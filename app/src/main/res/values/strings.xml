@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BuildP</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- menu -->
+    <string name="action_settings">Settings</string>
+    <string name="action_find">Find</string>
+
+    <!-- navigation drawer -->
+    <string name="navigation_drawer_object_in_map">Обьекты на карте</string>
+    <string name="navigation_drawer_catalog_object">Каталог обьектов</string>
+    <string name="navigation_drawer_quest">Квесты</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
