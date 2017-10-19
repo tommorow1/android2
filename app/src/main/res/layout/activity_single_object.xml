@@ -1,0 +1,169 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.bloold.buildp.single.object.SingleObjectActivity">
+    
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:id="@+id/ivAvatar"
+                        android:src="@drawable/avatar"
+                        android:scaleType="centerCrop"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:orientation="vertical"
+                        android:background="@color/colorPrimary">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/tvName"
+                            android:layout_weight="1"
+                            android:text="Жилой дом"
+                            android:paddingTop="8dp"
+                            android:paddingLeft="16dp"
+                            android:textSize="17sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:paddingTop="8dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="16dp">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/ivFirstStar"
+                                android:src="@drawable/ic_fill_star"/>
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/ivSecondStar"
+                                android:src="@drawable/ic_fill_star"/>
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/ivThirdStar"
+                                android:src="@drawable/ic_fill_star"/>
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/ivFirthStar"
+                                android:src="@drawable/ic_fill_star"/>
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/ivFifthStar"
+                                android:src="@drawable/ic_fill_star"/>
+
+                        </LinearLayout>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingTop="8dp"
+                            android:text="Жилой дом"
+                            android:lines="1"
+                            android:id="@+id/tvAddress"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:paddingLeft="16dp"/>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Жилой дом"
+                            android:id="@+id/tvDistance"
+                            android:textSize="15sp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:drawablePadding="8dp"
+                            android:drawableStart="@drawable/ic_map_marker"
+                            android:drawableLeft="@drawable/ic_map_marker"
+                            android:paddingLeft="16dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="144dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|end"
+                    android:layout_marginTop="168dp"
+                    android:layout_marginRight="16dp">
+
+                    <ImageButton
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:id="@+id/btnLink"
+                        android:background="@drawable/shape_button"
+                        android:src="@drawable/ic_link_button"
+                        android:layout_gravity="start|left|center_vertical"/>
+
+                    <ImageButton
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:id="@+id/btnStar"
+                        android:background="@drawable/shape_button"
+                        android:src="@drawable/ic_star_button"
+                        android:layout_gravity="end|right|center_vertical"/>
+
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:id="@+id/tabs"
+                android:layout_height="?attr/actionBarSize"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/vpSingleObject"/>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

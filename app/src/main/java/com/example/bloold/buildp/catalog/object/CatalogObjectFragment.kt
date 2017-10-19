@@ -1,6 +1,7 @@
 package com.example.bloold.buildp.catalog.`object`
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.model.CatalogObjectsModel
+import com.example.bloold.buildp.single.`object`.SingleObjectActivity
 
 class CatalogObjectFragment : Fragment(), AdapterListener, CatalogPresenterListener {
 
@@ -59,8 +61,10 @@ class CatalogObjectFragment : Fragment(), AdapterListener, CatalogPresenterListe
         }
     }
 
-    override fun onObjectClicked(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onObjectClicked(item: CatalogObjectsModel) {
+        val intent = Intent(context, SingleObjectActivity::class.java)
+        intent.putExtras(Bundle().apply { putParcelable(SingleObjectActivity.EXTRA_OBJECT_KEY, item) })
+        startActivity(intent)
     }
 
     override fun onObjectsLoaded(items: List<CatalogObjectsModel>) {

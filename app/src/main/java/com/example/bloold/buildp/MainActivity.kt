@@ -32,15 +32,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val defaultOptions = DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .build()
-        val config = ImageLoaderConfiguration.Builder(applicationContext)
-                .defaultDisplayImageOptions(defaultOptions)
-                .build()
-        ImageLoader.getInstance().init(config)
-
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
@@ -59,16 +50,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
-
         pagerAdapter = PagerClassAdapter(supportFragmentManager)
         viewPager = findViewById<ViewPager>(R.id.container)
         viewPager.adapter = pagerAdapter
 
         tabLayout = findViewById<TabLayout>(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
-
-        //navigator = NavigatorCatalogObjects(this, R.id.container)
-        //navigator.initFragment()
     }
 
     override fun onBackPressed() {

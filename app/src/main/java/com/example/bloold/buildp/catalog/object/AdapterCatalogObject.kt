@@ -15,7 +15,7 @@ import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.nostra13.universalimageloader.core.ImageLoader
 
 interface AdapterListener {
-    fun onObjectClicked(position: Int)
+    fun onObjectClicked(item: CatalogObjectsModel)
 }
 
 class AdapterCatalogObject(private val listener: AdapterListener):RecyclerView.Adapter<AdapterCatalogObject.ViewHolder>() {
@@ -32,6 +32,10 @@ class AdapterCatalogObject(private val listener: AdapterListener):RecyclerView.A
         return ViewHolder(view)
     }
 
+    fun getValues(): ArrayList<CatalogObjectsModel>{
+        return mValues
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position:Int) {
         holder.tvName.setText(mValues.get(position).name)
 
@@ -41,7 +45,7 @@ class AdapterCatalogObject(private val listener: AdapterListener):RecyclerView.A
 
         holder.mView.setOnClickListener(object:View.OnClickListener {
             override fun onClick(v:View) {
-                listener.onObjectClicked(position)
+                listener.onObjectClicked(mValues.get(position))
             }
         })
     }
