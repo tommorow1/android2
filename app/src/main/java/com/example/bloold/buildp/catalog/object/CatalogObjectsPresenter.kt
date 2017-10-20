@@ -2,12 +2,13 @@ package com.example.bloold.buildp.catalog.`object`
 
 import android.os.AsyncTask
 import android.text.TextUtils
+import android.util.ArraySet
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.CatalogObjectsModel
+import com.example.bloold.buildp.model.*
 import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONException
@@ -18,7 +19,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 /**
  * Created by bloold on 18.10.17.
@@ -107,10 +108,92 @@ class CatalogObjectsPresenter(private val view: CatalogPresenterListener) {
 
                         val ImgObject: JSONObject? = finalObject.getJSONObject("DETAIL_PICTURE")
 
-                        if(ImgObject != null)
+                        if (ImgObject != null)
                             catalogModel.src = "http://ruinnet.idefa.ru/" + ImgObject.getString("SRC")
 
                         catalogModel.preview_text = finalObject.getString("PREVIEW_TEXT")
+                        //catalogModel.audios = finalObject.getJSONArray("AUDIO_DATA").toString()
+
+                        //catalogModel.docs = finalObject.getJSONArray("DOCS_DATA")
+                        //catalogModel.publications = finalObject.getJSONArray("PUBLICATIONS_DATA")
+                        //catalogModel.videos = finalObject.getJSONArray("VIDEO_DATA")
+                        catalogModel.isFavorite = finalObject.getBoolean("IS_FAVORITE")
+                    } catch (e: JSONException) {
+
+                    }
+
+                    try {
+                        //PHOTO
+                        var photos = ArrayList<PhotoModel>()
+
+                        val photosJsonArray = finalObject.getJSONArray("PHOTOS_DATA")
+
+                        for (i: Int in 0..photosJsonArray.length() - 1) {
+                            val photo = PhotoModel()
+                            photo.name = photosJsonArray.getJSONObject(i).getString("NAME")
+                            photo.src = "http://ruinnet.idefa.ru/" +
+                                    photosJsonArray.getJSONObject(i)
+                                            .getJSONObject("DETAIL_PICTURE")
+                                            .getString("SRC")
+                            if (!photo.src.isNullOrEmpty()) {
+                                photos.add(photo)
+                            }
+                        }
+
+                        catalogModel.photos = photos
+
+                        //VIDEO
+                        var videos = ArrayList<VideoModel>()
+
+                        val videosJsonArray = finalObject.getJSONArray("VIDEO_DATA")
+
+                        for(i: Int in 0..videosJsonArray.length() - 1){
+                            val video = VideoModel()
+                            video.name = videosJsonArray.getJSONObject(i).getString("NAME")
+                            video.code = "http://ruinnet.idefa.ru/" +
+                                    videosJsonArray.getJSONObject(i).getString("CODE")
+
+                            if(!video.code.isNullOrEmpty()){
+                                videos.add(video)
+                            }
+                        }
+
+                        catalogModel.videos = videos.toTypedArray()
+
+                        //AUDIO
+                        var audios = ArrayList<AudioModel>()
+
+                        val audiosJsonArray = finalObject.getJSONArray("AUDIO_DATA")
+
+                        for(i: Int in 0..audiosJsonArray.length() - 1){
+                            val audio = AudioModel()
+                            audio.name = audiosJsonArray .getJSONObject(i).getString("NAME")
+                            audio.src = "http://ruinnet.idefa.ru/" +
+                                    audiosJsonArray .getJSONObject(i).getString("SRC")
+                            if(!audio.src.isNullOrEmpty()){
+                                audios.add(audio)
+                            }
+                        }
+
+                        catalogModel.audios = audios.toTypedArray()
+
+                        //DOCS
+                        var docs = ArrayList<DocModel>()
+
+                        val docsJsonArray = finalObject.getJSONArray("AUDIO_DATA")
+
+                        for(i: Int in 0..docsJsonArray.length() - 1){
+                            val doc = DocModel()
+                            doc.name = docsJsonArray.getJSONObject(i).getString("NAME")
+                            doc.code = "http://ruinnet.idefa.ru/" +
+                                    docsJsonArray.getJSONObject(i).getString("SRC")
+                            if(!doc.code.isNullOrEmpty()){
+                                docs.add(doc)
+                            }
+                        }
+
+                        catalogModel.docs = docs.toTypedArray()
+
                     } catch (e: JSONException){
                         e.printStackTrace()
                     }

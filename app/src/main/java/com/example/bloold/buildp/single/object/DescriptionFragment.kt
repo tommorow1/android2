@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,8 @@ class DescriptionFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_description, container, false)
 
+        Log.d("onCreate", "description")
+
         tvDescription = view.findViewById(R.id.tvDescription)
         tvDescription.text = mDescription
 
@@ -39,7 +42,10 @@ class DescriptionFragment : Fragment() {
         private val DESCRIPTION_KEY = "description"
 
         fun newInstance(description: String?): DescriptionFragment {
-            return DescriptionFragment().apply { arguments.putString(DESCRIPTION_KEY, description) }
+            return DescriptionFragment().apply {
+                if(!description.isNullOrEmpty()){
+                    arguments = Bundle().apply { putString(DESCRIPTION_KEY, description)} }
+            }
         }
     }
 }

@@ -12,11 +12,11 @@ class CatalogObjectsModel() : Parcelable {
     var property_address: String? = null
     var preview_text: String? = null
     var src: String? = null
-    var photos: ArrayList<String>? = null
-    var docs: ArrayList<String>? = null
-    var publications: ArrayList<String>? = null
-    var videos: ArrayList<String>? = null
-    var audios: ArrayList<String>? = null
+    var photos: ArrayList<PhotoModel>? = null
+    var docs: Array<DocModel>? = null
+    var publications: Array<DocModel>? = null
+    var videos: Array<VideoModel>? = null
+    var audios: Array<AudioModel>? = null
     var isFavorite: Boolean? = null
 
     constructor(parcel: Parcel) : this() {
@@ -25,6 +25,13 @@ class CatalogObjectsModel() : Parcelable {
         property_address = parcel.readString()
         preview_text = parcel.readString()
         src = parcel.readString()
+        photos = ArrayList<PhotoModel>()
+        parcel.readTypedList(photos, PhotoModel.CREATOR)
+        parcel.readParcelableArray(DocModel::class.java.classLoader)
+        parcel.readParcelableArray(DocModel::class.java.classLoader)
+        parcel.readParcelableArray(VideoModel::class.java.classLoader)
+        parcel.readParcelableArray(AudioModel::class.java.classLoader)
+        isFavorite= parcel.readString().toBoolean()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -33,6 +40,12 @@ class CatalogObjectsModel() : Parcelable {
         parcel.writeString(property_address)
         parcel.writeString(preview_text)
         parcel.writeString(src)
+        parcel.writeTypedList(photos)
+        parcel.writeParcelableArray(docs, 0)
+        parcel.writeParcelableArray(publications, 0)
+        parcel.writeParcelableArray(videos, 0)
+        parcel.writeParcelableArray(audios, 0)
+        parcel.writeString(isFavorite.toString())
     }
 
     override fun describeContents(): Int {
