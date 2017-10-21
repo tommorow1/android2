@@ -17,9 +17,10 @@ class NavigatorCatalogObjects(private val activity: AppCompatActivity,
     var currentFragment: Fragment? = null
 
     enum class CatalogObjectsScreens {
-        ALL_CATALOG_OBJECTS,
-        SINGLE_CATALOG_OBJECTS,
-        GROUP_CATALOG_OBJECTS
+        CATALOG_OBJECTS,
+        FILTER_OBJECTS,
+        SUB_FILTER_OBJECTS,
+        CHECK_FILTER_OBJECTS
     }
 
 
@@ -43,12 +44,12 @@ class NavigatorCatalogObjects(private val activity: AppCompatActivity,
                 .replace(layoutContainerId, currentFragment)
                 .commit()
 
-        currentScreen.push(CatalogObjectsScreens.ALL_CATALOG_OBJECTS)
+        //currentScreen.push(CatalogObjectsScreens.ALL_CATALOG_OBJECTS)
     }
 
     fun navigateTo(catalogObjects: CatalogObjectsScreens, data: Any? = null){
         when(catalogObjects){
-            CatalogObjectsScreens.ALL_CATALOG_OBJECTS -> {
+            CatalogObjectsScreens.CATALOG_OBJECTS -> {
                 //showFragment(CatalogObjectFragment.newInstance(), catalogObjects)
             }
         }

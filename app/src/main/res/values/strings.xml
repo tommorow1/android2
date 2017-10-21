@@ -20,4 +20,15 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
+    <string-array name="spinner_choice_object_address">
+        <item>По обьекту</item>
+        <item>По адресу</item>
+    </string-array>
+
+    <string name="find_by_name">http://ruinnet.idefa.ru/api_app/object/list/?select[0]=NAME&amp;filter[0][LOGIC]=OR&amp;filter[0][?NAME]=%1$s&amp;filter[!EGRKN_NUMBER]=false&amp;filter[0][?PROPERTY_ADDRESS]=%1$s</string>
+
+    <string name="find_by_egrn">http://ruinnet.idefa.ru/api_app/object/list/?select%5B0%5D=NAME&amp;select%5B7%5D=PROPERTY_EGRKN_NUMBER&amp;filter%5BPROPERTY_EGRKN_NUMBER%5D=%1$s</string>
+
+    <string name="find_by_address">https://geocode-maps.yandex.ru/1.x/?format=json&amp;results=10&amp;kind=locality&amp;geocode=%1$s</string>
+
 </resources>

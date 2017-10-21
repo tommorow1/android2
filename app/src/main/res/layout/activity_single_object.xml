@@ -57,6 +57,7 @@
                             android:orientation="horizontal"
                             android:paddingTop="8dp"
                             android:layout_weight="1"
+                            android:visibility="gone"
                             android:paddingLeft="16dp">
 
                             <android.support.v7.widget.AppCompatImageView

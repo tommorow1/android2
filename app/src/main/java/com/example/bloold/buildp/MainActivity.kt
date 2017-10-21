@@ -1,5 +1,6 @@
 package com.example.bloold.buildp
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -17,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewParent
 import com.example.bloold.buildp.catalog.`object`.PagerClassAdapter
+import com.example.bloold.buildp.search.SearchActivity
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
@@ -35,8 +37,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        val fab = findViewById<View>(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view ->
+        val fabAdd = findViewById<View>(R.id.fabAdd) as FloatingActionButton
+        fabAdd.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+
+        val fabFilter = findViewById<View>(R.id.fabFilter) as FloatingActionButton
+        fabFilter.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
@@ -79,15 +87,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
-
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
+        if (id == R.id.action_settings) {
+            startActivity(Intent(this, SearchActivity::class.java))
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
+        /*// Handle navigation view item clicks here.
         val id = item.itemId
 
         if (id == R.id.nav_camera) {
@@ -102,7 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        */val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
     }

@@ -43,23 +43,22 @@
                 android:id="@+id/ivStar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_camera"
+                android:src="@drawable/ic_star_stroke"
                 android:layout_marginRight="16dp"/>
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_share"
+                android:src="@drawable/ic_location"
                 android:layout_marginRight="16dp"/>
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_gallery"
+                android:src="@drawable/ic_arrow_next"
                 android:layout_marginRight="16dp"/>
-
 
         </LinearLayout>
 

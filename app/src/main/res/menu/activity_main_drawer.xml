@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/navigation_drawer_object_in_map" />
+            android:id="@+id/nav_objects"
+            android:icon="@drawable/ic_menu_objects"
+            android:title="Объекты на карте" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/navigation_drawer_catalog_object" />
+            android:id="@+id/nav_catalog"
+            android:icon="@drawable/ic_menu_catalog"
+            android:title="Каталог обьектов" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/navigation_drawer_quest" />
+            android:id="@+id/nav_quests"
+            android:icon="@drawable/ic_menu_quests"
+            android:title="Квесты" />
     </group>
-
-    <item android:title="Избранное">
+    <item android:title=""
+        android:id="@+id/logging_menu">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_election"
+                android:icon="@drawable/ic_menu_election"
+                android:title="Избраное" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_my_suggestions"
+                android:icon="@drawable/ic_menu_suggestions"
+                android:title="Мои предложения" />
+            <item
+                android:id="@+id/nav_notice"
+                android:icon="@drawable/ic_menu_notice"
+                android:title="Уведомления" />
+            <item
+                android:id="@+id/nav_message"
+                android:icon="@drawable/ic_menu_message"
+                android:title="Сообщения" />
+            <item
+                android:id="@+id/nav_contacts"
+                android:icon="@drawable/ic_menu_contacts"
+                android:title="Контакты" />
+            <item
+                android:id="@+id/nav_my_quests"
+                android:icon="@drawable/ic_menu_my_quests"
+                android:title="Мои квесты" />
         </menu>
     </item>
-
 </menu>

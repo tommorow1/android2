@@ -11,11 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.PhotoModel
 import com.example.bloold.buildp.single.`object`.SingleObjectActivity
 
-class CatalogObjectFragment : Fragment(), AdapterListener, CatalogPresenterListener {
+class CatalogObjectFragment : Fragment(), AdapterListener, callback {
 
     private lateinit var rvCatalog: RecyclerView
     private var adapter: AdapterCatalogObject = AdapterCatalogObject(this)
@@ -71,9 +72,6 @@ class CatalogObjectFragment : Fragment(), AdapterListener, CatalogPresenterListe
     override fun onObjectClicked(item: CatalogObjectsModel) {
         val intent = Intent(context, SingleObjectActivity::class.java)
         intent.putExtras(Bundle().apply { putParcelable(SingleObjectActivity.EXTRA_OBJECT_KEY, item) })
-        for(i: PhotoModel in item.photos!!){
-            Log.d("photos", i.src)
-        }
         startActivity(intent)
     }
 
