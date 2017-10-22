@@ -62,11 +62,11 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
             return getCatalogObject(finalJson)
 
         } catch (e: MalformedURLException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         } catch (e: IOException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         } finally {
             if (connection != null) {
                 connection.disconnect()
@@ -76,7 +76,7 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
                     reader.close()
                 }
             } catch (e: IOException) {
-                e.printStackTrace()
+                //e.printStackTrace()
             }
 
         }
@@ -106,14 +106,14 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
         try {
             DATA = JSONObject(response.getString("DATA"))
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         }
 
         try {
             ITEMS = JSONObject(DATA!!.getString("ITEMS"))
             //parentArray = DATA.getJSONArray("ITEMS");
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         }
 
         val catalogModelList = ArrayList<CatalogObjectsModel>()
@@ -221,7 +221,7 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
                 catalogModel.docs = docs.toTypedArray()
 
             } catch (e: JSONException){
-                e.printStackTrace()
+                //e.printStackTrace()
             }
 
             catalogModelList.add(catalogModel)
@@ -271,11 +271,11 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
             return getHighFilterObjects(finalJson)
 
         } catch (e: MalformedURLException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         } catch (e: IOException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         } finally {
             if (connection != null) {
                 connection.disconnect()
@@ -285,7 +285,7 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
                     reader.close()
                 }
             } catch (e: IOException) {
-                e.printStackTrace()
+                //e.printStackTrace()
             }
 
         }
@@ -312,9 +312,10 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
         try {
             data = JSONObject(response.getString("DATA"))
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         }
 
+        Log.d("data", data.toString())
         val iterator = data!!.keys()
 
         while (iterator.hasNext()) {
@@ -327,58 +328,74 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
                 objectModel.name = finalObject.getString("NAME")
                 objectModel.depth = finalObject.getString("DEPTH_LEVEL")
             } catch (e: JSONException) {
-                e.printStackTrace()
+                //e.printStackTrace()
             }
 
+            //CHILD
+            var childs = ArrayList<SubFilterModelLevel>()
+
             try {
-                //CHILD
-                var childs = ArrayList<SubFilterModelLevel>()
 
                 val childsJsonArray = finalObject.getJSONObject("CHILD")
 
                 val iteratorChilds = childsJsonArray.keys()
 
+                Log.d("childs", childsJsonArray.toString())
+
                 while (iteratorChilds.hasNext()) {
+                    val childKey = iteratorChilds.next() as String
+                    val childObject = childsJsonArray.getJSONObject(childKey)
                     val child = SubFilterModelLevel()
 
                     try {
-                        objectModel.id = childsJsonArray.getString("ID")
-                        objectModel.name = childsJsonArray.getString("NAME")
-                        objectModel.depth = childsJsonArray.getString("DEPTH_LEVEL")
+                        objectModel.id = childObject.getString("ID")
+                        objectModel.name = childObject.getString("NAME")
+                        objectModel.depth = childObject.getString("DEPTH_LEVEL")
                     } catch (e: JSONException) {
-                        e.printStackTrace()
+                        //e.printStackTrace()
                     }
 
+                    //CHILD
+                    var filters = ArrayList<CatalogObjectsModel>()
+
                     try {
-                        //CHILD
-                        var filters = ArrayList<CatalogObjectsModel>()
 
                         val filtersArray = finalObject.getJSONObject("CHILD")
 
                         val iteratorFilters = filtersArray.keys()
 
+                        Log.d("filters", filtersArray.toString())
+
                         while (iteratorFilters.hasNext()) {
+                            val filterdKey = iteratorFilters.next() as String
+                            val filterObject = filtersArray.getJSONObject(filterdKey)
                             val filter = CatalogObjectsModel()
 
                             try {
-                                objectModel.id = filtersArray.getString("ID")
-                                objectModel.name = filtersArray.getString("NAME")
+                                objectModel.id = filterObject.getString("ID")
+                                objectModel.name = filterObject.getString("NAME")
                             } catch (e: JSONException) {
-                                e.printStackTrace()
+                                //e.printStackTrace()
                             }
 
                             filters.add(filter)
                         }
+
                     }catch (e: JSONException){
-                        e.printStackTrace()
+                        //e.printStackTrace()
                     }
+
+                    child.items = filters
 
                     childs.add(child)
                 }
+
             } catch (e: JSONException) {
-                e.printStackTrace()
+                //e.printStackTrace()
             }
 
+            objectModel.items = childs
+            
             hightFilterModelLevel.add(objectModel)
         }
 
@@ -397,14 +414,14 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
         try {
             DATA = JSONObject(response.getString("DATA"))
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         }
 
         try {
             ITEMS = JSONObject(DATA!!.getString("ITEMS"))
             //parentArray = DATA.getJSONArray("ITEMS");
         } catch (e: JSONException) {
-            e.printStackTrace()
+            //e.printStackTrace()
         }
 
         val catalogModelList = ArrayList<CatalogObjectsModel>()
@@ -512,7 +529,7 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
                 catalogModel.docs = docs.toTypedArray()
 
             } catch (e: JSONException){
-                e.printStackTrace()
+                //e.printStackTrace()
             }
 
             catalogModelList.add(catalogModel)

@@ -2,29 +2,25 @@ package com.example.bloold.buildp.filter.`object`
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.BaseModel
-import com.example.bloold.buildp.model.CatalogObjectsModel
-import com.example.bloold.buildp.model.FilterModel
-import com.example.bloold.buildp.model.HightFilterModelLevel
+import com.example.bloold.buildp.model.SubFilterModelLevel
 
-class FilterStartFragment: Fragment(), onFilterClickListener<CatalogObjectsModel> {
+/**
+ * Created by bloold on 22.10.17.
+ */
+class SubLevelFragment : Fragment(), onFilterClickListener<SubFilterModelLevel> {
 
     private var mListener: OnListFragmentInteractionListener? = null
-    private var mItems: ArrayList<CatalogObjectsModel> = ArrayList()
+    private var mItems: ArrayList<SubFilterModelLevel> = ArrayList()
     private var mItemRes: Int = 0
-    private var adapter: MyFilterStartAdapter<CatalogObjectsModel>? = null
-
+    private var adapter: MyFilterStartAdapter<SubFilterModelLevel>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,21 +64,20 @@ class FilterStartFragment: Fragment(), onFilterClickListener<CatalogObjectsModel
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: CatalogObjectsModel)
+        fun onListFragmentInteraction(item: SubFilterModelLevel)
     }
 
-    override fun onClick(item: CatalogObjectsModel) {
-        Log.d("onClickFragment", item.name)
+    override fun onClick(item: SubFilterModelLevel) {
         mListener?.onListFragmentInteraction(item)
     }
 
-    companion object{
+    companion object {
 
         private val ITEMS_KEY = "items"
         private val RESOURCE_ITEM_KEY = "container"
 
-        fun newInstance(items: ArrayList<CatalogObjectsModel>, itemRes: Int): FilterStartFragment {
-            val fragment = FilterStartFragment()
+        fun newInstance(items: ArrayList<SubFilterModelLevel>, itemRes: Int): SubLevelFragment {
+            val fragment = SubLevelFragment()
             val args = Bundle()
             args.putParcelableArrayList(ITEMS_KEY, items)
             args.putInt(RESOURCE_ITEM_KEY, itemRes)

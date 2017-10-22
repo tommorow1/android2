@@ -6,9 +6,40 @@ import android.os.Parcelable
 /**
  * Created by bloold on 21.10.17.
  */
+class AllFiltersModel():
+        FilterModel<HightFilterModelLevel>(){
+
+    constructor(parcel: Parcel) : this() {
+        parcel.readTypedList(items, HightFilterModelLevel.CREATOR)
+        name = parcel.readString()
+        id = parcel.readString()
+        depth = parcel.readString()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeTypedList(items)
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(depth)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<AllFiltersModel> {
+        override fun createFromParcel(parcel: Parcel): AllFiltersModel {
+            return AllFiltersModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<AllFiltersModel?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
 class HightFilterModelLevel():
         FilterModel<SubFilterModelLevel>(){
-
 
     constructor(parcel: Parcel) : this() {
         parcel.readTypedList(items, SubFilterModelLevel.CREATOR)
@@ -73,7 +104,7 @@ class SubFilterModelLevel():
 
 abstract class FilterModel<T: Parcelable>(): Parcelable, BaseModel() {
 
-    val items: ArrayList<T>? = null
+    var items: ArrayList<T>? = null
     var depth: String? = null
 
     fun get(pos: Int): T? {

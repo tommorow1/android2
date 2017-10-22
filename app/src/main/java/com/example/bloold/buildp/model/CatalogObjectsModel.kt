@@ -6,9 +6,7 @@ import android.os.Parcelable
 /**
  * Created by bloold on 18.10.17.
  */
-class CatalogObjectsModel() : Parcelable {
-    var name: String? = null
-    var id: String? = null
+class CatalogObjectsModel() : Parcelable, BaseModel() {
     var property_address: String? = null
     var preview_text: String? = null
     var src: String? = null

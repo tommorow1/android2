@@ -3,8 +3,12 @@ package com.example.bloold.buildp.filter.`object`
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.AllFiltersModel
 import com.example.bloold.buildp.model.BaseModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
+import com.example.bloold.buildp.model.SubFilterModelLevel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,18 +76,24 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
 
     private fun initFragment(): Fragment {
         currentScreen.add(FilterScreens.HIGHT_FILTER)
-
-        return FilterStartFragment.newInstance(items, layoutContainerId)
+        return HighFilterFragment.newInstance(items, R.layout.item_hight_level_filter)
     }
 
     fun navigateTo(filterScreens: FilterScreens, data: Any? = null){
         when(filterScreens){
             FilterScreens.HIGHT_FILTER -> {
-                showFragment(FilterStartFragment.newInstance(items, layoutContainerId), filterScreens)
+                showFragment(HighFilterFragment.newInstance(items, R.layout.item_hight_level_filter), filterScreens)
             } FilterScreens.SUB_LEVEL_FILTER-> {
-                showFragment(FilterStartFragment.newInstance(items, layoutContainerId), filterScreens)
+                val item = (data as HightFilterModelLevel).items
+                if(item != null) {
+                    showFragment(SubLevelFragment.newInstance(item, R.layout.item_hight_level_filter), filterScreens)
+                }
+                Log.d("onListFragmentInte2", item.toString())
             } FilterScreens.MAIN_FILTER -> {
-                showFragment(FilterStartFragment.newInstance(items, layoutContainerId), filterScreens)
+                val item = (data as SubFilterModelLevel).items
+                if(item != null) {
+                    showFragment(FilterStartFragment.newInstance(item, R.layout.item_filter_start), filterScreens)
+                }
             }
         }
     }

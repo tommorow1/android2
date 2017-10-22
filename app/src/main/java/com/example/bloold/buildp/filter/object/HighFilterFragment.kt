@@ -2,28 +2,27 @@ package com.example.bloold.buildp.filter.`object`
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.BaseModel
 import com.example.bloold.buildp.model.CatalogObjectsModel
-import com.example.bloold.buildp.model.FilterModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
+import com.example.bloold.buildp.model.SubFilterModelLevel
 
-class FilterStartFragment: Fragment(), onFilterClickListener<CatalogObjectsModel> {
+/**
+ * Created by bloold on 22.10.17.
+ */
+class HighFilterFragment: Fragment(), onFilterClickListener<HightFilterModelLevel> {
 
     private var mListener: OnListFragmentInteractionListener? = null
-    private var mItems: ArrayList<CatalogObjectsModel> = ArrayList()
+    private var mItems: ArrayList<HightFilterModelLevel> = ArrayList()
     private var mItemRes: Int = 0
-    private var adapter: MyFilterStartAdapter<CatalogObjectsModel>? = null
+    private var adapter: MyFilterStartAdapter<HightFilterModelLevel>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,10 +67,10 @@ class FilterStartFragment: Fragment(), onFilterClickListener<CatalogObjectsModel
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: CatalogObjectsModel)
+        fun onListFragmentInteraction(item: HightFilterModelLevel)
     }
 
-    override fun onClick(item: CatalogObjectsModel) {
+    override fun onClick(item: HightFilterModelLevel) {
         Log.d("onClickFragment", item.name)
         mListener?.onListFragmentInteraction(item)
     }
@@ -81,8 +80,8 @@ class FilterStartFragment: Fragment(), onFilterClickListener<CatalogObjectsModel
         private val ITEMS_KEY = "items"
         private val RESOURCE_ITEM_KEY = "container"
 
-        fun newInstance(items: ArrayList<CatalogObjectsModel>, itemRes: Int): FilterStartFragment {
-            val fragment = FilterStartFragment()
+        fun newInstance(items: ArrayList<HightFilterModelLevel>, itemRes: Int): HighFilterFragment {
+            val fragment = HighFilterFragment()
             val args = Bundle()
             args.putParcelableArrayList(ITEMS_KEY, items)
             args.putInt(RESOURCE_ITEM_KEY, itemRes)
