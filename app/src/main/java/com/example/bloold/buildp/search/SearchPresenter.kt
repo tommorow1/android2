@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.text.TextUtils
 import android.util.Log
-import com.example.bloold.buildp.JSONTask
+import com.example.bloold.buildp.ListCatalogObjectsResponse
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.model.*
@@ -34,12 +34,12 @@ class SearchPresenter(private val view: callback, private val context: Context) 
             url = getAddress(seq)
         }
 
-        JSONTask(view).execute(url)
+        ListCatalogObjectsResponse(view).execute(url)
     }
 
     fun findObjects(seq: String){
 
-        JSONTask(view).execute(getObject(seq))
+        ListCatalogObjectsResponse(view).execute(getObject(seq))
     }
 
     private fun getEGRN(egrn: String): String{

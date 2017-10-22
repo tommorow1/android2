@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.BaseModel
 import com.example.bloold.buildp.model.FilterModel
 
-class MyFilterStartAdapter<T: Parcelable>(private val mValues: FilterModel<T>,
+class MyFilterStartAdapter<T: BaseModel>(private val mValues: List<T>,
                               private val customRes: Int)
     :RecyclerView.Adapter<MyFilterStartAdapter<T>.ViewHolder>() {
 
@@ -28,7 +29,7 @@ class MyFilterStartAdapter<T: Parcelable>(private val mValues: FilterModel<T>,
     }
 
     public override fun getItemCount():Int {
-        return mValues.size()
+        return mValues.size
     }
 
     inner class ViewHolder( val mView:View):RecyclerView.ViewHolder(mView) {

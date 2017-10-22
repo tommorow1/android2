@@ -9,12 +9,19 @@ import android.os.Parcelable
 class HightFilterModelLevel():
         FilterModel<SubFilterModelLevel>(){
 
+
     constructor(parcel: Parcel) : this() {
         parcel.readTypedList(items, SubFilterModelLevel.CREATOR)
+        name = parcel.readString()
+        id = parcel.readString()
+        depth = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeTypedList(items)
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(depth)
     }
 
     override fun describeContents(): Int {
@@ -37,10 +44,16 @@ class SubFilterModelLevel():
 
     constructor(parcel: Parcel) : this() {
         parcel.readTypedList(items, CatalogObjectsModel.CREATOR)
+        name = parcel.readString()
+        id = parcel.readString()
+        depth = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeTypedList(items)
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(depth)
     }
 
     override fun describeContents(): Int {
@@ -58,15 +71,46 @@ class SubFilterModelLevel():
     }
 }
 
-abstract class FilterModel<T: Parcelable>(): Parcelable {
+abstract class FilterModel<T: Parcelable>(): Parcelable, BaseModel() {
 
-    protected val items: ArrayList<T> = ArrayList()
+    val items: ArrayList<T>? = null
+    var depth: String? = null
 
-    fun get(pos: Int): T {
-        return items.get(pos)
+    fun get(pos: Int): T? {
+        return items?.get(pos)
     }
 
     fun size(): Int {
-        return items.size
+        return items?.size ?: 0
     }
+}
+
+open class BaseModel() : Parcelable {
+    var id: String? = null
+    var name: String? = null
+
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readString()
+        name = parcel.readString()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(name)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<BaseModel> {
+        override fun createFromParcel(parcel: Parcel): BaseModel {
+            return BaseModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<BaseModel?> {
+            return arrayOfNulls(size)
+        }
+    }
+
 }

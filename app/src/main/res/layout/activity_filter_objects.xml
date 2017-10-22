@@ -37,15 +37,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/vpFilter"/>
+        android:id="@+id/flContainerFilter"/>
 
     <android.support.v7.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:text="Поиск"
+        android:visibility="gone"
         android:textAllCaps="false"
         android:layout_gravity="bottom"
         android:textColor="@android:color/white"

@@ -18,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewParent
 import com.example.bloold.buildp.catalog.`object`.PagerClassAdapter
+import com.example.bloold.buildp.filter.`object`.FilterObjectsActivity
 import com.example.bloold.buildp.search.SearchActivity
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
@@ -45,8 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val fabFilter = findViewById<View>(R.id.fabFilter) as FloatingActionButton
         fabFilter.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            startActivity(Intent(this, FilterObjectsActivity::class.java))
         }
 
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout

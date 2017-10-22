@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.model.CatalogObjectsModel
+import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.PhotoModel
 import com.example.bloold.buildp.single.`object`.SingleObjectActivity
 
@@ -75,8 +76,12 @@ class CatalogObjectFragment : Fragment(), AdapterListener, callback {
         startActivity(intent)
     }
 
-    override fun onObjectsLoaded(items: List<CatalogObjectsModel>) {
+    override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {
         adapter.addAll(items)
+    }
+
+    override fun onFiltersLoaded(items: ArrayList<HightFilterModelLevel>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onAttach(context: Context?) {

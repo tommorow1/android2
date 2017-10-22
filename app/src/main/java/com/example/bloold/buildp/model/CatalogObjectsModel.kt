@@ -8,7 +8,7 @@ import android.os.Parcelable
  */
 class CatalogObjectsModel() : Parcelable {
     var name: String? = null
-    var id: Int = 0
+    var id: String? = null
     var property_address: String? = null
     var preview_text: String? = null
     var src: String? = null
@@ -21,7 +21,7 @@ class CatalogObjectsModel() : Parcelable {
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
-        id = parcel.readInt()
+        id = parcel.readString()
         property_address = parcel.readString()
         preview_text = parcel.readString()
         src = parcel.readString()
@@ -36,7 +36,7 @@ class CatalogObjectsModel() : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeInt(id)
+        parcel.writeString(id)
         parcel.writeString(property_address)
         parcel.writeString(preview_text)
         parcel.writeString(src)

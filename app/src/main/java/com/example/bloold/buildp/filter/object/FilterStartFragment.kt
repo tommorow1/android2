@@ -2,6 +2,7 @@ package com.example.bloold.buildp.filter.`object`
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -11,16 +12,24 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.BaseModel
+import com.example.bloold.buildp.model.FilterModel
+import com.example.bloold.buildp.model.HightFilterModelLevel
 
 class FilterStartFragment: Fragment() {
 
     private var mListener: OnListFragmentInteractionListener? = null
+    private var mItems: ArrayList<BaseModel> = ArrayList()
+    private var mItemRes: Int = 0
+    private var adapter: MyFilterStartAdapter<BaseModel>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
-
+            mItems = arguments.getParcelableArrayList(ITEMS_KEY)
+            mItemRes = arguments.getInt(RESOURCE_ITEM_KEY)
         }
     }
 
@@ -32,9 +41,10 @@ class FilterStartFragment: Fragment() {
         if (view is RecyclerView) {
             val context = view.getContext()
 
-            view.layoutManager = LinearLayoutManager(context)
-            view.adapter = MyFilterStartAdapter()
+            adapter = MyFilterStartAdapter(mItems, mItemRes)
 
+            view.layoutManager = LinearLayoutManager(context)
+            view.adapter = adapter
         }
         return view
     }
@@ -48,7 +58,6 @@ class FilterStartFragment: Fragment() {
 
         }
 
-
     }
 
     override fun onDetach() {
@@ -60,12 +69,16 @@ class FilterStartFragment: Fragment() {
         fun onListFragmentInteraction()
     }
 
-    companion object {
+    companion object{
 
-        fun newInstance(): FilterStartFragment {
+        private val ITEMS_KEY = "items"
+        private val RESOURCE_ITEM_KEY = "container"
+
+        fun <T: Parcelable> newInstance(items: ArrayList<T>, itemRes: Int): FilterStartFragment {
             val fragment = FilterStartFragment()
             val args = Bundle()
-            args.putInt()
+            args.putParcelableArrayList(ITEMS_KEY, items)
+            args.putInt(RESOURCE_ITEM_KEY, itemRes)
             fragment.arguments = args
             return fragment
         }

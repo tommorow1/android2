@@ -11,9 +11,11 @@ import com.example.bloold.buildp.R
 import android.widget.ArrayAdapter
 import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.model.CatalogObjectsModel
+import com.example.bloold.buildp.model.HightFilterModelLevel
 
 
 class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelectedListener {
+
     private lateinit var spinnerChoice: Spinner
     private lateinit var etChoice: EditText
     private lateinit var lvObjects: ListView
@@ -78,13 +80,16 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         adapter.clear()
     }
 
-    override fun onObjectsLoaded(items: List<CatalogObjectsModel>) {
-
+    override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {
         adapter.clear()
         var outArr: List<String?>
         outArr = items.map{it -> it.name}
 
         adapter.addAll(outArr)
         adapter.notifyDataSetInvalidated()
+    }
+
+    override fun onFiltersLoaded(items: ArrayList<HightFilterModelLevel>) {
+
     }
 }
