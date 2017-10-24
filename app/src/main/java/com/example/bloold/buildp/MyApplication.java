@@ -1,4 +1,4 @@
-package com.yourockdude.ruinnet;
+package com.example.bloold.buildp;
 
 import android.app.Application;
 import android.content.res.Configuration;

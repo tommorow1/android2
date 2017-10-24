@@ -130,6 +130,11 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
             try {
                 catalogModel.id = finalObject.getString("ID")
                 catalogModel.name = finalObject.getString("NAME")
+
+                catalogModel.preview_text = finalObject.getString("PREVIEW_TEXT")
+
+                Log.d("tag", catalogModel.preview_text)
+
                 catalogModel.property_address = finalObject.getString("PROPERTY_ADDRESS")
 
                 val ImgObject: JSONObject? = finalObject.getJSONObject("DETAIL_PICTURE")
@@ -137,7 +142,6 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
                 if (ImgObject != null)
                     catalogModel.src = "http://ruinnet.idefa.ru/" + ImgObject.getString("SRC")
 
-                catalogModel.preview_text = finalObject.getString("PREVIEW_TEXT")
                 //catalogModel.audios = finalObject.getJSONArray("AUDIO_DATA").toString()
 
                 //catalogModel.docs = finalObject.getJSONArray("DOCS_DATA")
@@ -395,7 +399,7 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
             }
 
             objectModel.items = childs
-            
+
             hightFilterModelLevel.add(objectModel)
         }
 

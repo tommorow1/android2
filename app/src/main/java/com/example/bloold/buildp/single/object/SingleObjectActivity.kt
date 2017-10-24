@@ -89,6 +89,13 @@ class SingleObjectActivity : AppCompatActivity() {
                         toolbar.contentScrim = resource
                     }
                 })
+
+        ivBackToolbar.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                onBackPressed()
+            }
+        })
+
         tvTitle.text = item!!.name
         tvDistance.text = "250m"
         tvAddress.text = item?.property_address

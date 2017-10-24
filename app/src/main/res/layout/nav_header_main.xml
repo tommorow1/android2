@@ -17,32 +17,62 @@
         android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ivProfile"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/avatar"/>
+            android:src="@drawable/avatar"
+            android:visibility="invisible" />
 
         <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|top"
-            android:src="@android:drawable/ic_menu_manage"/>
+            android:src="@drawable/gear"
+            android:visibility="invisible" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnAuth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/rounded_button"
+            android:paddingBottom="10dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="10dp"
+            android:text="Авторизация"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textColorLink="@color/colorAccent"
+            android:textSize="24sp"/>
+
 
     </FrameLayout>
 
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tvName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Вознесенский Артемий"
+        android:text=""
         android:textSize="20sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/ivLogout"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/logout"
+        android:visibility="invisible"
+        />
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textView"
+        android:id="@+id/ball"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="5 (3 740 бал.)"
         android:textSize="20sp"
-        android:text="5 (3 740 бал.)" />
+        android:visibility="invisible" />
+
+
 
 </LinearLayout>

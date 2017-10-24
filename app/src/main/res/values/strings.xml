@@ -19,7 +19,9 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-
+    <string name="facebook_app_id">893853807441584</string>
+    <string name="fb_login_protocol_scheme">fb893853807441584</string>
+    <integer name="com_vk_sdk_AppId">6219142</integer>
     <string-array name="spinner_choice_object_address">
         <item>По обьекту</item>
         <item>По адресу</item>
@@ -30,5 +32,11 @@
     <string name="find_by_egrn">http://ruinnet.idefa.ru/api_app/object/list/?select%5B0%5D=NAME&amp;select%5B7%5D=PROPERTY_EGRKN_NUMBER&amp;filter%5BPROPERTY_EGRKN_NUMBER%5D=%1$s</string>
 
     <string name="find_by_address">https://geocode-maps.yandex.ru/1.x/?format=json&amp;results=10&amp;kind=locality&amp;geocode=%1$s</string>
+    <string name="title_activity_logging">LoggingActivity</string>
+    <string name="title_activity_login">Main2Activity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="title_activity_restore">RestoreActivity</string>
 
 </resources>
