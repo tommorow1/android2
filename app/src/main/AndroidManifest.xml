@@ -77,6 +77,10 @@
             android:name=".RestoreActivity"
             android:label="@string/title_activity_restore"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ProfileSettingsActivity"
+            android:label="@string/title_activity_profile_settings"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

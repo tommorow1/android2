@@ -38,5 +38,6 @@
     <string name="title_activity_main3">Main3Activity</string>
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="title_activity_restore">RestoreActivity</string>
+    <string name="title_activity_profile_settings">ProfileSettingsActivity</string>
 
 </resources>

@@ -203,12 +203,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-        //val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView
+        val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView
 
-       // ivSettings.setOnClickListener {
-        //    val intent = Intent(this@MainActivity, ProfileActivity::class.java)
-        //    startActivity(intent)
-       // }
+        ivSettings.setOnClickListener {
+            val intent = Intent(this@MainActivity, ProfileSettingsActivity::class.java)
+            startActivity(intent)
+        }
         return true
     }
 
