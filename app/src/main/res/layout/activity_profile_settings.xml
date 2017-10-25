@@ -18,7 +18,6 @@
         tools:context="com.example.bloold.buildp.ProfileSettingsActivity"
         tools:showIn="@layout/activity_profile_settings">
 
-
         <include
             layout="@layout/toolbar"
             android:layout_width="match_parent"

@@ -16,7 +16,7 @@ class ProfileSettingsActivity: AppCompatActivity() {
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowHomeEnabled(true)
-            supportActionBar!!.title = "Профиль пользователя"
+            supportActionBar!!.title = "Профиль  пользователя"
         }
     }
 }
