@@ -374,6 +374,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         });
     }
+
     public class  JSONReg extends AsyncTask<String, String, String> {
 
         @Override

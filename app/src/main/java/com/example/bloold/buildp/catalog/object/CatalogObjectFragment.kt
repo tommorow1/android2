@@ -16,6 +16,7 @@ import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.PhotoModel
 import com.example.bloold.buildp.single.`object`.SingleObjectActivity
+import kotlinx.android.synthetic.main.fragment_show_objects.*
 
 class CatalogObjectFragment : Fragment(), AdapterListener, callback {
 
@@ -23,10 +24,14 @@ class CatalogObjectFragment : Fragment(), AdapterListener, callback {
     private var adapter: AdapterCatalogObject = AdapterCatalogObject(this)
     private val presenter: CatalogObjectsPresenter = CatalogObjectsPresenter(this)
     private var urlResponse: String? = null
+    private var objectsArray: ArrayList<CatalogObjectsModel> = ArrayList()
+    private var isHaveCatalog: Boolean = true
 
     companion object Catalog{
 
         private val KEY_RESPONSE = "response"
+        private val KEY_RESPONSE_ARRAY_OBJECTS = "catalog_response"
+        private val KEY_RESPONSE_HAVE_CATALOG = "catalog"
 
         fun newInstance(response: String): CatalogObjectFragment {
             return CatalogObjectFragment()
@@ -37,13 +42,24 @@ class CatalogObjectFragment : Fragment(), AdapterListener, callback {
             return CatalogObjectFragment()
                     .apply { arguments = Bundle().apply { putStringArrayList(KEY_RESPONSE, items) } }
         }
+
+        fun newInstance(items: ArrayList<CatalogObjectsModel>, isHave: Boolean = true): CatalogObjectFragment {
+            return CatalogObjectFragment()
+                    .apply { arguments = Bundle().apply { putParcelableArrayList(KEY_RESPONSE_ARRAY_OBJECTS, items)
+                    putBoolean(KEY_RESPONSE_HAVE_CATALOG, isHave)} }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if(arguments != null){
-            urlResponse = arguments.getString(KEY_RESPONSE)
+            if(arguments.containsKey(KEY_RESPONSE))
+                urlResponse = arguments.getString(KEY_RESPONSE)
+            else if (arguments.containsKey(KEY_RESPONSE_ARRAY_OBJECTS)) {
+                objectsArray = arguments.getParcelableArrayList(KEY_RESPONSE_ARRAY_OBJECTS)
+                isHaveCatalog = arguments.getBoolean(KEY_RESPONSE_HAVE_CATALOG)
+            }
         }
     }
 
@@ -61,11 +77,13 @@ class CatalogObjectFragment : Fragment(), AdapterListener, callback {
 
             rvCatalog = view
 
-            if(urlResponse != null) {
-                rvCatalog.adapter = adapter
-                presenter.getCatalogObjects(urlResponse!!)
+            rvCatalog.adapter = adapter
+            if(!isHaveCatalog) {
+                if(urlResponse != null) {
+                    presenter.getCatalogObjects(urlResponse!!)
+                }
             } else {
-                
+                onObjectsLoaded(objectsArray)
             }
         }
     }

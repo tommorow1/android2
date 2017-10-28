@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     String Password = "";
     String AuthTokenresp = null;
 
-    private static final String AuthToken = "AuthToken";
+    public static final String AuthToken = "AuthToken";
     private String[] scope = new String[]{
             VKScope.AUDIO,
             VKScope.FRIENDS,
