@@ -83,9 +83,13 @@
             android:label="@string/title_activity_profile_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".AgreementActivity"
+            android:label="@string/title_activity_agreement"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ListActivityObjects.ListObjectsActivity"
             android:label="@string/title_activity_list_objects"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -59,6 +60,7 @@ import ru.ok.android.sdk.util.OkScope;
 
 public class RegistrationActivity extends AppCompatActivity {
 
+    TextView etRegAgreement;
     EditText etRegEmail;
     EditText etRegPassword;
     EditText etFirstName;
@@ -86,6 +88,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        etRegAgreement = (TextView)findViewById(R.id.etRegAgreement) ;
         etRegEmail = (EditText)findViewById(R.id.etRegEmail);
         etRegPassword = (EditText)findViewById(R.id.etRegPassword);
         etFirstName = (EditText)findViewById(R.id.etFirstName);
@@ -95,6 +98,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(toolbar);
+
+        etRegAgreement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegistrationActivity.this, AgreementActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override

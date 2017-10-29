@@ -52,6 +52,7 @@
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="title_activity_restore">RestoreActivity</string>
     <string name="title_activity_profile_settings">ProfileSettingsActivity</string>
+    <string name="title_activity_agreement">Пользовательское соглашение</string>
     <string name="title_activity_list_objects">ListObjectsActivity</string>
 
 </resources>
