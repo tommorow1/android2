@@ -26,7 +26,7 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
 
     private val fragmentManager: FragmentManager = activity.supportFragmentManager
     var currentScreen: Stack<FilterScreens> = Stack()
-    var currentFragment: Fragment? = null
+    var currentFragment: Stack<Fragment> = Stack()
 
     enum class FilterScreens {
         MAIN_FILTER,
@@ -38,7 +38,7 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
     private fun showFragment(fragment: Fragment, screen: FilterScreens) {
 
         if(currentScreen.empty()){
-            currentFragment = fragment
+            currentFragment.push(fragment)
 
             fragmentManager.beginTransaction()
                     .replace(layoutContainerId, fragment)
@@ -47,7 +47,7 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
             currentScreen.push(screen)
 
         } else {
-            currentFragment = fragment
+            currentFragment.push(fragment)
 
             fragmentManager.beginTransaction()
                     .replace(layoutContainerId, fragment)
@@ -71,7 +71,7 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
                 showFragment(CatalogObjectFragment.newInstance(data as String, sortObject!!), filterScreens)
             }
         } FilterScreens.FILTER -> {
-            showFragment(CatalogObject4Fragment.newInstance((currentFragment as CatalogObjectFragment).sortedObject), FilterScreens.FILTER)
+            showFragment(CatalogObject4Fragment.newInstance((currentFragment.peek() as CatalogObjectFragment).sortedObject), FilterScreens.FILTER)
         }
         }
     }
@@ -79,6 +79,7 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
     fun back(){
         if(currentScreen.size > 1) {
             currentScreen.pop()
+            currentFragment.pop()
             listener.onScreenNavigate(currentScreen.peek())
         }
     }
