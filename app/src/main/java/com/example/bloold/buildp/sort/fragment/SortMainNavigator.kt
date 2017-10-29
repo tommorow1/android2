@@ -1,14 +1,12 @@
-package com.example.bloold.buildp.filter.`object`
+package com.example.bloold.buildp.sort.fragment
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.AllFiltersModel
-import com.example.bloold.buildp.model.BaseModel
+import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
 import com.example.bloold.buildp.model.HightFilterModelLevel
-import com.example.bloold.buildp.model.SubFilterModelLevel
+import com.example.bloold.buildp.model.SortObject
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -30,9 +28,8 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
     var currentFragment: Fragment? = null
 
     enum class FilterScreens {
-        HIGHT_FILTER,
-        SUB_LEVEL_FILTER,
-        MAIN_FILTER
+        MAIN_FILTER,
+        CATALOG_OBJECTS
     }
 
 
@@ -47,8 +44,7 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
 
             currentScreen.push(screen)
 
-        } else if (currentScreen.peek() != screen) {
-
+        } else {
             currentFragment = fragment
 
             fragmentManager.beginTransaction()
@@ -62,37 +58,15 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
         }
     }
 
-    fun onActivityCreate(models: ArrayList<HightFilterModelLevel>) {
-        items = models
-
-        currentFragment = initFragment()
-
-        fragmentManager.beginTransaction()
-                .add(layoutContainerId, currentFragment)
-                .commit()
-
-        listener.onScreenNavigate(FilterScreens.HIGHT_FILTER)
-    }
-
-    private fun initFragment(): Fragment {
-        currentScreen.add(FilterScreens.HIGHT_FILTER)
-        return HighFilterFragment.newInstance(items, R.layout.item_hight_level_filter)
-    }
-
     fun navigateTo(filterScreens: FilterScreens, data: Any? = null){
         when(filterScreens){
-            FilterScreens.HIGHT_FILTER -> {
-                showFragment(HighFilterFragment.newInstance(items, R.layout.item_hight_level_filter), filterScreens)
-            } FilterScreens.SUB_LEVEL_FILTER-> {
-                val item = (data as HightFilterModelLevel).items
-                if(item != null) {
-                    showFragment(SubLevelFragment.newInstance(item, R.layout.item_hight_level_filter), filterScreens)
+             FilterScreens.MAIN_FILTER -> {
+                if(data != null) {
+                    showFragment(SortFragment.newInstance(data as ArrayList<SortObject>, R.layout.item_hight_level_filter), filterScreens)
                 }
-                Log.d("onListFragmentInte2", item.toString())
-            } FilterScreens.MAIN_FILTER -> {
-                val item = (data as SubFilterModelLevel).items
-                if(item != null) {
-                    showFragment(FilterStartFragment.newInstance(item, R.layout.item_filter_start), filterScreens)
+            } FilterScreens.CATALOG_OBJECTS -> {
+                if(data != null) {
+                    showFragment(CatalogObjectFragment.newInstance(data as String), filterScreens)
                 }
             }
         }

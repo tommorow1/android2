@@ -1,4 +1,4 @@
-package com.example.bloold.buildp.filter.`object`
+package com.example.bloold.buildp.sort.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -9,18 +9,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.SubFilterModelLevel
 
-/**
- * Created by bloold on 22.10.17.
- */
-class SubLevelFragment : Fragment(), onFilterClickListener<SubFilterModelLevel> {
+import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.SortObject
+
+class SortFragment : Fragment(), onFilterClickListener<SortObject> {
 
     private var mListener: OnListFragmentInteractionListener? = null
-    private var mItems: ArrayList<SubFilterModelLevel> = ArrayList()
+    private var mItems: ArrayList<SortObject> = ArrayList()
     private var mItemRes: Int = 0
-    private var adapter: MyFilterStartAdapter<SubFilterModelLevel>? = null
+    private var adapter: SortAdapter<SortObject>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +37,7 @@ class SubLevelFragment : Fragment(), onFilterClickListener<SubFilterModelLevel> 
         if (view is RecyclerView) {
             val context = view.getContext()
 
-            adapter = MyFilterStartAdapter(mItems, mItemRes, this)
+            adapter = SortAdapter(mItems, mItemRes, this)
 
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
@@ -53,7 +51,7 @@ class SubLevelFragment : Fragment(), onFilterClickListener<SubFilterModelLevel> 
         try {
             mListener = context as OnListFragmentInteractionListener
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
 
     }
@@ -64,20 +62,21 @@ class SubLevelFragment : Fragment(), onFilterClickListener<SubFilterModelLevel> 
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: SubFilterModelLevel)
+        fun onListFragmentInteraction(item: SortObject)
     }
 
-    override fun onClick(item: SubFilterModelLevel) {
+    override fun onClick(item: SortObject) {
+        Log.d("onClickFragment", item.name)
         mListener?.onListFragmentInteraction(item)
     }
 
-    companion object {
+    companion object{
 
         private val ITEMS_KEY = "items"
         private val RESOURCE_ITEM_KEY = "container"
 
-        fun newInstance(items: ArrayList<SubFilterModelLevel>, itemRes: Int): SubLevelFragment {
-            val fragment = SubLevelFragment()
+        fun newInstance(items: ArrayList<SortObject>, itemRes: Int): SortFragment {
+            val fragment = SortFragment()
             val args = Bundle()
             args.putParcelableArrayList(ITEMS_KEY, items)
             args.putInt(RESOURCE_ITEM_KEY, itemRes)
