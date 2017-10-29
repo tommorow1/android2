@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val fabFilter = findViewById<View>(R.id.fabFilter) as FloatingActionButton
         fabFilter.setOnClickListener { view ->
-            startActivity(Intent(this, FilterObjectsActivity::class.java))
+            //startActivity(Intent(this, FilterObjectsActivity::class.java))
+            navigator?.navigateTo(FilterMainNavigator.FilterScreens.FILTER)
         }
 
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
