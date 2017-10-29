@@ -271,6 +271,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fabFilter.visibility = View.VISIBLE
             } FilterMainNavigator.FilterScreens.MAIN_FILTER -> {
                 fabFilter.visibility = View.GONE
+            } FilterMainNavigator.FilterScreens.FILTER-> {
+                fabFilter.visibility = View.GONE
             }
         }
     }
