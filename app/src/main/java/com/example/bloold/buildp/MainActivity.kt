@@ -18,6 +18,7 @@ import com.example.bloold.buildp.filter.`object`.FilterObjectsActivity
 import com.example.bloold.buildp.search.SearchActivity
 import android.content.SharedPreferences
 import android.support.v7.widget.AppCompatButton
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -30,13 +31,14 @@ import com.example.bloold.buildp.presenters.callback
 import com.example.bloold.buildp.sort.fragment.SortFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import com.facebook.login.LoginManager;
-
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         callback,
         onFilterListener,
-        SortFragment.OnListFragmentInteractionListener{
+        SortFragment.OnListFragmentInteractionListener
+{
 
 
     private val AuthToken = "AuthToken"
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val CATALOG_OBJECTS_SELECT = "?select[]=ID&select[]=NAME"
     private val CATALOG_OBJECTS_FILTER = "&filter[IBLOCK_SECTION_ID][1]="
     private val URL = "http://ruinnet.idefa.ru/api_app/directory/type-catalog-structure/"
+    private val CATALOG_ALL_OBJECT = "http://ruinnet.idefa.ru/api_app/object/list/?select[]=ID&select[]=NAME&select[]=PREVIEW_TEXT&select[]=PROPERTY_ADDRESS&select[]=DETAIL_PICTURE&select[]=PHOTOS_DATA&select[]=DOCS_DATA&select[]=PUBLICATIONS_DATA&select[]=VIDEO_DATA&select[]=AUDIO_DATA&select[]=DETAIL_PAGE_URL&select[]=IS_FAVORITE&select[]=PROPERTY_MAP=Y"
     private var presenter: SortPresenter = SortPresenter(this)
     private var navigator: FilterMainNavigator? = null
 
@@ -170,6 +173,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
+            navigator?.back()
             super.onBackPressed()
         }
     }
@@ -242,19 +246,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onSortedObjectsLoaded(items: ArrayList<SortObject>) {
-        navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, items)
+        navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, getItems(items))
+    }
+
+    private fun getItems(items: ArrayList<SortObject>, itemId: String? = null ): ArrayList<SortObject> {
+        return items.apply {
+            if(!TextUtils.equals(items.get(0).name, "Все"))
+                add(0, SortObject().apply {
+                    name = "Все"
+                    child = items
+                    if(itemId == null) {
+                        id = "-1"
+                    } else {
+                        id = itemId
+                    }
+                })
+        }
     }
 
     override fun onScreenNavigate(screen: FilterMainNavigator.FilterScreens) {
-
+        when(screen){
+            FilterMainNavigator.FilterScreens.CATALOG_OBJECTS -> {
+                fabFilter.visibility = View.VISIBLE
+            } FilterMainNavigator.FilterScreens.MAIN_FILTER -> {
+                fabFilter.visibility = View.GONE
+            }
+        }
     }
 
     override fun onListFragmentInteraction(item: SortObject) {
         Log.d("mainListener", item.child.toString())
-        if(item.child != null) {
-            navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, item.child)
+        if(item.child != null && item.child!!.get(0).child != null && !TextUtils.equals(item.name, "Все")) {
+            navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, getItems(item.child!!, item.id))
         } else {
-            navigator?.navigateTo(FilterMainNavigator.FilterScreens.CATALOG_OBJECTS, BASE_URL + CATALOG_OBJECTS_URL + CATALOG_OBJECTS_SELECT + CATALOG_OBJECTS_FILTER + item.id)
+            var url = ""
+            if(TextUtils.equals(item.id, "-1")){
+                url = CATALOG_ALL_OBJECT
+            } else {
+                url = BASE_URL + CATALOG_OBJECTS_URL + CATALOG_OBJECTS_SELECT + CATALOG_OBJECTS_FILTER + item.id
+            }
+            Log.d("mainListener", url)
+            navigator?.navigateTo(FilterMainNavigator.FilterScreens.CATALOG_OBJECTS, url, item)
         }
     }
 }

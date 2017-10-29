@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
+import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.SortObject
 import java.util.*
@@ -53,12 +54,12 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
                     .commit()
 
             currentScreen.add(screen)
-
-            listener.onScreenNavigate(screen)
         }
+
+        listener.onScreenNavigate(screen)
     }
 
-    fun navigateTo(filterScreens: FilterScreens, data: Any? = null){
+    fun navigateTo(filterScreens: FilterScreens, data: Any? = null, sortObject: SortObject? = null){
         when(filterScreens){
              FilterScreens.MAIN_FILTER -> {
                 if(data != null) {
@@ -66,9 +67,16 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
                 }
             } FilterScreens.CATALOG_OBJECTS -> {
                 if(data != null) {
-                    showFragment(CatalogObjectFragment.newInstance(data as String), filterScreens)
+                    showFragment(CatalogObjectFragment.newInstance(data as String, sortObject!!), filterScreens)
                 }
             }
+        }
+    }
+
+    fun back(){
+        if(!currentScreen.empty()) {
+            currentScreen.pop()
+            listener.onScreenNavigate(currentScreen.peek())
         }
     }
 }

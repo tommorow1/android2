@@ -33,6 +33,8 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
         var connection: HttpURLConnection? = null
         var reader: BufferedReader? = null
 
+        Log.d("doinback", params[0])
+
         try {
             val url = URL(params[0])
             connection = url.openConnection() as HttpURLConnection
