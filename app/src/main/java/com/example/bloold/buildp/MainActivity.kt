@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         SortFragment.OnListFragmentInteractionListener
 {
 
-
     private val AuthToken = "AuthToken"
     var navigationView: NavigationView? = null
     //private lateinit var navigator: NavigatorCatalogObjects

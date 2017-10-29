@@ -11,9 +11,6 @@ import com.example.bloold.buildp.model.SortObject
 import com.example.bloold.buildp.sort.fragment.SortFragment
 import kotlinx.android.synthetic.main.fragment_catalog_object_4.*
 
-/**
- * Created by mikha on 29-Oct-17.
- */
 class CatalogObject4Fragment : android.support.v4.app.Fragment() {
 
     private var rootView: View? = null
@@ -27,10 +24,6 @@ class CatalogObject4Fragment : android.support.v4.app.Fragment() {
         }
 
         val catalogObjects = ArrayList<ArrayList<SortObject>?>()
-        val children1 = ArrayList<String>()
-
-        children1.add("Child_1")
-        children1.add("Child_2")
         catalogObjects.add(mItems.child)
 
 
