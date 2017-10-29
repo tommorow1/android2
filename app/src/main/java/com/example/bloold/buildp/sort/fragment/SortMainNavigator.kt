@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
+import com.example.bloold.buildp.filter.`object`.CatalogObject4Fragment
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.SortObject
@@ -30,7 +31,8 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
 
     enum class FilterScreens {
         MAIN_FILTER,
-        CATALOG_OBJECTS
+        CATALOG_OBJECTS,
+        FILTER
     }
 
 
@@ -69,6 +71,8 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
                 if(data != null) {
                     showFragment(CatalogObjectFragment.newInstance(data as String, sortObject!!), filterScreens)
                 }
+            } FilterScreens.FILTER -> {
+                showFragment(CatalogObject4Fragment(), filterScreens)
             }
         }
     }
