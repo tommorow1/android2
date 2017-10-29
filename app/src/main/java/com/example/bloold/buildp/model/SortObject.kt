@@ -15,7 +15,7 @@ class SortObject() : Parcelable, BaseModel() {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
-        parcel.writeTypedList(child)
+        //parcel.writeTypedList(child)
     }
 
     override fun describeContents(): Int {

@@ -6,25 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.SortObject
 
 /**
  * Created by mikha on 29-Oct-17.
  */
-class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayList<ArrayList<String>>?) : BaseExpandableListAdapter() {
+class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayList<ArrayList<SortObject>?>) : BaseExpandableListAdapter() {
     override fun getGroupCount(): Int {
-       return mGroups?.size ?: 0
+       return mGroups.size
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return mGroups?.get(groupPosition)?.size ?: 0
+        return mGroups.get(groupPosition)?.size ?: 0
     }
 
     override fun getGroup(groupPosition: Int): Any? {
-        return mGroups?.get(groupPosition)
+        return mGroups.get(groupPosition)
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): Any? {
-        return mGroups?.get(groupPosition)?.get(childPosition)
+        return mGroups.get(groupPosition)?.get(childPosition)
     }
 
     override fun getGroupId(groupPosition: Int): Long {
@@ -57,7 +58,7 @@ class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayLi
         }
 
         val textGroup = convertView2?.findViewById<TextView>(R.id.filterRootName)
-        textGroup?.text = "Group " + Integer.toString(groupPosition)
+        textGroup?.text = mGroups?.get(groupPosition)?.get(0)?.name
 
         return convertView2
     }
@@ -71,10 +72,11 @@ class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayLi
             convertView
         }
 
-        val textGroup = convertView2?.findViewById<android.support.v7.widget.AppCompatTextView>(R.id.tvName)
-        textGroup?.text = mGroups?.get(groupPosition)?.get(childPosition)
+//        val textGroup = convertView2?.findViewById<android.support.v7.widget.AppCompatTextView>(R.id.tvName)
+//        textGroup?.text = mGroups?.get(groupPosition)?.get(childPosition)?.name
 
         val checkBox = convertView2?.findViewById<CheckBox>(R.id.chbFilter)
+        checkBox?.text = mGroups?.get(groupPosition)?.get(childPosition)?.name
         checkBox?.setOnCheckedChangeListener { buttonView, isChecked ->
             Toast.makeText(mContext,"button is pressed",Toast.LENGTH_LONG).show()
         }

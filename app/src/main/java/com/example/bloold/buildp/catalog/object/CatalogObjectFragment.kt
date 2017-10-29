@@ -27,7 +27,7 @@ class CatalogObjectFragment : Fragment(), AdapterListener, callback {
     private var urlResponse: String? = null
     private var objectsArray: ArrayList<CatalogObjectsModel> = ArrayList()
     private var isHaveCatalog: Boolean = false
-    private var sortedObject: SortObject? = null
+    var sortedObject: SortObject? = null
 
     companion object Catalog{
 

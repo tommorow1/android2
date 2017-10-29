@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
 import com.example.bloold.buildp.filter.`object`.CatalogObject4Fragment
-import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.SortObject
 import java.util.*
@@ -63,22 +62,22 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
 
     fun navigateTo(filterScreens: FilterScreens, data: Any? = null, sortObject: SortObject? = null){
         when(filterScreens){
-             FilterScreens.MAIN_FILTER -> {
+            FilterScreens.MAIN_FILTER -> {
                 if(data != null) {
                     showFragment(SortFragment.newInstance(data as ArrayList<SortObject>, R.layout.item_hight_level_filter), filterScreens)
                 }
             } FilterScreens.CATALOG_OBJECTS -> {
-                if(data != null) {
-                    showFragment(CatalogObjectFragment.newInstance(data as String, sortObject!!), filterScreens)
-                }
-            } FilterScreens.FILTER -> {
-                showFragment(CatalogObject4Fragment(), filterScreens)
+            if(data != null) {
+                showFragment(CatalogObjectFragment.newInstance(data as String, sortObject!!), filterScreens)
             }
+        } FilterScreens.FILTER -> {
+            showFragment(CatalogObject4Fragment.newInstance((currentFragment as CatalogObjectFragment).sortedObject), FilterScreens.FILTER)
+        }
         }
     }
 
     fun back(){
-        if(!currentScreen.empty()) {
+        if(currentScreen.size > 1) {
             currentScreen.pop()
             listener.onScreenNavigate(currentScreen.peek())
         }
