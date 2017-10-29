@@ -12,9 +12,6 @@ import com.example.bloold.buildp.model.SubFilterModelLevel
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by bloold on 22.10.17.
- */
 interface onFilterListener {
     fun onScreenNavigate(screen: FilterMainNavigator.FilterScreens)
 }

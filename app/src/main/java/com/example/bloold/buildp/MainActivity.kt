@@ -126,7 +126,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun  LogBtnHide()
     {
         val btnAuth =  findViewById<View>(R.id.btnAuth) as AppCompatButton;
-        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView;
         val ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView;
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView;
         //btnLogout.setWidth(160);
@@ -135,7 +134,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         btnAuth.setVisibility(View.INVISIBLE);
-        ivLogout.setVisibility(View.VISIBLE);
         ivProfile.setVisibility(View.VISIBLE);
         ivSettings.setVisibility(View.VISIBLE);
 
@@ -144,7 +142,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun LogBtnShow()
     {
         val btnAuth =  findViewById<View>(R.id.btnAuth) as AppCompatButton;
-        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView;
         val ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView;
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView;
         val tvName = findViewById<View>(R.id.tvName) as TextView;
@@ -153,7 +150,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tvName.setText("");
 
         btnAuth.setVisibility(View.VISIBLE);
-        ivLogout.setVisibility(View.INVISIBLE);
         ivProfile.setVisibility(View.INVISIBLE);
         ivSettings.setVisibility(View.INVISIBLE);
     }
@@ -194,13 +190,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         btnAuth.setOnClickListener { view ->
             startActivity(Intent(this, LoginActivity::class.java))
 
-        }
-
-        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView
-
-        ivLogout.setOnClickListener { view ->
-            DeleteToken();
-            startActivity(Intent(this, MainActivity::class.java))
         }
 
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView

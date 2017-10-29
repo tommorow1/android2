@@ -24,7 +24,6 @@ class FilterObjectsActivity : AppCompatActivity(),
 
     private val URL = "http://ruinnet.idefa.ru/api_app/directory/type-catalog-structure/"
     private var presenter: HighObjectsFilterResponse = HighObjectsFilterResponse(this)
-    private var navigator: FilterMainNavigator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +33,6 @@ class FilterObjectsActivity : AppCompatActivity(),
         tvClear = findViewById(R.id.tvEndClear)
         ivBack = findViewById(R.id.ivBack)
 
-        navigator = FilterMainNavigator(this, R.id.flContainerFilter, this)
         presenter.execute(URL)
     }
 
@@ -42,8 +40,8 @@ class FilterObjectsActivity : AppCompatActivity(),
 
     }
 
-    override fun onFiltersLoaded(items: ArrayList<HightFilterModelLevel>) {
-        navigator?.onActivityCreate(items)
+    override fun onFiltersLoaded(items: ArrayList<HightFilterModelLevel>) { //Callback
+
     }
 
     override fun onScreenNavigate(screen: FilterMainNavigator.FilterScreens) {
@@ -57,10 +55,10 @@ class FilterObjectsActivity : AppCompatActivity(),
 
     override fun onListFragmentInteraction(item: HightFilterModelLevel) {
         Log.d("onListFragmentInte2", item.name)
-        navigator?.navigateTo(FilterMainNavigator.FilterScreens.SUB_LEVEL_FILTER, item)
+        //navigator?.navigateTo(FilterMainNavigator.FilterScreens.SUB_LEVEL_FILTER, item)
     }
 
     override fun onListFragmentInteraction(item: SubFilterModelLevel) {
-        navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, item)
+        //navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, item)
     }
 }
