@@ -16,7 +16,7 @@ import com.example.bloold.buildp.model.SortObject
 class SortFragment : Fragment(), onFilterClickListener<SortObject> {
 
     private var mListener: OnListFragmentInteractionListener? = null
-    private var mItems: ArrayList<SortObject> = ArrayList()
+    private var mItems: ArrayList<SortObject>? = null
     private var mItemRes: Int = 0
     private var adapter: SortAdapter<SortObject>? = null
 
@@ -37,7 +37,7 @@ class SortFragment : Fragment(), onFilterClickListener<SortObject> {
         if (view is RecyclerView) {
             val context = view.getContext()
 
-            adapter = SortAdapter(mItems, mItemRes, this)
+            adapter = SortAdapter(mItems!!, mItemRes, this)
 
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
@@ -59,6 +59,7 @@ class SortFragment : Fragment(), onFilterClickListener<SortObject> {
     override fun onDetach() {
         super.onDetach()
         mListener = null
+        mItems = null
     }
 
     interface OnListFragmentInteractionListener {

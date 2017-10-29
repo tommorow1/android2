@@ -11,21 +11,21 @@ import com.example.bloold.buildp.model.SortObject
 /**
  * Created by mikha on 29-Oct-17.
  */
-class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayList<ArrayList<SortObject>?>) : BaseExpandableListAdapter() {
+class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : SortObject?) : BaseExpandableListAdapter() {
     override fun getGroupCount(): Int {
-       return mGroups.size
+       return 1
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return mGroups.get(groupPosition)?.size ?: 0
+        return (mGroups?.child?.size ?: 1) - 1
     }
 
     override fun getGroup(groupPosition: Int): Any? {
-        return mGroups.get(groupPosition)
+        return mGroups
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): Any? {
-        return mGroups.get(groupPosition)?.get(childPosition)
+        return mGroups?.child?.get(groupPosition + 1)
     }
 
     override fun getGroupId(groupPosition: Int): Long {
@@ -58,7 +58,7 @@ class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayLi
         }
 
         val textGroup = convertView2?.findViewById<TextView>(R.id.filterRootName)
-        textGroup?.text = mGroups?.get(groupPosition)?.get(0)?.name
+        textGroup?.text = mGroups?.name
 
         return convertView2
     }
@@ -76,7 +76,7 @@ class ExpandableListCatalogObject4(var mContext: Context?, var mGroups : ArrayLi
 //        textGroup?.text = mGroups?.get(groupPosition)?.get(childPosition)?.name
 
         val checkBox = convertView2?.findViewById<CheckBox>(R.id.chbFilter)
-        checkBox?.text = mGroups?.get(groupPosition)?.get(childPosition)?.name
+        checkBox?.text = mGroups?.child?.get(childPosition + 1)?.name
         checkBox?.setOnCheckedChangeListener { buttonView, isChecked ->
             Toast.makeText(mContext,"button is pressed",Toast.LENGTH_LONG).show()
         }

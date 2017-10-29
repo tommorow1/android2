@@ -34,7 +34,7 @@ class CatalogObject4Fragment : android.support.v4.app.Fragment() {
         catalogObjects.add(mItems.child)
 
 
-        val adapter = ExpandableListCatalogObject4(activity.applicationContext, catalogObjects)
+        val adapter = ExpandableListCatalogObject4(activity.applicationContext, mItems)
         val listView = rootView?.findViewById<ExpandableListView>(R.id.catalogObjectListView)
         listView?.setAdapter(adapter)
 
