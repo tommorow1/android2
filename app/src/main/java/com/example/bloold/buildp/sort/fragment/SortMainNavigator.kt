@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
 import com.example.bloold.buildp.filter.`object`.CatalogObject4Fragment
-import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.SortObject
 import java.util.*
@@ -72,13 +71,13 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
                 showFragment(CatalogObjectFragment.newInstance(data as String, sortObject!!), filterScreens)
             }
         } FilterScreens.FILTER -> {
-            showFragment(CatalogObject4Fragment(), filterScreens)
+            showFragment(CatalogObject4Fragment.newInstance((currentFragment as CatalogObjectFragment).sortedObject), FilterScreens.FILTER)
         }
         }
     }
 
     fun back(){
-        if(!currentScreen.empty()) {
+        if(currentScreen.size > 1) {
             currentScreen.pop()
             listener.onScreenNavigate(currentScreen.peek())
         }
