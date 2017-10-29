@@ -38,7 +38,9 @@ class FilterObjectsActivity : AppCompatActivity(),
         ivBack = findViewById(R.id.ivBack)
 
         navigator = FilterMainNavigator(this, R.id.flContainerFilter, this)
-        presenter.execute(URL)
+        //presenter.execute(URL)
+
+        supportFragmentManager.beginTransaction().add(R.id.flContainerFilter, CatalogObject4Fragment(), "CATALOG_OBJECT_4_FRAGMENT").commit()
     }
 
     override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {

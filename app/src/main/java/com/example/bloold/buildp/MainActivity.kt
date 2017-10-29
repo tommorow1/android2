@@ -81,11 +81,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 /*
-
         pagerAdapter = PagerClassAdapter(supportFragmentManager)
         viewPager = findViewById<ViewPager>(R.id.container)
         viewPager.adapter = pagerAdapter
-
         tabLayout = findViewById<TabLayout>(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
 */
@@ -124,6 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun  LogBtnHide()
     {
         val btnAuth =  findViewById<View>(R.id.btnAuth) as AppCompatButton;
+        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView;
         val ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView;
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView;
         //btnLogout.setWidth(160);
@@ -131,6 +130,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         btnAuth.setVisibility(View.INVISIBLE);
+        ivLogout.setVisibility(View.VISIBLE);
         ivProfile.setVisibility(View.VISIBLE);
         ivSettings.setVisibility(View.VISIBLE);
 
@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun LogBtnShow()
     {
         val btnAuth =  findViewById<View>(R.id.btnAuth) as AppCompatButton;
+        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView;
         val ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView;
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView;
         val tvName = findViewById<View>(R.id.tvName) as TextView;
@@ -147,6 +148,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tvName.setText("");
 
         btnAuth.setVisibility(View.VISIBLE);
+        ivLogout.setVisibility(View.INVISIBLE);
         ivProfile.setVisibility(View.INVISIBLE);
         ivSettings.setVisibility(View.INVISIBLE);
     }
@@ -189,6 +191,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
+        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView
+
+        ivLogout.setOnClickListener { view ->
+            DeleteToken();
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView
 
         ivSettings.setOnClickListener {
@@ -216,19 +225,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         /*// Handle navigation view item clicks here.
         val id = item.itemId
-
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
         } else if (id == R.id.nav_slideshow) {
-
         } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
-
         }
-
         */val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true

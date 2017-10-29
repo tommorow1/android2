@@ -1,16 +1,17 @@
 package com.example.bloold.buildp.filter.`object`
 
-import android.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ExpandableListView
 import com.example.bloold.buildp.R
+import kotlinx.android.synthetic.main.fragment_catalog_object_4.*
 
 /**
  * Created by mikha on 29-Oct-17.
  */
-class CatalogObject4Fragment : Fragment() {
+class CatalogObject4Fragment : android.support.v4.app.Fragment() {
 
     private var rootView: View? = null
 
@@ -31,8 +32,9 @@ class CatalogObject4Fragment : Fragment() {
         children2.add("Child_3")
         catalogObjects.add(children2)
 
-//        ExpListAdapter adapter = new ExpListAdapter(getApplicationContext(), groups);
-//        listView.setAdapter(adapter);
+        val adapter = ExpandableListCatalogObject4(activity.applicationContext, catalogObjects)
+        val listView = rootView?.findViewById<ExpandableListView>(R.id.catalogObjectListView)
+        listView?.setAdapter(adapter)
 
         return rootView
     }
