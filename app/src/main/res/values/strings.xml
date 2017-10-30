@@ -22,16 +22,31 @@
     <string name="facebook_app_id">893853807441584</string>
     <string name="fb_login_protocol_scheme">fb893853807441584</string>
     <integer name="com_vk_sdk_AppId">6219142</integer>
+
     <string-array name="spinner_choice_object_address">
         <item>По обьекту</item>
         <item>По адресу</item>
     </string-array>
 
-    <string name="find_by_name">http://ruinnet.idefa.ru/api_app/object/list/?select[0]=NAME&amp;filter[0][LOGIC]=OR&amp;filter[0][?NAME]=%1$s&amp;filter[!EGRKN_NUMBER]=false&amp;filter[0][?PROPERTY_ADDRESS]=%1$s</string>
+    <string-array name="spinner_choice_region">
+        <item>Выберите область</item>
+        <item>Ростовская область</item>
+    </string-array>
 
-    <string name="find_by_egrn">http://ruinnet.idefa.ru/api_app/object/list/?select%5B0%5D=NAME&amp;select%5B7%5D=PROPERTY_EGRKN_NUMBER&amp;filter%5BPROPERTY_EGRKN_NUMBER%5D=%1$s</string>
+    <string-array name="chooseImage">
+        <item>Выбрать из галереи</item>
+        <item>Сделать фото</item>
+    </string-array>
 
-    <string name="find_by_address">https://geocode-maps.yandex.ru/1.x/?format=json&amp;results=10&amp;kind=locality&amp;geocode=%1$s</string>
+    <string name="profile_pick_photo">Загрузить фотографию</string>
+
+
+    <string name="find_by_name">http://ruinnet.idefa.ru/api_app/object/list/?select[0]=NAME&amp;filter[0][LOGIC]=OR&amp;filter[0][?NAME]=%1$s&amp;filter[!EGRKN_NUMBER]=false</string>
+
+    <string name="find_by_egrn">http://ruinnet.idefa.ru/api_app/object/list/?select[]=NAME&amp;select[]=PROPERTY_EGRKN_NUMBER&amp;filter[?PROPERTY_EGRKN_NUMBER]=%1$s</string>
+
+    <string name="find_by_address">http://ruinnet.idefa.ru/api_app/object/list/?select[]=NAME&amp;select[]=PROPERTY_ADDRESS&amp;filter[0][LOGIC]=OR&amp;filter[!EGRKN_NUMBER]=false&amp;filter[0][?PROPERTY_ADDRESS]=%1$s</string>
+
     <string name="title_activity_logging">LoggingActivity</string>
     <string name="title_activity_login">Main2Activity</string>
     <string name="title_activity_main2">Main2Activity</string>
@@ -39,5 +54,7 @@
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="title_activity_restore">RestoreActivity</string>
     <string name="title_activity_profile_settings">ProfileSettingsActivity</string>
+    <string name="title_activity_agreement">Пользовательское соглашение</string>
+    <string name="title_activity_list_objects">ListObjectsActivity</string>
 
 </resources>

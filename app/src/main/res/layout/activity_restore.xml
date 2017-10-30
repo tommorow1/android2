@@ -107,8 +107,8 @@
                     android:paddingTop="10dp"
                     android:text="Изменить пароль"
                     android:textAllCaps="false"
-                    android:textColor="@color/colorAccent"
-                    android:textColorLink="@color/colorAccent"
+                    android:textColor="@color/colorRed"
+                    android:textColorLink="@color/colorRed"
                     android:textSize="24sp" />
             </LinearLayout>
         </LinearLayout>

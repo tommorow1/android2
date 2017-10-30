@@ -2,6 +2,7 @@ package com.example.bloold.buildp.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by bloold on 21.10.17.
@@ -117,7 +118,10 @@ abstract class FilterModel<T: Parcelable>(): Parcelable, BaseModel() {
 }
 
 open class BaseModel() : Parcelable {
+    @SerializedName("ID")
     var id: String? = null
+
+    @SerializedName("NAME")
     var name: String? = null
 
     constructor(parcel: Parcel) : this() {

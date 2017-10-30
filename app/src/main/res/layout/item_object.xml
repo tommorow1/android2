@@ -20,14 +20,20 @@
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivBuild"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@color/black_overlay"/>
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:textColor="@android:color/white"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:layout_gravity="bottom|left"/>
 
@@ -53,12 +59,12 @@
                 android:src="@drawable/ic_location"
                 android:layout_marginRight="16dp"/>
 
-            <android.support.v7.widget.AppCompatImageView
+            <!--<android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_arrow_next"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginRight="16dp"/>-->
 
         </LinearLayout>
 

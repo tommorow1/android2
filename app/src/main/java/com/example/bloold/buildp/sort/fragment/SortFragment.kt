@@ -1,4 +1,4 @@
-package com.example.bloold.buildp.filter.`object`
+package com.example.bloold.buildp.sort.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -9,21 +9,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.CatalogObjectsModel
-import com.example.bloold.buildp.model.HightFilterModelLevel
-import com.example.bloold.buildp.model.SubFilterModelLevel
 
-/**
- * Created by bloold on 22.10.17.
- */
-class HighFilterFragment: Fragment(), onFilterClickListener<HightFilterModelLevel> {
+import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.SortObject
+
+class SortFragment : Fragment(), onFilterClickListener<SortObject> {
 
     private var mListener: OnListFragmentInteractionListener? = null
-    private var mItems: ArrayList<HightFilterModelLevel> = ArrayList()
+    private var mItems: ArrayList<SortObject>? = null
     private var mItemRes: Int = 0
-    private var adapter: MyFilterStartAdapter<HightFilterModelLevel>? = null
-
+    private var adapter: SortAdapter<SortObject>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +37,7 @@ class HighFilterFragment: Fragment(), onFilterClickListener<HightFilterModelLeve
         if (view is RecyclerView) {
             val context = view.getContext()
 
-            adapter = MyFilterStartAdapter(mItems, mItemRes, this)
+            adapter = SortAdapter(mItems!!, mItemRes, this)
 
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
@@ -56,7 +51,7 @@ class HighFilterFragment: Fragment(), onFilterClickListener<HightFilterModelLeve
         try {
             mListener = context as OnListFragmentInteractionListener
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
 
     }
@@ -64,13 +59,14 @@ class HighFilterFragment: Fragment(), onFilterClickListener<HightFilterModelLeve
     override fun onDetach() {
         super.onDetach()
         mListener = null
+        mItems = null
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: HightFilterModelLevel)
+        fun onListFragmentInteraction(item: SortObject)
     }
 
-    override fun onClick(item: HightFilterModelLevel) {
+    override fun onClick(item: SortObject) {
         Log.d("onClickFragment", item.name)
         mListener?.onListFragmentInteraction(item)
     }
@@ -80,8 +76,8 @@ class HighFilterFragment: Fragment(), onFilterClickListener<HightFilterModelLeve
         private val ITEMS_KEY = "items"
         private val RESOURCE_ITEM_KEY = "container"
 
-        fun newInstance(items: ArrayList<HightFilterModelLevel>, itemRes: Int): HighFilterFragment {
-            val fragment = HighFilterFragment()
+        fun newInstance(items: ArrayList<SortObject>, itemRes: Int): SortFragment {
+            val fragment = SortFragment()
             val args = Bundle()
             args.putParcelableArrayList(ITEMS_KEY, items)
             args.putInt(RESOURCE_ITEM_KEY, itemRes)

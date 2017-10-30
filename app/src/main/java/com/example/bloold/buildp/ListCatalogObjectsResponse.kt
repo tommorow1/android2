@@ -33,6 +33,8 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
         var connection: HttpURLConnection? = null
         var reader: BufferedReader? = null
 
+        Log.d("doinback", params[0])
+
         try {
             val url = URL(params[0])
             connection = url.openConnection() as HttpURLConnection
@@ -58,8 +60,15 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
 
             val finalJson = buffer.toString()
             Log.d("json", finalJson)
+            var objects = ArrayList<CatalogObjectsModel>()
 
-            return getCatalogObject(finalJson)
+            try {
+                objects = getCatalogObject(finalJson)
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
+
+            return objects
 
         } catch (e: MalformedURLException) {
             //e.printStackTrace()
@@ -86,11 +95,8 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
     override fun onPostExecute(result: ArrayList<CatalogObjectsModel>?) {
         super.onPostExecute(result)
         //dialog.dismiss()
-        if (result != null) {
+        if(result != null) {
             view.onObjectsLoaded(result)
-            Log.d("result", "onPostExecute")
-        } else {
-            //Toast.makeText(getApplicationContext(), "Ошибка", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,7 +104,7 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
 
         val response = JSONObject(responseStr)
 
-        var ITEMS: JSONObject? = null
+        var ITEMS: JSONArray? = null
         var DATA: JSONObject? = null
 
         val parentArray: JSONArray? = null
@@ -110,7 +116,7 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
         }
 
         try {
-            ITEMS = JSONObject(DATA!!.getString("ITEMS"))
+            ITEMS = JSONArray(DATA!!.getString("ITEMS"))
             //parentArray = DATA.getJSONArray("ITEMS");
         } catch (e: JSONException) {
             //e.printStackTrace()
@@ -121,10 +127,9 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
         val gson = Gson()
         val array: JSONArray? = null
 
-        val iterator = ITEMS!!.keys()
-        while (iterator.hasNext()) {
-            val key = iterator.next() as String
-            val finalObject = ITEMS.getJSONObject(key)
+        for(i:Int in 0..(ITEMS?.length() ?: 1) - 1) {
+            val finalObject = ITEMS!!.getJSONObject(i)
+            Log.d("i: ${i}", finalObject.toString())
             val catalogModel = CatalogObjectsModel()
 
             try {
@@ -228,9 +233,11 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
                 //e.printStackTrace()
             }
 
+            Log.d("i: ${i}", catalogModel.name.toString())
             catalogModelList.add(catalogModel)
         }
 
+        Log.d("${catalogModelList.size}", catalogModelList.toString())
         return catalogModelList
     }
 }

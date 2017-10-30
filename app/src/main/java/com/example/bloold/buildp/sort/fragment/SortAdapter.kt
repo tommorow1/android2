@@ -1,8 +1,6 @@
-package com.example.bloold.buildp.filter.`object`
+package com.example.bloold.buildp.sort.fragment
 
-import android.os.Parcelable
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +8,17 @@ import android.widget.CheckBox
 import android.widget.TextView
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.model.BaseModel
-import com.example.bloold.buildp.model.FilterModel
-import com.example.bloold.buildp.model.HightFilterModelLevel
 
 interface onFilterClickListener<T> {
     fun onClick(item: T)
 }
 
-class MyFilterStartAdapter<T: BaseModel>(private val mValues: List<T>,
+class SortAdapter<T: BaseModel>(private val mValues: List<T>,
                               private val customRes: Int,
                                          private val listener: onFilterClickListener<T>)
-    :RecyclerView.Adapter<MyFilterStartAdapter<T>.ViewHolder>() {
+    :RecyclerView.Adapter<SortAdapter<T>.ViewHolder>() {
 
-    public override fun onCreateViewHolder(parent:ViewGroup, viewType:Int):ViewHolder {
+    public override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewHolder {
         val view = LayoutInflater.from(parent.getContext())
             .inflate(customRes,
                     //R.layout.item_filter_start,
@@ -30,7 +26,7 @@ class MyFilterStartAdapter<T: BaseModel>(private val mValues: List<T>,
         return ViewHolder(view)
     }
 
-    public override fun onBindViewHolder(holder:ViewHolder, position:Int) {
+    public override fun onBindViewHolder(holder: ViewHolder, position:Int) {
         holder.mItem = mValues.get(position)
         holder.mCheckText.text = mValues.get(position).name
 

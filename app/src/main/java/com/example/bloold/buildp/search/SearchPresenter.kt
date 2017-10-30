@@ -25,25 +25,25 @@ import java.net.URL
 class SearchPresenter(private val view: callback, private val context: Context) {
 
     fun findAddress(seq: String){
+
+
+        ListCatalogObjectsResponse(view).execute(getAddress(seq))
+    }
+
+    fun findObjects(seq: String){
         var url = ""
 
         val egrn = seq.toIntOrNull()
         if(egrn != null) {
-            url = getEGRN(url)
+            url = getEGRN(seq)
         } else {
-            url = getAddress(seq)
+            url = getObject(seq)
         }
-
         ListCatalogObjectsResponse(view).execute(url)
     }
 
-    fun findObjects(seq: String){
-
-        ListCatalogObjectsResponse(view).execute(getObject(seq))
-    }
-
     private fun getEGRN(egrn: String): String{
-        return "http://ruinnet.idefa.ru/api_app/object/list/?select%5B0%5D=NAME&amp;select%5B7%5D=PROPERTY_EGRKN_NUMBER&amp;filter%5BPROPERTY_EGRKN_NUMBER%5D=" + egrn
+        return context.resources.getString(R.string.find_by_egrn, egrn)
     }
 
     private fun getAddress(address: String): String{

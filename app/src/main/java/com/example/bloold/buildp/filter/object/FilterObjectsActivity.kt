@@ -2,7 +2,6 @@ package com.example.bloold.buildp.filter.`object`
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,13 +9,17 @@ import com.example.bloold.buildp.HighObjectsFilterResponse
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.model.*
+import com.example.bloold.buildp.sort.fragment.FilterMainNavigator
+import com.example.bloold.buildp.sort.fragment.SortFragment
+import com.example.bloold.buildp.sort.fragment.onFilterListener
 
 class FilterObjectsActivity : AppCompatActivity(),
         callback,
         onFilterListener,
-        FilterStartFragment.OnListFragmentInteractionListener,
-        HighFilterFragment.OnListFragmentInteractionListener,
-        SubLevelFragment.OnListFragmentInteractionListener{
+        SortFragment.OnListFragmentInteractionListener{
+    override fun onListFragmentInteraction(item: SortObject) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private lateinit var tvTitle: TextView
     private lateinit var tvClear: TextView
@@ -35,7 +38,9 @@ class FilterObjectsActivity : AppCompatActivity(),
         ivBack = findViewById(R.id.ivBack)
 
         navigator = FilterMainNavigator(this, R.id.flContainerFilter, this)
-        presenter.execute(URL)
+        //presenter.execute(URL)
+
+        supportFragmentManager.beginTransaction().add(R.id.flContainerFilter, CatalogObject4Fragment(), "CATALOG_OBJECT_4_FRAGMENT").commit()
     }
 
     override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {
@@ -43,24 +48,11 @@ class FilterObjectsActivity : AppCompatActivity(),
     }
 
     override fun onFiltersLoaded(items: ArrayList<HightFilterModelLevel>) {
-        navigator?.onActivityCreate(items)
+        //navigator?.onActivityCreate(items)
     }
 
     override fun onScreenNavigate(screen: FilterMainNavigator.FilterScreens) {
 
     }
 
-    override fun onListFragmentInteraction(item: CatalogObjectsModel) {
-        Log.d("onListFragmentInte1", item.name)
-        //navigator?.navigateTo(FilterMainNavigator.FilterScreens.SUB_LEVEL_FILTER, item)
-    }
-
-    override fun onListFragmentInteraction(item: HightFilterModelLevel) {
-        Log.d("onListFragmentInte2", item.name)
-        navigator?.navigateTo(FilterMainNavigator.FilterScreens.SUB_LEVEL_FILTER, item)
-    }
-
-    override fun onListFragmentInteraction(item: SubFilterModelLevel) {
-        navigator?.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, item)
-    }
 }

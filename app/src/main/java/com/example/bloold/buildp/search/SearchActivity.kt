@@ -1,5 +1,6 @@
 package com.example.bloold.buildp.search
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.*
 import com.example.bloold.buildp.R
 import android.widget.ArrayAdapter
+import com.example.bloold.buildp.ListActivityObjects.ListObjectsActivity
 import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
@@ -19,11 +21,14 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     private lateinit var spinnerChoice: Spinner
     private lateinit var etChoice: EditText
     private lateinit var lvObjects: ListView
+    private lateinit var btnViewFind: Button
 
     private val INDEX_ADDRESS = 1
     private val INDEX_OBJECT = 2
 
     private var indexChoice = INDEX_ADDRESS
+
+    private var objects: ArrayList<CatalogObjectsModel> = ArrayList()
 
     private val presenter: SearchPresenter = SearchPresenter(this, this)
 
@@ -36,6 +41,7 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         spinnerChoice = findViewById(R.id.spinnerChoice)
         etChoice = findViewById(R.id.etChoice)
         lvObjects = findViewById(R.id.lvNames)
+        btnViewFind = findViewById(R.id.btnViewFind)
 
         val adapterS = ArrayAdapter.createFromResource(this,
                 R.array.spinner_choice_object_address, android.R.layout.simple_spinner_item)
@@ -67,6 +73,14 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
 
         })
 
+        btnViewFind.setOnClickListener{
+            if(!adapter.isEmpty){
+                val intent = Intent(this, ListObjectsActivity::class.java)
+                intent.putExtras(Bundle().apply { putParcelableArrayList(ListObjectsActivity.KEY_LIST_OBJECT, objects) } )
+                startActivity(intent)
+            }
+        }
+
         lvObjects.adapter = adapter
     }
 
@@ -75,7 +89,6 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-
         indexChoice = p2
         adapter.clear()
     }
@@ -83,8 +96,8 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {
         adapter.clear()
         var outArr: List<String?>
-        outArr = items.map{it -> it.name}
-
+        outArr = items.map{it -> it.name}.filter { it -> it != null }
+        objects = items
         adapter.addAll(outArr)
         adapter.notifyDataSetInvalidated()
     }

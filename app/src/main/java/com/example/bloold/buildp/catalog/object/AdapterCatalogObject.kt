@@ -58,14 +58,14 @@ class AdapterCatalogObject(private val listener: AdapterListener):RecyclerView.A
         val ivBuild: ImageView
         val ivStar: ImageView
         val ivLocation: ImageView
-        val ivArrow: ImageView
+      //  val ivArrow: ImageView
         val tvName: TextView
 
         init{
             ivBuild = mView.findViewById<ImageView>(R.id.ivBuild)
             ivStar = mView.findViewById<ImageView>(R.id.ivStar)
             ivLocation = mView.findViewById<ImageView>(R.id.ivLocation)
-            ivArrow = mView.findViewById<ImageView>(R.id.ivArrow)
+            //ivArrow = mView.findViewById<ImageView>(R.id.ivArrow)
             tvName = mView.findViewById<TextView>(R.id.name)
         }
 
