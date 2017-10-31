@@ -29,6 +29,7 @@
             android:textSize="20sp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textColor="@color/vk_white"
             android:visibility="gone"
             android:text="Профиль пользователя"/>
 
@@ -37,7 +38,7 @@
             android:layout_height="match_parent"
             android:id="@+id/ivCancel"
             android:visibility="gone"
-            android:src="@drawable/ic_close"
+            android:src="@drawable/ic_cross"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_gravity="right|end"/>
