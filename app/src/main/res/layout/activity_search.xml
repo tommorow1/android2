@@ -23,6 +23,7 @@
             android:drawableStart="@drawable/ic_search_search"
             android:layout_width="match_parent"
             android:textColor="@color/red"
+            android:layout_marginLeft="16dp"
             android:layout_height="?attr/actionBarSize"
             android:drawablePadding="8dp"
             android:background="@android:color/transparent"/>

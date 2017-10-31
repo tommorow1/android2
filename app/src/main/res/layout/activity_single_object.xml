@@ -137,8 +137,7 @@
                         android:id="@+id/btnLink"
                         android:background="@drawable/shape_button"
                         android:src="@drawable/ic_link_button"
-                        android:layout_gravity="start|left|center_vertical"
-                        android:elevation="16dp"/>
+                        android:layout_gravity="start|left|center_vertical" />
 
                     <ImageButton
                         android:layout_width="52dp"
@@ -146,7 +145,6 @@
                         android:id="@+id/ivStar"
                         android:background="@drawable/shape_button"
                         android:src="@drawable/ic_star_button"
-                        android:elevation="16dp"
                         android:layout_gravity="end|right|center_vertical"/>
 
                 </FrameLayout>
@@ -211,13 +209,13 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
         <android.support.design.widget.TabLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
             app:tabTextColor="@android:color/white"
             app:tabIndicatorColor="@android:color/white"
             app:tabSelectedTextColor="@android:color/white"
-            android:id="@+id/tabs"/>
+            android:id="@+id/tabs" />
 
     </android.support.design.widget.AppBarLayout>
 
