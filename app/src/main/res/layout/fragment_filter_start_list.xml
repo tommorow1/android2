@@ -11,3 +11,4 @@
     app:layoutManager="LinearLayoutManager"
     tools:context="com.example.bloold.buildp.sort.fragment.SortFragment"
     tools:listitem="@layout/item_filter_start" />
+

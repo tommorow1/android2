@@ -99,6 +99,7 @@ public class RegistrationActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(toolbar);
 
+
         etRegAgreement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +152,11 @@ public class RegistrationActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("Регистрация");
+            //getSupportActionBar().setTitle("Регистрация");
+            TextView tvTitle = toolbar.findViewById(R.id.tvTitle);
+            tvTitle.setText("Регистрация");
+            tvTitle.setVisibility(View.VISIBLE);
+
         }
         final LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         ImageView ivFb = (ImageView)findViewById(R.id.ivFb);

@@ -36,37 +36,37 @@
                 android:textColor="@android:color/white"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:layout_gravity="bottom|left"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:gravity="right">
 
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/ivStar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/star_stroke"
+                    android:layout_marginRight="16dp"/>
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/ivLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bubble"
+                    android:layout_marginRight="16dp"/>
+
+                <!--<android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/ivArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_arrow_next"
+                    android:layout_marginRight="16dp"/>-->
+
+            </LinearLayout>
         </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:gravity="right">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivStar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_star_stroke"
-                android:layout_marginRight="16dp"/>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_location"
-                android:layout_marginRight="16dp"/>
-
-            <!--<android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_next"
-                android:layout_marginRight="16dp"/>-->
-
-        </LinearLayout>
 
     </LinearLayout>
 

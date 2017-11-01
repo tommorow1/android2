@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import com.example.bloold.buildp.filter.`object`.FilterObjectsActivity
 import com.example.bloold.buildp.search.SearchActivity
 import android.content.SharedPreferences
 import android.support.v7.widget.AppCompatButton
@@ -24,6 +22,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.example.bloold.buildp.map.BigClusteringDemoActivity
 import com.example.bloold.buildp.sort.fragment.FilterMainNavigator
 import com.example.bloold.buildp.sort.fragment.onFilterListener
 import com.example.bloold.buildp.model.*
@@ -56,8 +55,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 */
     private val BASE_URL = "http://ruinnet.idefa.ru/api_app"
-    private val CATALOG_OBJECTS_URL = "/object/index/"
-    private val CATALOG_OBJECTS_SELECT = "?select[]=ID&select[]=NAME"
+    private val CATALOG_OBJECTS_URL = "/object/list/"
+    private val CATALOG_OBJECTS_SELECT = "?select[]=ID&select[]=NAME&select[]=DETAIL_PICTURE&select[]=PREVIEW_TEXT&select[]=PROPERTY_ADDRESS&select[]=PHOTOS_DATA&select[]=IS_FAVORITE&filter[INCLUDE_SUBSECTIONS]=Y"
     private val CATALOG_OBJECTS_FILTER = "&filter[IBLOCK_SECTION_ID][1]="
     private val URL = "http://ruinnet.idefa.ru/api_app/directory/type-catalog-structure/"
     private val CATALOG_ALL_OBJECT = "http://ruinnet.idefa.ru/api_app/object/list/?select[]=ID&select[]=NAME&select[]=PREVIEW_TEXT&select[]=PROPERTY_ADDRESS&select[]=DETAIL_PICTURE&select[]=PHOTOS_DATA&select[]=DOCS_DATA&select[]=PUBLICATIONS_DATA&select[]=VIDEO_DATA&select[]=AUDIO_DATA&select[]=DETAIL_PAGE_URL&select[]=IS_FAVORITE&select[]=PROPERTY_MAP=Y"
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             showItem();
 
         }
-        drawer.openDrawer(GravityCompat.START)
+       // drawer.openDrawer(GravityCompat.START)
 
         navigator = FilterMainNavigator(this, R.id.mainContainer, this)
         presenter.execute(URL)
@@ -282,15 +281,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-        ivProfile = findViewById(R.id.ivProfile)
-        tvName = findViewById(R.id.tvName)
+
 
         val sPref = getSharedPreferences("main", Context.MODE_PRIVATE) as SharedPreferences
         val AuthTokenSuccess = sPref.getString(AuthToken, "")
         if (sPref.contains(AuthToken)) {
             LogBtnHide()
         }
-
+        ivProfile = findViewById(R.id.ivProfile)
+        tvName = findViewById(R.id.tvName)
         val btnAuth = findViewById<View>(R.id.btnAuth) as Button
 
         btnAuth.setOnClickListener { view ->
@@ -331,16 +330,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        /*// Handle navigation view item clicks here.
+        // Handle navigation view item clicks here.
         val id = item.itemId
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_map) {
+            startActivity(Intent(this, BigClusteringDemoActivity::class.java))
+        } else if (id == R.id.nav_catalog) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }/* else if (id == R.id.nav_slideshow) {
         } else if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
-        }
-        */val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        }*/
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
     }

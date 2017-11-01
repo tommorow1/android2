@@ -2,6 +2,7 @@ package com.example.bloold.buildp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -46,7 +48,7 @@ public class RestoreActivity extends AppCompatActivity {
                     Toast.makeText(RestoreActivity.this, "Не все поля заполнены", Toast.LENGTH_SHORT).show();
                 }else{
                     RestEmail =  etRestEmail.getText().toString();
-                    new RestoreActivity.JSONRestore().execute("http://ruinnet.idefa.ru/api_app/user/forgot-password/");
+                    new JSONRestore().execute("http://ruinnet.idefa.ru/api_app/user/forgot-password/");
                 }
 
             }
@@ -54,7 +56,10 @@ public class RestoreActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("Восстановление пароля");
+            TextView tvTitle = toolbar.findViewById(R.id.tvTitle);
+            tvTitle.setText("Восстановление пароля");
+            tvTitle.setVisibility(View.VISIBLE);
+          //  getSupportActionBar().setTitle("Восстановление пароля");
         }
     }
     public class  JSONRestore extends AsyncTask<String, String, String> {

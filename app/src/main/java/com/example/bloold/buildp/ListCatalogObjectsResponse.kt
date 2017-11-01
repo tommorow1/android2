@@ -36,7 +36,7 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
         Log.d("doinback", params[0])
 
         try {
-            val url = URL(params[0])
+            val url = URL(params[0]+"&limit=70&page=1")
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
             connection.setRequestProperty("Device-Id", "0000")
@@ -136,16 +136,17 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
                 catalogModel.id = finalObject.getString("ID")
                 catalogModel.name = finalObject.getString("NAME")
 
+                val ImgObject: JSONObject? = finalObject.getJSONObject("DETAIL_PICTURE")
+
+                if (ImgObject != null)
+                    catalogModel.src = "http://ruinnet.idefa.ru/" + ImgObject.getString("SRC")
+
                 catalogModel.preview_text = finalObject.getString("PREVIEW_TEXT")
 
                 Log.d("tag", catalogModel.preview_text)
 
                 catalogModel.property_address = finalObject.getString("PROPERTY_ADDRESS")
 
-                val ImgObject: JSONObject? = finalObject.getJSONObject("DETAIL_PICTURE")
-
-                if (ImgObject != null)
-                    catalogModel.src = "http://ruinnet.idefa.ru/" + ImgObject.getString("SRC")
 
                 //catalogModel.audios = finalObject.getJSONArray("AUDIO_DATA").toString()
 

@@ -92,7 +92,10 @@ public class LoginActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("Авторизация");
+           // getSupportActionBar().setTitle("Авторизация");
+            TextView tvTitle = toolbar.findViewById(R.id.tvTitle);
+            tvTitle.setText("Авторизация");
+            tvTitle.setVisibility(View.VISIBLE);
         }
         final LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         ImageView ivFb = (ImageView)findViewById(R.id.ivFb);
@@ -102,7 +105,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginButton.performClick();
             }
         });
-
 
         ImageView ivOk = (ImageView) findViewById(R.id.ivOk);
         ivOk.setOnClickListener(new LoginClickListener(OkAuthType.ANY));
