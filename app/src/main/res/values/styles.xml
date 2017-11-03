@@ -30,9 +30,6 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
-    <style name="text_appearance">
-            <item name="android:layout_width">wrap_content</item>
-    </style>
 
     <style name="text_appearance">
         <item name="android:layout_width">wrap_content</item>
