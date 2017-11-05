@@ -36,15 +36,19 @@ import org.json.JSONObject;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -71,7 +75,7 @@ import com.google.gson.Gson;
 import com.google.maps.android.clustering.ClusterManager;
 //import com.google.maps.android.utils.demo.model.MyItem;
 
-public class BigClusteringDemoActivity extends BaseDemoActivity implements DirectionFinderListener {
+public class BigClusteringDemoActivity extends BaseDemoActivity implements GoogleMap.OnCameraMoveListener, DirectionFinderListener {
     private ClusterManager<MyItem> mClusterManager;
     private Button btnFindPath;
     private EditText etOrigin;
@@ -84,20 +88,12 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Direc
     double lng2 = 148.6877064739115;
     double lat1 = -30.4486834932737;
     double lat2 = 85.0511287798066;
+    double latitude = 16.85176189428896;
+    double longitude = 148.6877064739115;
 
     @Override
     protected void startDemo() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        ChangeMap();
+
         mClusterManager = new ClusterManager<MyItem>(this, getMap());
         getMap().setOnCameraIdleListener(mClusterManager);
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
@@ -110,11 +106,12 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Direc
                 sendRequest();
             }
         });
-    }
-
-    private void ChangeMap(){
+        getMap().setOnCameraMoveListener(this);
+        LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+            // TODO: Consider callingпше
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -123,16 +120,29 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Direc
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            getMap().setMyLocationEnabled(true);
-            LocationManager locationManager = (LocationManager)
-                    getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
+        getMap().setMyLocationEnabled(true);
+        Location location = locationManager.getLastKnownLocation(locationManager
+                .getBestProvider(criteria, false));
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
-            Location location = locationManager.getLastKnownLocation(locationManager
-                    .getBestProvider(criteria, false));
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            checkLocationPermission();
+        }
+        ChangeMap();
+
+    }
+
+    @Override
+    public void onCameraMove() {
+          //  ChangeMap();
+
+    }
+
+    private void ChangeMap(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
             getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12));
             LatLngBounds bounds = getMap().getProjection().getVisibleRegion().latLngBounds;
             lat1 = bounds.southwest.latitude;
@@ -152,11 +162,11 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Direc
                 lng1 =tmp;
             }
         } else {
-            // Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
-            return;
+           return;
         }
         new JSONTask().execute("http://ruinnet.idefa.ru/api_app/object/index/?select[]=ID&select[]=NAME&select[]=ADDRESS&select[]=MAP_TYPE&select[]=LAT&select[]=LNG&filter[INCLUDE_SUBSECTIONS]=Y&filter[%3C%3DLAT_FROM]="+lat2+"&filter[%3E%3DLAT_TO]="+lat1+"&filter[%3C%3DLNG_FROM]="+lng2+"&filter[%3E%3DLNG_TO]="+lng1+"&limit=3500&page=1");
     }
+
 
     private void sendRequest() {
         String origin = etOrigin.getText().toString();
@@ -317,4 +327,42 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Direc
             }
         }
     }*/
+
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(BigClusteringDemoActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(BigClusteringDemoActivity.this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(BigClusteringDemoActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(BigClusteringDemoActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION );
+            }
+        }
+    }
 }

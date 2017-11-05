@@ -288,8 +288,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (sPref.contains(AuthToken)) {
             LogBtnHide()
         }
-        ivProfile = findViewById(R.id.ivProfile)
-        tvName = findViewById(R.id.tvName)
+        ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView
+        tvName = findViewById<View>(R.id.tvName) as TextView
         val btnAuth = findViewById<View>(R.id.btnAuth) as Button
 
         btnAuth.setOnClickListener { view ->
