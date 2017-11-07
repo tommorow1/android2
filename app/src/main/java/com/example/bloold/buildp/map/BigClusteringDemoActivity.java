@@ -65,6 +65,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -75,7 +76,7 @@ import com.google.gson.Gson;
 import com.google.maps.android.clustering.ClusterManager;
 //import com.google.maps.android.utils.demo.model.MyItem;
 
-public class BigClusteringDemoActivity extends BaseDemoActivity implements GoogleMap.OnCameraMoveListener, DirectionFinderListener {
+public class BigClusteringDemoActivity extends BaseDemoActivity implements DirectionFinderListener {
     private ClusterManager<MyItem> mClusterManager;
     private Button btnFindPath;
     private EditText etOrigin;
@@ -93,9 +94,8 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Googl
 
     @Override
     protected void startDemo() {
-
         mClusterManager = new ClusterManager<MyItem>(this, getMap());
-        getMap().setOnCameraIdleListener(mClusterManager);
+        //getMap().setOnCameraIdleListener(mClusterManager);
         btnFindPath = (Button) findViewById(R.id.btnFindPath);
         etOrigin = (EditText) findViewById(R.id.etOrigin);
         etDestination = (EditText) findViewById(R.id.etDestination);
@@ -106,7 +106,6 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Googl
                 sendRequest();
             }
         });
-        getMap().setOnCameraMoveListener(this);
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -125,25 +124,37 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Googl
                 .getBestProvider(criteria, false));
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-
+        getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             checkLocationPermission();
         }
-        ChangeMap();
+        final CameraPosition[] mPreviousCameraPosition = {null};
+        getMap().setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                mClusterManager.clearItems();
+                CameraPosition position = getMap().getCameraPosition();                
+                try {
+                    ChangeMap();
+                    Thread.sleep(3000);
+                   
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-    }
-
-    @Override
-    public void onCameraMove() {
-          //  ChangeMap();
+                if(mPreviousCameraPosition[0] == null || mPreviousCameraPosition[0].zoom != position.zoom) {
+                    mPreviousCameraPosition[0] = getMap().getCameraPosition();
+                    mClusterManager.cluster();
+                }
+            }
+        });
 
     }
 
     private void ChangeMap(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12));
             LatLngBounds bounds = getMap().getProjection().getVisibleRegion().latLngBounds;
             lat1 = bounds.southwest.latitude;
             lat2 = bounds.northeast.latitude;
@@ -172,11 +183,11 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Googl
         String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
         if (origin.isEmpty()) {
-            Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Адрес пуст", Toast.LENGTH_SHORT).show();
             return;
         }
         if (destination.isEmpty()) {
-            Toast.makeText(this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Адрес пуст", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -188,8 +199,8 @@ public class BigClusteringDemoActivity extends BaseDemoActivity implements Googl
     }
     @Override
     public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
+        progressDialog = ProgressDialog.show(this, "Обновляется маршрут.",
+                "Пожалуйста, подождите..!", true);
 
         if (originMarkers != null) {
             for (Marker marker : originMarkers) {
