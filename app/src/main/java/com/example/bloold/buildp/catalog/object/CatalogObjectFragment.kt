@@ -108,9 +108,11 @@ class CatalogObjectFragment : Fragment(), AdapterListener, callback {
     }
 
     override fun onObjectClicked(item: CatalogObjectsModel) {
-        val intent = Intent(context, SingleObjectActivity::class.java)
-        intent.putExtras(Bundle().apply { putParcelable(SingleObjectActivity.EXTRA_OBJECT_KEY, item) })
-        startActivity(intent)
+        val intentSingleObject = Intent(context, SingleObjectActivity::class.java)
+        val ObjId = item.id
+        intentSingleObject.putExtra("ObjId", ObjId)
+        //intent.putExtras(Bundle().apply { putParcelable(SingleObjectActivity.EXTRA_OBJECT_KEY, item) })
+        startActivity(intentSingleObject)
     }
 
     override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {

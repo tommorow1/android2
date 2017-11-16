@@ -1,14 +1,10 @@
-package com.example.bloold.buildp;
+package com.example.bloold.buildp.profile;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.HideReturnsTransformationMethod;
@@ -17,18 +13,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bloold.buildp.MainActivity;
+import com.example.bloold.buildp.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -40,6 +36,8 @@ import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.facebook.login.widget.*;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,22 +56,16 @@ import ru.ok.android.sdk.OkAuthListener;
 import ru.ok.android.sdk.util.OkAuthType;
 import ru.ok.android.sdk.util.OkScope;
 
-public class RegistrationActivity extends AppCompatActivity {
-
-    TextView etRegAgreement;
-    EditText etRegEmail;
-    EditText etRegPassword;
-    EditText etFirstName;
-    EditText etLastName;
+public class LoginActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    String EmailReg;
-    String RegPassword;
-    String FirstName;
-    String LastName;
     CallbackManager callbackManager;
+    EditText etEmail, etPassword;
+
+    String Email = "";
+    String Password = "";
     String AuthTokenresp = null;
 
-    private static final String AuthToken = "AuthToken";
+    public static final String AuthToken = "AuthToken";
     private String[] scope = new String[]{
             VKScope.AUDIO,
             VKScope.FRIENDS,
@@ -83,80 +75,20 @@ public class RegistrationActivity extends AppCompatActivity {
     protected static final String APP_KEY = "D126C3FC68EA3E9A7F54197C";
     protected static final String REDIRECT_URL = "ok1256634880://authorize";
     protected Odnoklassniki odnoklassniki;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
-
-        etRegAgreement = (TextView)findViewById(R.id.etRegAgreement) ;
-        etRegEmail = (EditText)findViewById(R.id.etRegEmail);
-        etRegPassword = (EditText)findViewById(R.id.etRegPassword);
-        etFirstName = (EditText)findViewById(R.id.etFirstName);
-        etLastName = (EditText)findViewById(R.id.etLastName);
-        final CheckBox cbAgr = (CheckBox)findViewById(R.id.cbAgr);
-        final Button btnReg = (Button)findViewById(R.id.btnReg);
-
+        setContentView(R.layout.activity_login);
         toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(toolbar);
-
-
-        etRegAgreement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegistrationActivity.this, AgreementActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(etRegEmail.getText().toString().equals("") || etRegPassword.getText().toString().equals("") || etFirstName.getText().toString().equals("") || etLastName.getText().toString().equals("")) {
-                    Toast.makeText(RegistrationActivity.this, "Не все поля заполнены", Toast.LENGTH_SHORT).show();
-                }else{
-                    EmailReg = etRegEmail.getText().toString();
-                    RegPassword = etRegPassword.getText().toString();
-                    FirstName = etFirstName.getText().toString();
-                    LastName = etLastName.getText().toString();
-
-                    new RegistrationActivity.JSONReg().execute("http://ruinnet.idefa.ru/api_app/user/registration/");
-                }
-
-            }
-        });
-
-        cbAgr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    btnReg.setEnabled(true);
-                } else {
-                    btnReg.setEnabled(false);
-                }
-            }
-        });
-
-        final int[] num = {2};
-        final ImageView ivRegSeePassword = (ImageView)findViewById(R.id.ivRegSeePassword);
-        ivRegSeePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ( num[0] % 2 == 0 ){
-                    etRegPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                }else{
-                    etRegPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
-                num[0] = num[0] +1;
-            }
-        });
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            //getSupportActionBar().setTitle("Регистрация");
+           // getSupportActionBar().setTitle("Авторизация");
             TextView tvTitle = toolbar.findViewById(R.id.tvTitle);
-            tvTitle.setText("Регистрация");
+            tvTitle.setText("Авторизация");
             tvTitle.setVisibility(View.VISIBLE);
-
         }
         final LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         ImageView ivFb = (ImageView)findViewById(R.id.ivFb);
@@ -167,9 +99,8 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-
         ImageView ivOk = (ImageView) findViewById(R.id.ivOk);
-        ivOk.setOnClickListener(new RegistrationActivity.LoginClickListener(OkAuthType.ANY));
+        ivOk.setOnClickListener(new LoginClickListener(OkAuthType.ANY));
         odnoklassniki = Odnoklassniki.createInstance(this, APP_ID, APP_KEY);
 
 
@@ -218,27 +149,45 @@ public class RegistrationActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        SocAuth("fb", loginResult.getAccessToken().getToken());
-                    }
+            new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    SocAuth("fb", loginResult.getAccessToken().getToken());
+                }
 
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
+                @Override
+                public void onCancel() {
+                    // App code
+                }
 
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
+                @Override
+                public void onError(FacebookException exception) {
+                    // App code
+                }
+            });
+
+        etEmail = (EditText)findViewById(R.id.etEmail);
+        etPassword = (EditText)findViewById(R.id.etPassword);
+        Button btnOk = (Button)findViewById(R.id.btnOk);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(etEmail.getText().toString().equals("") || etPassword.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, "Не все поля заполнены", Toast.LENGTH_SHORT).show();
+                }else{
+                    Email =  etEmail.getText().toString();
+                    Password = etPassword.getText().toString();
+                    new LoginActivity.JSONLogging().execute("http://ruinnet.idefa.ru/api_app/user/auth/email/");
+                }
+
+            }
+        });
         final ImageView ivVk = (ImageView)findViewById(R.id.ivVk);
         ivVk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VKSdk.login(RegistrationActivity.this, scope);
+                VKSdk.login(LoginActivity.this, scope);
                 VKRequest request = VKApi.users().get();
                 request.executeWithListener(new VKRequest.VKRequestListener() {
 
@@ -261,9 +210,40 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+        final int[] num = {2};
+        final ImageView seePassword = (ImageView)findViewById(R.id.seePassword);
+        seePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( num[0] % 2 == 0 ){
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }else{
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                num[0] = num[0] +1;
+            }
+        });
 
+        final TextView tvReg = (TextView) findViewById(R.id.tvReg);
+        tvReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,RegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final TextView tvRestPas = (TextView) findViewById(R.id.tvRestPas);
+        tvRestPas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,RestoreActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
+
 
     private OkAuthListener getAuthListener() {
         return new OkAuthListener() {
@@ -298,7 +278,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         @Override
         public void onClick(final View view) {
-            odnoklassniki.requestAuthorization(RegistrationActivity.this, REDIRECT_URL, authType, OkScope.VALUABLE_ACCESS);
+            odnoklassniki.requestAuthorization(LoginActivity.this, REDIRECT_URL, authType, OkScope.VALUABLE_ACCESS);
         }
     }
 
@@ -377,35 +357,34 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                     if(code.equals("200")){
                         SaveToken(AuthTokenresp);
-                        Intent intent = new Intent(RegistrationActivity.this,MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
                     }else{
-                        Toast.makeText(RegistrationActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(RegistrationActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
                 }
 
             }
-
         });
     }
-
-    public class  JSONReg extends AsyncTask<String, String, String> {
+    public class  JSONLogging extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... params) {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
-            String output = "";
+            String output ="";
             try {
                 URL url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
-                String urlParameters = "EMAIL=" + EmailReg + "&PASSWORD=" + RegPassword + "&FIRST_NAME=" + FirstName + "&LAST_NAME=" + LastName + "&AGREEMENT=Y";
+                String urlParameters =  "EMAIL="+Email+"&PASSWORD=" + Password;
+                //String urlParameters =  "EMAIL=viktor.kolotiy@defa.ru&PASSWORD=815406";
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
-                connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
-                connection.setRequestProperty("Device-Id", "0000");
+                connection.setRequestProperty("USER-AGENT","Mozilla/5.0");
+                connection.setRequestProperty("ACCEPT-LANGUAGE","en-US,en;0.5");
+                connection.setRequestProperty("Device-Id","0000");
                 String header = "Basic " + new String(android.util.Base64.encode("defa:defa".getBytes(), android.util.Base64.NO_WRAP));
                 connection.addRequestProperty("Authorization", header);
                 connection.setDoOutput(true);
@@ -420,17 +399,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = "";
                 StringBuilder responseOutput = new StringBuilder();
-                while ((line = br.readLine()) != null) {
+                while((line = br.readLine()) != null ) {
                     responseOutput.append(line);
                 }
                 br.close();
 
                 output = responseOutput.toString();
+
                 return output;
 
-            } catch (MalformedURLException e) {
+            }catch (MalformedURLException e){
                 e.printStackTrace();
-            } catch (IOException e) {
+            }catch(IOException e){
                 e.printStackTrace();
             } finally {
                 if (connection != null) {
@@ -445,7 +425,9 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
             return output;
+
         }
+
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -457,37 +439,30 @@ public class RegistrationActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if (response !=null) {
+            if (response !=null){
+
                 String code = null;
                 try {
                     code = response.getString("CODE");
 
+                    if(code.equals("200")) {
+                        AuthTokenresp = response.getString("AUTH_TOKEN");
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (code.equals("200")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
-                    builder.setTitle("Информационное сообщение!")
-                            .setMessage("Вам отправлено письмо с ссылкой для создания нового пароля. Если Вы не получили письмо, отправьте запрос повторно или проверьте папку «Спам» Вашего почтового клиента.")
-                            //.setIcon(R.drawable.ic_android)
-                            .setCancelable(false)
-                            .setNegativeButton("Ok",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                            Intent intent = new Intent(RegistrationActivity.this,MainActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-
-                } else {
-                    Toast.makeText(RegistrationActivity.this, "Ошибка при регистрация.", Toast.LENGTH_LONG).show();
+                if(code.equals("200")){
+                    SaveToken(AuthTokenresp);
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(LoginActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
                 }
+            }else{
+                Toast.makeText(LoginActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
             }
         }
-
     }
     public void SaveToken(String s) {
         SharedPreferences sPref = getSharedPreferences("main", MODE_PRIVATE);

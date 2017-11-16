@@ -23,7 +23,7 @@ interface callback{
 }
 
 class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String, String, ArrayList<CatalogObjectsModel>>() {
-
+    private var searchType = ""
     override fun onPreExecute() {
         super.onPreExecute()
         //dialog.show()
@@ -37,6 +37,9 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
 
         try {
             val url = URL(params[0]+"&limit=70&page=1")
+            if(params.size==2) {
+                searchType = params[1]
+            }
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
             connection.setRequestProperty("Device-Id", "0000")
@@ -134,8 +137,19 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
 
             try {
                 catalogModel.id = finalObject.getString("ID")
-                catalogModel.name = finalObject.getString("NAME")
-
+                if (searchType!="") {
+                    if(searchType.equals("egrn")){
+                        catalogModel.name = finalObject.getString("PROPERTY_EGRKN_NUMBER")+", "+finalObject.getString("NAME")
+                    }
+                    if(searchType.equals("address")){
+                        catalogModel.name = finalObject.getString("PROPERTY_ADDRESS")+", "+finalObject.getString("NAME")
+                    }
+                    if(searchType.equals("object")){
+                        catalogModel.name = finalObject.getString("NAME")
+                    }
+                }else{
+                    catalogModel.name = finalObject.getString("NAME")
+                }
                 val ImgObject: JSONObject? = finalObject.getJSONObject("DETAIL_PICTURE")
 
                 if (ImgObject != null)

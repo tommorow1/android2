@@ -33,7 +33,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
                             android:id="@+id/ivAvatar"
-                            android:src="@drawable/avatar"
+                            android:src="@drawable/back"
                             android:scaleType="centerCrop"/>
                             <View
                                 android:layout_width="match_parent"

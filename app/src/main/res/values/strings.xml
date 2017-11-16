@@ -41,11 +41,11 @@
     <string name="profile_pick_photo">Загрузить фотографию</string>
 
 
-    <string name="find_by_name">http://ruinnet.idefa.ru/api_app/object/list/?select[0]=NAME&amp;select[]=DETAIL_PICTURE&amp;filter[0][LOGIC]=OR&amp;filter[0][?NAME]=%1$s&amp;filter[!EGRKN_NUMBER]=false</string>
+    <string name="find_by_name">http://ruinnet.idefa.ru/api_app/object/list/?select[0]=NAME&amp;select[]=DETAIL_PICTURE&amp;filter[0][?NAME]=%1$s</string>
 
-    <string name="find_by_egrn">http://ruinnet.idefa.ru/api_app/object/list/?select[]=NAME&amp;select[]=DETAIL_PICTUR&amp;select[]=PROPERTY_EGRKN_NUMBER&amp;filter[?PROPERTY_EGRKN_NUMBER]=%1$s</string>
+    <string name="find_by_egrn">http://ruinnet.idefa.ru/api_app/object/list/?select[]=NAME&amp;select[]=PROPERTY_EGRKN_NUMBER&amp;select[]=DETAIL_PICTURЕ&amp;filter[?PROPERTY_EGRKN_NUMBER]=%1$s</string>
 
-    <string name="find_by_address">http://ruinnet.idefa.ru/api_app/object/list/?select[]=NAME&amp;select[]=DETAIL_PICTURE&amp;filter[0][LOGIC]=OR&amp;filter[!EGRKN_NUMBER]=false&amp;filter[0][?PROPERTY_ADDRESS]=%1$s</string>
+    <string name="find_by_address">http://ruinnet.idefa.ru/api_app/object/list/?select[]=NAME&amp;select[]=PROPERTY_ADDRESS&amp;select[]=DETAIL_PICTURE&amp;filter[?PROPERTY_ADDRESS]=%1$s</string>
 
     <string name="title_activity_logging">LoggingActivity</string>
     <string name="title_activity_login">Main2Activity</string>

@@ -16,6 +16,9 @@
 
 package com.example.bloold.buildp.map;
 
+import android.graphics.drawable.Icon;
+
+import com.example.bloold.buildp.R;
 import com.example.bloold.buildp.model.MyItem;
 //import com.google.maps.android.utils.demo.model.MyItem;
 
@@ -41,16 +44,15 @@ public class MyItemReader {
         for (int i = 0; i < finalJson.length(); i++) {
             String title = null;
             String snippet = null;
+            String ObjId =null;
             JSONObject object = finalJson.getJSONObject(i);
             double lat = object.getDouble("LAT");
             double lng = object.getDouble("LNG");
-            if (!object.isNull("title")) {
-                title = object.getString("ADDRESS");
-            }
-            if (!object.isNull("snippet")) {
-                snippet = object.getString("NAME");
-            }
-            items.add(new MyItem(lat, lng, title, snippet));
+            title = object.getString("ADDRESS");
+            ObjId = object.getString("OBJECT_ID");
+            snippet = object.getString("NAME");
+
+            items.add(new MyItem(lat, lng, title, snippet,ObjId));
         }
         return items;
     }

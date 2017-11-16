@@ -23,11 +23,10 @@ import java.net.URL
  * Created by bloold on 21.10.17.
  */
 class SearchPresenter(private val view: callback, private val context: Context) {
-
+    private var searchType = "";
     fun findAddress(seq: String){
-
-
-        ListCatalogObjectsResponse(view).execute(getAddress(seq))
+        searchType = "address"
+        ListCatalogObjectsResponse(view).execute(getAddress(seq),searchType)
     }
 
     fun findObjects(seq: String){
@@ -35,11 +34,13 @@ class SearchPresenter(private val view: callback, private val context: Context) 
 
         val egrn = seq.toIntOrNull()
         if(egrn != null) {
+            searchType ="egrn"
             url = getEGRN(seq)
         } else {
+            searchType ="object"
             url = getObject(seq)
         }
-        ListCatalogObjectsResponse(view).execute(url)
+        ListCatalogObjectsResponse(view).execute(url,searchType)
     }
 
     private fun getEGRN(egrn: String): String{

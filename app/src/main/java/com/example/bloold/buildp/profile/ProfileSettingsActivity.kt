@@ -1,8 +1,7 @@
-package com.example.bloold.buildp
+package com.example.bloold.buildp.profile
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -20,26 +19,21 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
-import com.example.bloold.buildp.R.styleable.CircleImageView
+import com.example.bloold.buildp.R
 import com.example.bloold.buildp.model.BaseModel
-import com.example.bloold.buildp.utils.BaseResponse
 import com.example.bloold.buildp.utils.MediaFilePicker
 import com.example.bloold.buildp.utils.PermissionUtil
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
 import cz.msebera.android.httpclient.Header
-import cz.msebera.android.httpclient.entity.mime.MIME
-import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder
-import kotlinx.android.synthetic.main.toolbar.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
-import java.util.concurrent.ExecutionException
+import java.net.URLEncoder
 
 
 class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePickerListener {
@@ -70,6 +64,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
 
     private var FirstName: String = ""
     private var LastName: String = ""
+    private var Region: String = ""
     private var IndexPhoto: String = ""
 
     private lateinit var filePicker: MediaFilePicker
@@ -112,6 +107,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
         tvSaveChanges.setOnClickListener{
             FirstName = etFirstName.text.toString()
             LastName = etLastName.text.toString()
+            Region  = spinnerEdit.id.toString()
 
             JSONEdit(this).execute("http://ruinnet.idefa.ru/api_app" + "/user/profile/edit/")
 
@@ -129,7 +125,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
         //adapterS?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinnerEdit.adapter = adapterS
-
+        spinnerEdit.id
         getUser()
         getRegion()
 
@@ -425,9 +421,11 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
             var sPref = getSharedPreferences("main", MODE_PRIVATE)
             var AuthTokenSuccess = sPref.getString(LoginActivity.AuthToken, "")
             try {
+                FirstName = URLEncoder.encode(FirstName, "utf-8");
+                LastName = URLEncoder.encode(LastName, "utf-8");
                 val url = URL(params[0])
                 connection = url.openConnection() as HttpURLConnection
-                var urlParameters = "FIRST_NAME=${FirstName}&LAST_NAME=${LastName}&REGION_ID=1"
+                var urlParameters = "FIRST_NAME=${FirstName}&LAST_NAME=${LastName}&REGION_ID="+Region
 
                 if(!IndexPhoto.isNullOrEmpty()) {
                     urlParameters = urlParameters + "&PHOTO_ID=" + IndexPhoto

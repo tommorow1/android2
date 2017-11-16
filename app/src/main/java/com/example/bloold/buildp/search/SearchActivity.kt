@@ -12,6 +12,7 @@ import com.example.bloold.buildp.R
 import android.widget.ArrayAdapter
 import com.example.bloold.buildp.ListActivityObjects.ListObjectsActivity
 import com.example.bloold.buildp.callback
+import com.example.bloold.buildp.map.BigClusteringDemoActivity
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
 
@@ -33,11 +34,14 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     private val presenter: SearchPresenter = SearchPresenter(this, this)
 
     private lateinit var adapter: ArrayAdapter<String>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        val intent = intent
+        val fromActivity = intent.getStringExtra("fromActivity") as String
+
+        val intentSearch = Intent(this, BigClusteringDemoActivity::class.java)
         spinnerChoice = findViewById(R.id.spinnerChoice)
         etChoice = findViewById(R.id.etChoice)
         lvObjects = findViewById(R.id.lvNames)
@@ -64,10 +68,19 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                intentSearch.putExtra("searchText", p0.toString())
                 if(indexChoice == INDEX_ADDRESS){
                     presenter.findAddress(p0.toString())
+                    intentSearch.putExtra("searchType", "address")
                 } else {
                     presenter.findObjects(p0.toString())
+                    val egrn = p0.toString() as String
+                    val egrnNumber = egrn.toIntOrNull()
+                    if(egrnNumber != null) {
+                        intentSearch.putExtra("searchType", "egrn")
+                    } else {
+                        intentSearch.putExtra("searchType", "object")
+                    }
                 }
             }
 
@@ -75,9 +88,14 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
 
         btnViewFind.setOnClickListener{
             if(!adapter.isEmpty){
-                val intent = Intent(this, ListObjectsActivity::class.java)
-                intent.putExtras(Bundle().apply { putParcelableArrayList(ListObjectsActivity.KEY_LIST_OBJECT, objects) } )
-                startActivity(intent)
+                if (fromActivity != null && fromActivity == "map") {
+                    startActivity(intentSearch)
+                }else{
+                    val intent = Intent(this, ListObjectsActivity::class.java)
+                    intent.putExtras(Bundle().apply { putParcelableArrayList(ListObjectsActivity.KEY_LIST_OBJECT, objects) } )
+                    startActivity(intent)
+                }
+
             }
         }
 

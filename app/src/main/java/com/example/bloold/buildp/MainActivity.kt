@@ -28,6 +28,8 @@ import com.example.bloold.buildp.sort.fragment.onFilterListener
 import com.example.bloold.buildp.model.*
 import com.example.bloold.buildp.presenters.SortPresenter
 import com.example.bloold.buildp.presenters.callback
+import com.example.bloold.buildp.profile.LoginActivity
+import com.example.bloold.buildp.profile.ProfileSettingsActivity
 import com.example.bloold.buildp.sort.fragment.SortFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import com.facebook.login.LoginManager;
@@ -38,7 +40,6 @@ import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.json.JSONException
 import org.json.JSONObject
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         callback,
@@ -56,10 +57,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 */
     private val BASE_URL = "http://ruinnet.idefa.ru/api_app"
     private val CATALOG_OBJECTS_URL = "/object/list/"
-    private val CATALOG_OBJECTS_SELECT = "?select[]=ID&select[]=NAME&select[]=DETAIL_PICTURE&select[]=PREVIEW_TEXT&select[]=PROPERTY_ADDRESS&select[]=PHOTOS_DATA&select[]=IS_FAVORITE&filter[INCLUDE_SUBSECTIONS]=Y"
+    private val CATALOG_OBJECTS_SELECT = "?select[]=ID&select[]=NAME&select[]=DETAIL_PICTURE&select[]=IS_FAVORITE&filter[INCLUDE_SUBSECTIONS]=Y"
     private val CATALOG_OBJECTS_FILTER = "&filter[IBLOCK_SECTION_ID][1]="
     private val URL = "http://ruinnet.idefa.ru/api_app/directory/type-catalog-structure/"
-    private val CATALOG_ALL_OBJECT = "http://ruinnet.idefa.ru/api_app/object/list/?select[]=ID&select[]=NAME&select[]=PREVIEW_TEXT&select[]=PROPERTY_ADDRESS&select[]=DETAIL_PICTURE&select[]=PHOTOS_DATA&select[]=DOCS_DATA&select[]=PUBLICATIONS_DATA&select[]=VIDEO_DATA&select[]=AUDIO_DATA&select[]=DETAIL_PAGE_URL&select[]=IS_FAVORITE&select[]=PROPERTY_MAP=Y"
+    private val CATALOG_ALL_OBJECT = "http://ruinnet.idefa.ru/api_app/object/list/?select[]=ID&select[]=NAME&select[]=DETAIL_PICTURE&select[]=IS_FAVORITE"
     private var presenter: SortPresenter = SortPresenter(this)
     private var navigator: FilterMainNavigator? = null
     private lateinit var ivProfile : CircleImageView
@@ -321,7 +322,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val id = item.itemId
 
         if (id == R.id.action_settings) {
-            startActivity(Intent(this, SearchActivity::class.java))
+            val intentSearch = Intent(this, SearchActivity::class.java)
+            intentSearch.putExtra("fromActivity", "catalog")
+            startActivity(intentSearch)
             return true
         } else {
             return super.onOptionsItemSelected(item)

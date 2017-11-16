@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bloold.buildp">
+
     <permission
         android:name="com.google.maps.android.utils.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.google.maps.android.utils.permission.MAPS_RECEIVE"/>
+        android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="com.google.maps.android.utils.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".MyApplication"
@@ -75,23 +80,23 @@
             android:name=".filter.object.FilterObjectsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".profile.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".profile.RegistrationActivity"
             android:label="@string/title_activity_registration"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RestoreActivity"
+            android:name=".profile.RestoreActivity"
             android:label="@string/title_activity_restore"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ProfileSettingsActivity"
+            android:name=".profile.ProfileSettingsActivity"
             android:label="@string/title_activity_profile_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AgreementActivity"
+            android:name=".profile.AgreementActivity"
             android:label="@string/title_activity_agreement"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -109,7 +114,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <activity android:name=".map.BigClusteringDemoActivity"/>
+
+        <activity android:name=".map.BigClusteringDemoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".map.RouteActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -16,6 +16,8 @@
 
 package com.example.bloold.buildp.model;
 
+import android.graphics.drawable.Icon;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
@@ -23,6 +25,7 @@ public class MyItem implements ClusterItem {
     private final LatLng mPosition;
     private String mTitle;
     private String mSnippet;
+    private String mObjId;
 
     public Integer getId() {
         return id;
@@ -40,10 +43,11 @@ public class MyItem implements ClusterItem {
         mSnippet = null;
     }
 
-    public MyItem(double lat, double lng, String title, String snippet) {
+    public MyItem(double lat, double lng, String title, String snippet,String ObjId) {
         mPosition = new LatLng(lat, lng);
         mTitle = title;
         mSnippet = snippet;
+        mObjId = ObjId;
     }
 
     @Override
@@ -53,6 +57,8 @@ public class MyItem implements ClusterItem {
 
 
     public String getTitle() { return mTitle; }
+
+    public String getObjId() { return mObjId; }
 
     public String getSnippet() { return mSnippet; }
 
