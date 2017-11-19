@@ -25,9 +25,8 @@
             android:id="@+id/btnViewFind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:layout_margin="16dp"
-            android:layout_alignParentBottom="true"
-            android:text="Показать найденное" />
+            style="@style/RoundedRedBtnStyle"
+            android:text="@string/show" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

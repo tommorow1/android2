@@ -1,7 +1,6 @@
 package com.example.bloold.buildp.catalog.`object`
 
 import android.content.Context
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.model.CatalogObjectsModel
-import com.nostra13.universalimageloader.core.ImageLoader
 
 interface AdapterListener {
     fun onObjectClicked(item: CatalogObjectsModel)
@@ -25,7 +23,7 @@ class AdapterCatalogObject(private val listener: AdapterListener):RecyclerView.A
 
     override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_object, parent, false)
+            .inflate(R.layout.item_catalog_object, parent, false)
 
         context = parent.context
 

@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bloold.buildp.MainActivity;
+import com.example.bloold.buildp.ui.MainActivity;
 import com.example.bloold.buildp.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

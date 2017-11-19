@@ -1,10 +1,9 @@
 package com.example.bloold.buildp.ListActivityObjects
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
+import com.example.bloold.buildp.ui.fragments.CatalogObjectListFragment
 import com.example.bloold.buildp.model.CatalogObjectsModel
 
 import kotlinx.android.synthetic.main.activity_list_objects.*
@@ -25,6 +24,6 @@ class ListObjectsActivity : AppCompatActivity() {
 
         objectsArray = intent.getParcelableArrayListExtra<CatalogObjectsModel>(KEY_LIST_OBJECT)
 
-        supportFragmentManager.beginTransaction().add(R.id.container, CatalogObjectFragment.newInstance(objectsArray, true)).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container, CatalogObjectListFragment.newInstance(objectsArray, true)).commit()
     }
 }

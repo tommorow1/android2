@@ -1,237 +1,233 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.bloold.buildp.single.object.SingleObjectActivity">
-    
-    <android.support.design.widget.AppBarLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/appbar">
-        
-        <android.support.design.widget.CollapsingToolbarLayout
+        android:layout_height="match_parent"
+        tools:context="com.example.bloold.buildp.single.object.SingleObjectActivity">
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="@drawable/avatar"
-            android:id="@+id/ctlMainSingleObject"
-            android:fitsSystemWindows="true">
+            android:layout_height="wrap_content"
+            android:id="@+id/appbar">
 
-            <FrameLayout
+            <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                            <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp"
-                            android:id="@+id/ivAvatar"
-                            android:src="@drawable/back"
-                            android:scaleType="centerCrop"/>
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="300dp"
-                                android:background="@color/black_overlay"/>
-                    </FrameLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:orientation="vertical"
-                        android:background="@color/colorPrimary">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/tvName"
-                            android:layout_weight="1"
-                            android:text="Жилой дом"
-                            android:textColor="@android:color/white"
-                            android:lines="1"
-                            android:paddingTop="8dp"
-                            android:paddingLeft="16dp"
-                            android:textSize="17sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingTop="8dp"
-                            android:layout_weight="1"
-                            android:visibility="gone"
-                            android:paddingLeft="16dp">
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:id="@+id/ivFirstStar"
-                                android:src="@drawable/ic_fill_star"/>
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:id="@+id/ivSecondStar"
-                                android:src="@drawable/ic_fill_star"/>
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:id="@+id/ivThirdStar"
-                                android:src="@drawable/ic_fill_star"/>
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:id="@+id/ivFirthStar"
-                                android:src="@drawable/ic_fill_star"/>
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:id="@+id/ivFifthStar"
-                                android:src="@drawable/ic_fill_star"/>
-
-                        </LinearLayout>
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingTop="8dp"
-                            android:text="Жилой дом"
-                            android:lines="1"
-                            android:textColor="@android:color/white"
-                            android:id="@+id/tvAddress"
-                            android:layout_weight="1"
-                            android:textSize="12sp"
-                            android:paddingLeft="16dp"/>
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Жилой дом"
-                            android:lines="1"
-                            android:textColor="@android:color/white"
-                            android:id="@+id/tvDistance"
-                            android:textSize="15sp"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_map_marker"
-                            android:drawableLeft="@drawable/ic_map_marker"
-                            android:paddingLeft="16dp"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="124dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|end"
-                    android:layout_marginTop="268dp"
-                    android:layout_marginRight="16dp">
-
-                    <ImageButton
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
-                        android:id="@+id/btnLink"
-                        android:background="@drawable/shape_button"
-                        android:src="@drawable/ic_link_button"
-                        android:layout_gravity="start|left|center_vertical"/>
-
-                    <ImageButton
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
-                        android:id="@+id/ivStar"
-                        android:background="@drawable/shape_button"
-                        android:src="@drawable/ic_star_button"
-                        android:layout_gravity="end|right|center_vertical"/>
-
-                </FrameLayout>
-
-            </FrameLayout>
-
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:id="@+id/toolbar"
-                android:layout_gravity="top"
-                app:collapseIcon="@drawable/avatar"
-                app:layout_collapseMode="pin"
-                android:layout_marginTop="16dp">
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@drawable/avatar"
+                android:id="@+id/ctlMainSingleObject"
+                android:fitsSystemWindows="true">
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatImageView
+                        android:orientation="vertical">
+                        <FrameLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/ivBack"
-                            android:paddingBottom="16dp"
-                            android:paddingTop="16dp"
-                            android:src="@drawable/ic_back_arrow"/>
+                            android:layout_height="wrap_content">
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:id="@+id/ivAvatar"
+                                tools:src="@drawable/back"
+                                android:scaleType="centerCrop"/>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:background="@color/black_overlay"/>
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:orientation="vertical"
+                            android:background="@color/colorPrimary">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_marginLeft="8dp"
-                            android:textSize="25sp"
-                            android:lines="1"
-                            android:visibility="invisible"
-                            android:textColor="@android:color/white"
-                            android:text="@string/navigation_drawer_catalog_object"
-                            android:id="@+id/tvTitle"/>
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:id="@+id/tvName"
+                                android:layout_weight="1"
+                                android:text="Жилой дом"
+                                android:textColor="@android:color/white"
+                                android:lines="1"
+                                android:paddingTop="8dp"
+                                android:paddingLeft="16dp"
+                                android:textSize="17sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:paddingTop="8dp"
+                                android:layout_weight="1"
+                                android:visibility="gone"
+                                android:paddingLeft="16dp">
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/ivFirstStar"
+                                    android:src="@drawable/ic_fill_star"/>
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/ivSecondStar"
+                                    android:src="@drawable/ic_fill_star"/>
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/ivThirdStar"
+                                    android:src="@drawable/ic_fill_star"/>
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/ivFirthStar"
+                                    android:src="@drawable/ic_fill_star"/>
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/ivFifthStar"
+                                    android:src="@drawable/ic_fill_star"/>
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingTop="8dp"
+                                android:text="Жилой дом"
+                                android:lines="1"
+                                android:textColor="@android:color/white"
+                                android:id="@+id/tvAddress"
+                                android:layout_weight="1"
+                                android:textSize="12sp"
+                                android:paddingLeft="16dp"/>
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Жилой дом"
+                                android:lines="1"
+                                android:textColor="@android:color/white"
+                                android:id="@+id/tvDistance"
+                                android:textSize="15sp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:drawablePadding="8dp"
+                                android:drawableStart="@drawable/ic_map_marker"
+                                android:drawableLeft="@drawable/ic_map_marker"
+                                android:paddingLeft="16dp"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/ivStarFill"
-                        android:layout_gravity="end"
-                        android:visibility="invisible"
-                        android:padding="8dp"
-                        android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_star_filling"/>
+                    <FrameLayout
+                        android:layout_width="124dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|end"
+                        android:layout_marginTop="268dp"
+                        android:layout_marginRight="16dp">
+
+                        <ImageButton
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:id="@+id/btnLink"
+                            android:background="@drawable/shape_button"
+                            android:src="@drawable/ic_link_button"
+                            android:layout_gravity="start|left|center_vertical"/>
+
+                        <ImageButton
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:id="@+id/ivStar"
+                            android:background="@drawable/shape_button"
+                            android:src="@drawable/ic_star_button"
+                            android:layout_gravity="end|right|center_vertical"/>
+
+                    </FrameLayout>
 
                 </FrameLayout>
 
-            </android.support.v7.widget.Toolbar>
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:id="@+id/toolbar"
+                    android:layout_gravity="top"
+                    app:collapseIcon="@drawable/avatar"
+                    app:layout_collapseMode="pin"
+                    android:layout_marginTop="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:paddingEnd="@dimen/activity_vertical_margin"
+                            android:layout_height="match_parent"
+                            android:id="@+id/ivBack"
+                            app:srcCompat="@drawable/ic_back_arrow"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/activity_vertical_margin"
+                            android:gravity="center_vertical"
+                            android:textSize="18sp"
+                            android:lines="1"
+                            android:visibility="invisible"
+                            tools:visibility="visible"
+                            android:textColor="@android:color/white"
+                            android:ellipsize="end"
+                            tools:text="sd kfjks dfsldj f sdf sdf sd dfgdf gdf gdff"
+                            android:text="@string/navigation_drawer_catalog_object"
+                            android:id="@+id/tvTitle"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/ivStarFill"
+                            android:layout_gravity="end"
+                            android:visibility="invisible"
+                            tools:visibility="visible"
+                            android:padding="8dp"
+                            android:layout_marginRight="8dp"
+                            app:srcCompat="@drawable/ic_star_filling"/>
+                    </LinearLayout>
+                </android.support.v7.widget.Toolbar>
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
 
-        <android.support.design.widget.TabLayout
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="bottom"
-            app:tabTextColor="@android:color/white"
-            app:tabMode="scrollable"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:tabIndicatorColor="@android:color/white"
-            app:tabSelectedTextColor="@android:color/white"
-            android:id="@+id/tabs"/>
+            <android.support.design.widget.TabLayout
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                app:tabTextColor="@android:color/white"
+                app:tabMode="scrollable"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabSelectedTextColor="@android:color/white"
+                android:id="@+id/tabs"/>
 
-    </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/vpSingleObject"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/vpSingleObject"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>

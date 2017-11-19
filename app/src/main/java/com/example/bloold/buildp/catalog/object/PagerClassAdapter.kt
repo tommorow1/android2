@@ -1,10 +1,8 @@
 package com.example.bloold.buildp.catalog.`object`
 
-import android.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.PagerAdapter
-import android.view.View
+import com.example.bloold.buildp.ui.fragments.CatalogObjectListFragment
 
 /**
  * Created by bloold on 18.10.17.
@@ -43,7 +41,9 @@ class PagerClassAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(
             }
         }
 
-        return CatalogObjectFragment.newInstance(urlResponse)
+        //return CatalogObjectListFragment.newInstance(urlResponse)
+        //TODO сделать дял разных табов свой список
+        return CatalogObjectListFragment.newInstance()
     }
 
     override fun getCount(): Int {

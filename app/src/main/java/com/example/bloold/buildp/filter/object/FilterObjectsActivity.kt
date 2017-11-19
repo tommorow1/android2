@@ -2,7 +2,6 @@ package com.example.bloold.buildp.filter.`object`
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.bloold.buildp.HighObjectsFilterResponse
@@ -40,7 +39,7 @@ class FilterObjectsActivity : AppCompatActivity(),
         navigator = FilterMainNavigator(this, R.id.flContainerFilter, this)
         //presenter.execute(URL)
 
-        supportFragmentManager.beginTransaction().add(R.id.flContainerFilter, CatalogObject4Fragment(), "CATALOG_OBJECT_4_FRAGMENT").commit()
+        supportFragmentManager.beginTransaction().add(R.id.flContainerFilter, ChooseCatalogFiltersFragment(), "CATALOG_OBJECT_4_FRAGMENT").commit()
     }
 
     override fun onObjectsLoaded(items: ArrayList<CatalogObjectsModel>) {

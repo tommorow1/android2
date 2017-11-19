@@ -3,7 +3,6 @@ package com.example.bloold.buildp.single.`object`
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.single.`object`.base.list.ListFragment
 import com.example.bloold.buildp.single.`object`.photos.PhotoFragment

@@ -134,18 +134,12 @@ open class BaseModel() : Parcelable {
         parcel.writeString(name)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<BaseModel> {
-        override fun createFromParcel(parcel: Parcel): BaseModel {
-            return BaseModel(parcel)
-        }
+        override fun createFromParcel(parcel: Parcel): BaseModel = BaseModel(parcel)
 
-        override fun newArray(size: Int): Array<BaseModel?> {
-            return arrayOfNulls(size)
-        }
+        override fun newArray(size: Int): Array<BaseModel?> = arrayOfNulls(size)
     }
 
 }

@@ -118,7 +118,7 @@ class SortPresenter(private val view: callback) : AsyncTask<String, String, Arra
 
             try {
                 val childsJsonArray = currentObject?.getJSONArray("CHILD")
-                sortModel.child = getSortObjects(childsJsonArray)
+                sortModel.child = getSortObjects(childsJsonArray)?.toTypedArray()
                 Log.d("childs", childsJsonArray.toString())
             } catch (e: JSONException) {
                 //e.printStackTrace()

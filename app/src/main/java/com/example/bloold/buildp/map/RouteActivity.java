@@ -4,15 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -21,15 +18,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bloold.buildp.MainActivity;
 import com.example.bloold.buildp.R;
-import com.example.bloold.buildp.profile.LoginActivity;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.HttpGet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,17 +28,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 public class RouteActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private TextView tvRoute;

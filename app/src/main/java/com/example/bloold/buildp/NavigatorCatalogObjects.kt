@@ -3,7 +3,6 @@ package com.example.bloold.buildp
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import com.example.bloold.buildp.catalog.`object`.CatalogObjectFragment
 import java.util.*
 
 /**
@@ -38,7 +37,7 @@ class NavigatorCatalogObjects(private val activity: AppCompatActivity,
     }
 
     fun initFragment(){
-        //currentFragment = CatalogObjectFragment.newInstance()
+        //currentFragment = CatalogObjectListFragment.newInstance()
 
         fragmentManager.beginTransaction()
                 .replace(layoutContainerId, currentFragment)
@@ -50,7 +49,7 @@ class NavigatorCatalogObjects(private val activity: AppCompatActivity,
     fun navigateTo(catalogObjects: CatalogObjectsScreens, data: Any? = null){
         when(catalogObjects){
             CatalogObjectsScreens.CATALOG_OBJECTS -> {
-                //showFragment(CatalogObjectFragment.newInstance(), catalogObjects)
+                //showFragment(CatalogObjectListFragment.newInstance(), catalogObjects)
             }
         }
     }

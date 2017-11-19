@@ -10,5 +10,7 @@
     <color name="grey">#fafafa</color>
     <color name="blue">#41587a</color>
 
-
+    <color name="colorGray">#757575</color>
+    <color name="colorBtnRed">#cd4e4b</color>
+    <color name="colorBtnRedPressed">#863432</color>
 </resources>

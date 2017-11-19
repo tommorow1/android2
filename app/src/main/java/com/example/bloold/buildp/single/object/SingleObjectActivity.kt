@@ -1,48 +1,31 @@
 package com.example.bloold.buildp.single.`object`
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
+import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
-import android.media.Image
 import android.os.AsyncTask
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import com.example.bloold.buildp.ListCatalogObjectsResponse
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.R.id.toolbar
-import com.example.bloold.buildp.callback
-import com.example.bloold.buildp.catalog.`object`.AdapterListener
-import com.example.bloold.buildp.catalog.`object`.CatalogObjectsPresenter
-import com.example.bloold.buildp.catalog.`object`.PagerClassAdapter
+import com.example.bloold.buildp.common.IntentHelper
+import com.example.bloold.buildp.databinding.ActivitySingleObjectBinding
 import com.example.bloold.buildp.model.*
-import com.example.bloold.buildp.profile.LoginActivity
-import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_single_object.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
-import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -54,7 +37,7 @@ import java.net.URL
  * status bar and navigation/system bar) with user interaction.
  */
 class SingleObjectActivity : AppCompatActivity() {
-
+    private lateinit var mBinding: ActivitySingleObjectBinding
     private var item: CatalogObjectsModel? = null
     private lateinit var pagerAdapter: PagerAdapter
     private lateinit var viewPager: ViewPager
@@ -73,14 +56,9 @@ class SingleObjectActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_single_object)
-        val intentSingleObject = getIntent() as Intent
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_single_object)
 
-        val ObjId = intentSingleObject.getStringExtra("ObjId") as String
-
-        if (ObjId!=null){
-            GetObject(this).execute(URL+ObjId)
-        }
+        GetObject(this).execute(URL+intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, 0).toString())
 
         /*if(intent.hasExtra(EXTRA_OBJECT_KEY) ?: false){
             item = intent.getParcelableExtra<CatalogObjectsModel>(EXTRA_OBJECT_KEY)
