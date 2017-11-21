@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.bloold.buildp.search.SearchActivity">
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white">
-
-        <Spinner
-            android:id="@+id/spinnerChoice"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
-
-        <EditText
-            android:id="@+id/etChoice"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginLeft="16dp"
-            android:background="@android:color/transparent"
-            android:drawablePadding="8dp"
-            android:drawableStart="@drawable/ic_search_search"
-            android:textColor="@color/red" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <ListView
+    xmlns:tools="http://schemas.android.com/tools">
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:id="@+id/lvNames"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        tools:context="com.example.bloold.buildp.search.SearchActivity">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Показать найденное"
-        android:layout_gravity="bottom"
-        android:layout_margin="16dp"
-        android:id="@+id/btnViewFind"/>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white">
 
-</android.support.design.widget.CoordinatorLayout>
+            <Spinner
+                android:id="@+id/spinnerChoice"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+            <EditText
+                android:id="@+id/etChoice"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginLeft="16dp"
+                android:background="@android:color/transparent"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_search_search"
+                android:textColor="@color/red" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:id="@+id/lvNames"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Показать найденное"
+            android:layout_gravity="bottom"
+            android:layout_margin="16dp"
+            android:id="@+id/btnViewFind"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>

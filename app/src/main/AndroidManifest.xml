@@ -32,6 +32,7 @@
             android:value="@string/facebook_app_id" />
         <activity
             android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -69,7 +70,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".single.object.SingleObjectActivity"
+            android:name=".ui.CatalogObjectDetailsActivity"
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/FullscreenTheme" />
         <activity
@@ -102,6 +103,12 @@
             android:name=".ListActivityObjects.ListObjectsActivity"
             android:label="@string/title_activity_list_objects"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.RouteMapActivity"
+            android:label=""/>
+        <activity
+            android:name=".ui.ImageViewActivity"
+            android:label=""/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -113,11 +120,13 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity android:name=".map.BigClusteringDemoActivity"
+        <activity android:name=".ui.MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".map.RouteActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <service
+            android:name=".services.NetworkIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -13,11 +13,18 @@ import java.util.HashSet
 
 object Settings {
     private val KEY_CATALOG_FILTERS = "catalogFilters"
+    private val KEY_USER_TOKEN = "user_token"
 
     /*** Фильтры для каталога  */
     var catalogFilters: Set<String>?
         get() = prefs.getStringSet(KEY_CATALOG_FILTERS, HashSet<String>())
-        set(value) { prefs.edit().putStringSet(KEY_CATALOG_FILTERS, value).apply() }
+        set(value) = prefs.edit().putStringSet(KEY_CATALOG_FILTERS, value).apply()
+
+
+    /*** Токен авторизации  */
+    var userToken: String?
+        get() = prefs.getString(KEY_USER_TOKEN, null)
+        set(value) = prefs.edit().putString(KEY_USER_TOKEN, userToken).apply()
 
     private val prefs: SharedPreferences
         get() = MyApplication.instance.getSharedPreferences("buildp", 0)

@@ -1,6 +1,7 @@
 package com.example.bloold.buildp.search
 
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -12,13 +13,16 @@ import com.example.bloold.buildp.R
 import android.widget.ArrayAdapter
 import com.example.bloold.buildp.ListActivityObjects.ListObjectsActivity
 import com.example.bloold.buildp.callback
-import com.example.bloold.buildp.map.BigClusteringDemoActivity
+import com.example.bloold.buildp.common.IntentHelper
+import com.example.bloold.buildp.databinding.ActivitySearchBinding
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
+import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
 
 
 class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelectedListener {
 
+    private lateinit var mBinding: ActivitySearchBinding
     private lateinit var spinnerChoice: Spinner
     private lateinit var etChoice: EditText
     private lateinit var lvObjects: ListView
@@ -36,12 +40,11 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     private lateinit var adapter: ArrayAdapter<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_search)
 
         val intent = intent
         val fromActivity = intent.getStringExtra("fromActivity") as String
 
-        val intentSearch = Intent(this, BigClusteringDemoActivity::class.java)
         spinnerChoice = findViewById(R.id.spinnerChoice)
         etChoice = findViewById(R.id.etChoice)
         lvObjects = findViewById(R.id.lvNames)
@@ -55,7 +58,7 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         adapter = ArrayAdapter(this,
             android.R.layout.simple_list_item_1, ArrayList<String>());
 
-        spinnerChoice.setAdapter(adapterS)
+        spinnerChoice.adapter = adapterS
         spinnerChoice.onItemSelectedListener = this
 
         etChoice.addTextChangedListener(object: TextWatcher{
@@ -68,19 +71,10 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                intentSearch.putExtra("searchText", p0.toString())
                 if(indexChoice == INDEX_ADDRESS){
                     presenter.findAddress(p0.toString())
-                    intentSearch.putExtra("searchType", "address")
                 } else {
                     presenter.findObjects(p0.toString())
-                    val egrn = p0.toString() as String
-                    val egrnNumber = egrn.toIntOrNull()
-                    if(egrnNumber != null) {
-                        intentSearch.putExtra("searchType", "egrn")
-                    } else {
-                        intentSearch.putExtra("searchType", "object")
-                    }
                 }
             }
 
@@ -89,7 +83,18 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         btnViewFind.setOnClickListener{
             if(!adapter.isEmpty){
                 if (fromActivity != null && fromActivity == "map") {
-                    startActivity(intentSearch)
+                    val searchType = if(indexChoice == INDEX_ADDRESS)
+                        "address"
+                    else {
+                        val egrnNumber = mBinding.etChoice.text.toString().toIntOrNull()
+                        if(egrnNumber != null) {
+                            "egrn"
+                        } else
+                            "object"
+                    }
+                    startActivity(Intent(this, MapObjectListFragment::class.java)
+                            .putExtra(IntentHelper.EXTRA_SEARCH_TYPE, searchType)
+                            .putExtra(IntentHelper.EXTRA_SEARCH_TEXT, mBinding.etChoice.text.toString()))
                 }else{
                     val intent = Intent(this, ListObjectsActivity::class.java)
                     intent.putExtras(Bundle().apply { putParcelableArrayList(ListObjectsActivity.KEY_LIST_OBJECT, objects) } )

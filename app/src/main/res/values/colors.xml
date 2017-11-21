@@ -13,4 +13,7 @@
     <color name="colorGray">#757575</color>
     <color name="colorBtnRed">#cd4e4b</color>
     <color name="colorBtnRedPressed">#863432</color>
+    <color name="loadingBackground">#ffffff</color>
+    <color name="colorPanel">#fafafa</color>
+    <color name="colorGrayDivider">#aaa</color>
 </resources>

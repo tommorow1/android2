@@ -14,8 +14,7 @@ import com.example.bloold.buildp.R
 import com.example.bloold.buildp.model.AudioModel
 import com.example.bloold.buildp.model.DocModel
 import com.example.bloold.buildp.model.VideoModel
-import com.example.bloold.buildp.single.`object`.PagerSingleObjectAdapter
-import com.example.bloold.buildp.single.`object`.photos.PhotoFragment
+import com.example.bloold.buildp.adapter.CatalogObjectDetailsPagerAdapter
 
 class ListFragment : Fragment() {
 
@@ -73,16 +72,16 @@ class ListFragment : Fragment() {
         private val TYPE_KEY = "type"
 
         fun newInstance(childRes: Int,
-                        listType: PagerSingleObjectAdapter.LIST_TYPE,
+                        listType: CatalogObjectDetailsPagerAdapter.LIST_TYPE,
                         items: Any?): ListFragment {
             return ListFragment().apply {
                 if(items != null && (items as Array<Any>)?.isNotEmpty() ?: false){
                     when(listType){
-                        PagerSingleObjectAdapter.LIST_TYPE.AUDIO -> {
+                        CatalogObjectDetailsPagerAdapter.LIST_TYPE.AUDIO -> {
                             arguments.putParcelableArray(ITEMS_KEY, items as Array<AudioModel>)
-                        } PagerSingleObjectAdapter.LIST_TYPE.VIDEO -> {
+                        } CatalogObjectDetailsPagerAdapter.LIST_TYPE.VIDEO -> {
                             arguments.putParcelableArray(ITEMS_KEY, items as Array<VideoModel>)
-                        } PagerSingleObjectAdapter.LIST_TYPE.PUBLICATIONS -> {
+                        } CatalogObjectDetailsPagerAdapter.LIST_TYPE.PUBLICATIONS -> {
                             arguments.putParcelableArray(ITEMS_KEY, items as Array<DocModel>)
                         }
                     }

@@ -15,9 +15,12 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.bloold.buildp.search.SearchActivity
 import android.content.SharedPreferences
+import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatButton
 import android.text.TextUtils
 import android.util.Log
+import android.util.TypedValue
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,7 +28,6 @@ import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.OnFilterApplyListener
-import com.example.bloold.buildp.map.BigClusteringDemoActivity
 import com.example.bloold.buildp.sort.fragment.FilterMainNavigator
 import com.example.bloold.buildp.sort.fragment.onFilterListener
 import com.example.bloold.buildp.model.*
@@ -34,6 +36,7 @@ import com.example.bloold.buildp.presenters.callback
 import com.example.bloold.buildp.profile.LoginActivity
 import com.example.bloold.buildp.profile.ProfileSettingsActivity
 import com.example.bloold.buildp.sort.fragment.SortFragment
+import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import com.facebook.login.LoginManager;
 import com.loopj.android.http.AsyncHttpClient
@@ -119,6 +122,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         navigator = FilterMainNavigator(this, R.id.mainContainer, this)
         presenter.execute(URL)
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
+            currentFragment.onResume()
+            if (currentFragment is MapObjectListFragment) {
+                showAppBarElevation(false)
+            } else
+                showAppBarElevation(true)
+        }
     }
 
     private fun LogUserInfo(){
@@ -336,17 +348,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    private fun showAppBarElevation(show: Boolean) {
+        //Сделано 0.1 вместо 0, а иначе возврат по кнопке назад в тулбаре не работает
+        ViewCompat.setElevation(findViewById(R.id.appBarLayout), if (!show) 0.1f else TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics))
+    }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
+        var fragmentClass: Class<out Fragment>? = null
         val id = item.itemId
         if (id == R.id.nav_map) {
-            startActivity(Intent(this, BigClusteringDemoActivity::class.java))
+            showAppBarElevation(false)
+            fragmentClass = MapObjectListFragment::class.java
+            fabFilter.hide()
+            //startActivity(Intent(this, BigClusteringDemoActivity::class.java))
         } else if (id == R.id.nav_catalog) {
+            showAppBarElevation(true)
+            fabFilter.show()
             startActivity(Intent(this, MainActivity::class.java))
         }/* else if (id == R.id.nav_slideshow) {
         } else if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
         }*/
+        fragmentClass?.newInstance()?.let { supportFragmentManager.beginTransaction().replace(R.id.mainContainer, it).commit() }
+
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true

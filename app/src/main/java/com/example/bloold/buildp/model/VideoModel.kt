@@ -2,12 +2,17 @@ package com.example.bloold.buildp.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * Created by bloold on 20.10.17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 class VideoModel(): Parcelable {
+    @get: JsonProperty("NAME")
     var name: String? = null
+    @get: JsonProperty("PROPERTY_DOCUMENT_CODE")
     var code: String? = null
 
     override fun writeToParcel(parcel: Parcel, p1: Int) {

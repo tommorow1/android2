@@ -9,13 +9,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.model.PhotoModel
 
-interface OnListFragmentInteractionListener {
-    fun onPhotoClickListener(item: String)
-}
-
-class PhotoRecyclerViewAdapter(private val mListener:OnListFragmentInteractionListener?,
+class PhotoRecyclerViewAdapter(private val mListener:OnItemClickListener<PhotoModel>?,
                                 private val context: Context):
                                 RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder>() {
 
@@ -35,21 +32,13 @@ class PhotoRecyclerViewAdapter(private val mListener:OnListFragmentInteractionLi
     override fun onBindViewHolder(holder:ViewHolder, position:Int) {
 
         Glide.with(context)
-            .load(mValues.get(position).src)
+            .load(mValues.get(position).fullImagePath())
             .into(holder.mIvPhoto)
 
-        holder.mView.setOnClickListener(object:View.OnClickListener {
-            override fun onClick(v:View) {
-                if (null != mListener) {
-                    mListener.onPhotoClickListener(mValues.get(position).name!!)
-                }
-            }
-        })
+        holder.mView.setOnClickListener { mListener?.onItemClick(mValues[holder.adapterPosition]) }
     }
 
-    override fun getItemCount():Int {
-        return mValues.size
-    }
+    override fun getItemCount():Int = mValues.size
 
     fun replaceAll(items: ArrayList<PhotoModel>) {
         clear()
@@ -62,30 +51,21 @@ class PhotoRecyclerViewAdapter(private val mListener:OnListFragmentInteractionLi
         notifyItemRangeRemoved(0, size)
     }
 
-    fun addAll(items: ArrayList<PhotoModel>?, startPosition: Int) {
-        if (items == null || items.size == 0) {
-            return
+    fun addAll(items: List<PhotoModel>?, startPosition: Int) {
+        items?.let {
+            mValues.addAll(startPosition, it)
+            notifyDataSetChanged()
         }
-
-        mValues.addAll(startPosition, items)
-
-        notifyDataSetChanged()
     }
 
-    fun addAll(items: ArrayList<PhotoModel>?) {
+    fun addAll(items: List<PhotoModel>?) {
         addAll(items, mValues.size)
         Log.d("adapter", mValues.size.toString())
     }
 
     inner class ViewHolder( val mView:View):RecyclerView.ViewHolder(mView) {
-        val mIvPhoto: ImageView
+        val mIvPhoto: ImageView = mView.findViewById(R.id.ivPhoto)
 
-        init{
-            mIvPhoto = mView.findViewById(R.id.ivPhoto)
-        }
-
-        override fun toString():String {
-            return super.toString() + "${TAG}, ${mValues.size}"
-        }
+        override fun toString():String = super.toString() + "$TAG, ${mValues.size}"
     }
-    }
+}

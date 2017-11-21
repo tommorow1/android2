@@ -18,6 +18,9 @@
     <string name="filter_quest">Участвует в квесте</string>
     <string name="filter_vote">Участвует в голосовании</string>
 
+    <!-- Карта -->
+    <string name="all">Все</string>
+
     <!-- navigation drawer -->
     <string name="navigation_drawer_object_in_map">Обьекты на карте</string>
     <string name="navigation_drawer_catalog_object">Каталог обьектов</string>
@@ -69,5 +72,6 @@
     <!-- Общее -->
     <string name="error_check_internet">Нет подключения к сети. Проверьте подключение и попробуйте позже</string>
     <string name="server_error">Ошибка сервера. Обратитесь к разработчику или попробуйте позже</string>
+    <string name="google_services_error">Ошибка при обращении к Google Play Services. Попробуйте позже или обратитесь к разработчику</string>
 
 </resources>

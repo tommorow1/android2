@@ -52,7 +52,7 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
             holder.mLayoutBinding.name.text=catalogObject.name
 
             Glide.with(holderRaw.itemView.context)
-                    .load(ServiceGenerator.SITE_URL+catalogObject.detailPicture?.src)
+                    .load(catalogObject.detailPicture?.fullImagePath())
                     .into(holder.mLayoutBinding.ivBuild)
             holder.itemView.setOnClickListener({onItemClickListener?.onItemClick(mData[holder.adapterPosition])})
         }

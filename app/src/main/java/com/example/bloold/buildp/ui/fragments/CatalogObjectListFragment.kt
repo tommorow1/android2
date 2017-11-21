@@ -22,8 +22,7 @@ import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.databinding.FragmentCatalogObjectBinding
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.SortObject
-import com.example.bloold.buildp.single.`object`.SingleObjectActivity
-import com.example.bloold.buildp.ui.MainActivity
+import com.example.bloold.buildp.ui.CatalogObjectDetailsActivity
 import io.reactivex.observers.DisposableSingleObserver
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -121,7 +120,7 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
 
 
     override fun onItemClick(item: CatalogObject) {
-        startActivity(Intent(context, SingleObjectActivity::class.java)
+        startActivity(Intent(context, CatalogObjectDetailsActivity::class.java)
                 .putExtra(IntentHelper.EXTRA_OBJECT_ID, item.id))
     }
 

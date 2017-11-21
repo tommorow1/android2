@@ -2,6 +2,7 @@ package com.example.bloold.buildp.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.bloold.buildp.api.ServiceGenerator
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -18,6 +19,7 @@ class PhotoModel(): Parcelable {
         name = parcel.readString()
         src = parcel.readString()
     }
+    fun fullImagePath() = if(src==null) src else ServiceGenerator.SITE_URL+src
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)

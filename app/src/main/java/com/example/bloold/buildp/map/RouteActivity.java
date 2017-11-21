@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bloold.buildp.R;
+import com.example.bloold.buildp.common.IntentHelper;
+import com.example.bloold.buildp.ui.RouteMapActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,30 +99,25 @@ public class RouteActivity extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(RouteActivity.this, "Адрес пуст", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(RouteActivity.this, BigClusteringDemoActivity.class);
-                intent.putExtra("Origin", origin);
-                intent.putExtra("Destination", destination);
-                startActivity(intent);
+                startActivity(new Intent(RouteActivity.this, RouteMapActivity.class)
+                    .putExtra(IntentHelper.Companion.getEXTRA_ORIGIN(), origin)
+                        .putExtra(IntentHelper.Companion.getEXTRA_DESTINATION(), destination));
             }
         });
-        AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.atvOrigin);
+        AutoCompleteTextView autoCompView = findViewById(R.id.atvOrigin);
         autoCompView.setAdapter(new RouteActivity.GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        autoCompView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position,long id) {
-                String selection = (String)parent.getItemAtPosition(position);
-                try {
-                     new JSONGet().execute(selection).get();
-                    Thread.sleep(1000);
-                     geoPosition = PosCoods;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-
+        autoCompView.setOnItemClickListener((parent, v, position, id) -> {
+            String selection = (String)parent.getItemAtPosition(position);
+            try {
+                 new JSONGet().execute(selection).get();
+                Thread.sleep(1000);
+                 geoPosition = PosCoods;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
+
         });
 
         final AutoCompleteTextView autoCompView2 = (AutoCompleteTextView) findViewById(R.id.atvDestination);

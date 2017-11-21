@@ -10,7 +10,8 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tvDescription"
-        android:gravity="center_horizontal"/>
+        android:padding="@dimen/activity_vertical_margin"
+        tools:text="Описание"
+        android:id="@+id/tvDescription"/>
 
 </android.support.v4.widget.NestedScrollView>
