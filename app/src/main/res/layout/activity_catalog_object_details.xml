@@ -249,6 +249,7 @@
                 android:layout_height="match_parent" />
             <ImageView
                 app:srcCompat="@drawable/ic_edit"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_gravity="center_vertical"
                 android:onClick="@{listener::onEditClick}"
                 android:padding="@dimen/activity_vertical_margin_half"
@@ -260,6 +261,7 @@
                 android:layout_height="match_parent" />
             <ImageView
                 app:srcCompat="@drawable/ic_alert"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_gravity="center_vertical"
                 android:onClick="@{listener::onAlertClick}"
                 android:padding="@dimen/activity_vertical_margin_half"
@@ -271,6 +273,7 @@
                 android:layout_height="match_parent" />
             <ImageView
                 app:srcCompat="@drawable/ic_photo"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_gravity="center_vertical"
                 android:onClick="@{listener::onPhotoClick}"
                 android:padding="@dimen/activity_vertical_margin_half"
@@ -283,6 +286,7 @@
             <ImageView
                 app:srcCompat="@drawable/ic_route"
                 android:layout_gravity="center_vertical"
+                android:background="?selectableItemBackgroundBorderless"
                 android:onClick="@{listener::onRouteClick}"
                 android:padding="@dimen/activity_vertical_margin_half"
                 android:layout_width="@dimen/img_panel_size"

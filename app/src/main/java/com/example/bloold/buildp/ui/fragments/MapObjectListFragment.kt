@@ -1,7 +1,9 @@
 package com.example.bloold.buildp.ui.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
@@ -22,10 +24,14 @@ import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponse
 import com.example.bloold.buildp.api.data.CatalogResponse
+import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
-import com.example.bloold.buildp.components.NetworkFragment
+import com.example.bloold.buildp.common.Settings
+import com.example.bloold.buildp.components.EventFragment
 import com.example.bloold.buildp.databinding.FragmentMapObjectsBinding
 import com.example.bloold.buildp.model.MyItem
+import com.example.bloold.buildp.services.NetworkIntentService
+import com.example.bloold.buildp.ui.ChooseEditFieldActivity
 import com.example.bloold.buildp.utils.PermissionUtil
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -43,8 +49,7 @@ import java.net.URLEncoder
 import java.net.UnknownHostException
 
 
-class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener {
-
+class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     /*   override fun onClusterClick(cluster: Cluster<MyItem>?): Boolean {
            cluster?.let {
                //Увеличиваем, чтобы помещались все кластеры
@@ -66,7 +71,7 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
     private lateinit var mClusterManager: ClusterManager<MyItem>
     var mEventMapItem: HashMap<String, MyItem> = HashMap()
     private var googleMap: GoogleMap?=null
-    private var oldMarker: Marker? = null
+    private var currentMarker: Marker? = null
     private var categoryId: Int?=null
     private var searchType: String?=null
     private var searchQuery: String?=null
@@ -96,7 +101,7 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
-                    oldMarker=null
+                    currentMarker =null
                     categoryId=if(it.tag!=null) it.tag as Int else null
                     loadObjectsOnMap()
                 }
@@ -104,6 +109,18 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
 
         })
         loadTabs()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode== Activity.RESULT_OK)
+        {
+            if(requestCode==ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+            {
+                mBinding.mapInfo.visibility=View.GONE
+                loadObjectsOnMap()
+            }
+        }
     }
 
     override fun onResume() {
@@ -134,7 +151,7 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
                 it.setOnMarkerClickListener(this)
                 it.setOnCameraIdleListener {
                     mClusterManager.onCameraIdle()
-                    oldMarker = null
+                    currentMarker = null
 
                     mBinding.mapInfo.visibility=View.GONE
                     loadObjectsOnMap()
@@ -254,8 +271,16 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
             if (address == null && name == null) {
                 return true
             }
-            oldMarker?.let {
-                it.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker", 67, 96)))
+            if(currentMarker?.id!=it.id) {
+                currentMarker?.let {
+                    try {
+                        it.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker", 67, 96)))
+                    }
+                    catch (ex: Exception)
+                    {
+                        ex.printStackTrace()
+                    }
+                }
             }
 
             mBinding.markerAddress.text=address
@@ -264,7 +289,7 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
 
             val item = mEventMapItem[it.id]
             it.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("red_marker",67,96)))
-            oldMarker = it
+            currentMarker = it
             val ObjId = item?.objId
 
             val mrLatitude = it.position.latitude.toString()
@@ -291,6 +316,24 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
             dist = dist.toInt().toFloat()
             mBinding.tvDist.text=dist.toString()+"м"
 
+            if(Settings.userToken.isNullOrEmpty())
+            {
+                mBinding.ivFavourite.visibility = View.GONE
+
+            }
+            else
+            {
+                mBinding.ivFavourite.visibility = View.VISIBLE
+                updateFavouriteBtn(item?.isFavourite!=null && item.isFavourite==true)
+                mBinding.ivFavourite.setOnClickListener({
+                    item?.isFavourite=(mBinding.ivFavourite.tag as Int)==0
+                    updateFavouriteBtn((mBinding.ivFavourite.tag as Int)==0)
+                    mEventMapItem[marker.id]?.let {
+                        NetworkIntentService.toogleFavourite(activity, it.id)
+                    }
+                })
+            }
+
 /*String mrPosition = String.valueOf(mrLatitude+","+mrLongitude);
             intentRoute.putExtra("mrPosition", mrPosition);
             intentSingleObject.putExtra("ObjId", ObjId);
@@ -300,6 +343,21 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
 
         }
         return true
+    }
+
+    private fun updateFavouriteBtn(isFavourite:Boolean)
+    {
+        if(isFavourite)
+        {
+            mBinding.ivFavourite.setImageResource(R.drawable.ic_favourite_on)
+            mBinding.ivFavourite.tag=1
+
+        }
+        else
+        {
+            mBinding.ivFavourite.setImageResource(R.drawable.ic_favourite_off)
+            mBinding.ivFavourite.tag=0
+        }
     }
 
 
@@ -315,7 +373,12 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
 
     fun onEditClick(v:View)
     {
-        //TODO
+        val item = mEventMapItem[currentMarker?.id]
+        item?.let {
+            startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, item.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+        }
+
     }
     fun onAlertClick(v:View)
     {
@@ -330,6 +393,21 @@ class MapObjectListFragment : NetworkFragment(), GoogleMap.OnMarkerClickListener
         //TODO
     }
 
+    //---- Ловим события от сервиса ----
+    override val actions: Array<String>
+        get() = arrayOf(IntentHelper.ACTION_TOGGLE_FAVOURITE)
+
+    override fun onEventReceived(action: String, errorMsg: String?, data: Intent?) {
+        if(!errorMsg.isNullOrEmpty()) {
+            Toast.makeText(activity, errorMsg, Toast.LENGTH_LONG).show()
+            //Ошибка при добавлении в избранное, поэтому инвертируем
+            data?.let {
+                val item = mEventMapItem[it.getIntExtra(IntentHelper.EXTRA_VALUE,-100).toString()]
+                if(currentMarker !=null&&item?.id.toString()==currentMarker?.id) onMarkerClick(currentMarker)
+            }
+        }
+    }
+     //------
     inner class OwnIconRendered(context: Context, map: GoogleMap,
                                    clusterManager: ClusterManager<MyItem>) : DefaultClusterRenderer<MyItem>(context, map, clusterManager) {
 

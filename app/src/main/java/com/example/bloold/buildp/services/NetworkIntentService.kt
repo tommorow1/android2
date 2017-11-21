@@ -46,7 +46,10 @@ class NetworkIntentService : IntentService(TAG) {
 
                     override fun onError(error: Throwable) {
                         error.printStackTrace()
-                        detectAndSendError(IntentHelper.ACTION_TOGGLE_FAVOURITE, error)
+                        if (error is UnknownHostException || error is ConnectException)
+                            sendEvent(IntentHelper.ACTION_TOGGLE_FAVOURITE, getString(R.string.error_check_internet), objectId)
+                        else
+                            sendEvent(IntentHelper.ACTION_TOGGLE_FAVOURITE, getString(R.string.server_error), objectId)
                     }
                 })
     }

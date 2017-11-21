@@ -21,6 +21,16 @@
     <!-- Карта -->
     <string name="all">Все</string>
 
+    <!-- Редактирование -->
+    <string name="edit_object_title">Редактирование объекта</string>
+    <string name="add_object_item">Добавление объекта</string>
+    <string name="route_item">Проложить маршрут</string>
+    <string name="status_item">Состояние объекта</string>
+    <string name="photo_video_audio_item">Фото, видео, аудио</string>
+    <string name="main_info_item">Основные сведения</string>
+    <string name="archive_item">Архивные материалы</string>
+    <string name="science_pub_info">Научные публикации</string>
+
     <!-- navigation drawer -->
     <string name="navigation_drawer_object_in_map">Обьекты на карте</string>
     <string name="navigation_drawer_catalog_object">Каталог обьектов</string>

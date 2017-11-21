@@ -81,6 +81,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_vertical_margin"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <TextView
@@ -90,11 +91,12 @@
                         android:layout_weight="1"
                         android:lines="1"
                         android:ellipsize="end"
-                        android:layout_margin="@dimen/activity_vertical_margin"
+                        android:layout_marginEnd="@dimen/activity_vertical_margin"
                         tools:text="TextVw"
                         android:textColor="@color/vk_black"
                         android:textSize="22sp" />
                     <ImageView
+                        android:id="@+id/ivFavourite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/ic_favourite_off"/>
@@ -132,6 +134,7 @@
                         android:layout_height="match_parent" />
                     <ImageView
                         app:srcCompat="@drawable/ic_edit"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:layout_gravity="center_vertical"
                         android:onClick="@{listener::onEditClick}"
                         android:padding="@dimen/activity_vertical_margin_half"
@@ -143,6 +146,7 @@
                         android:layout_height="match_parent" />
                     <ImageView
                         app:srcCompat="@drawable/ic_alert"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:layout_gravity="center_vertical"
                         android:onClick="@{listener::onAlertClick}"
                         android:padding="@dimen/activity_vertical_margin_half"
@@ -154,6 +158,7 @@
                         android:layout_height="match_parent" />
                     <ImageView
                         app:srcCompat="@drawable/ic_photo"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:layout_gravity="center_vertical"
                         android:onClick="@{listener::onPhotoClick}"
                         android:padding="@dimen/activity_vertical_margin_half"
@@ -165,6 +170,7 @@
                         android:layout_height="match_parent" />
                     <ImageView
                         app:srcCompat="@drawable/ic_route"
+                        android:background="?selectableItemBackgroundBorderless"
                         android:layout_gravity="center_vertical"
                         android:onClick="@{listener::onRouteClick}"
                         android:padding="@dimen/activity_vertical_margin_half"

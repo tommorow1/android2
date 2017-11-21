@@ -67,8 +67,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.facebook.android:facebook-login:[4,5)'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     compile 'com.google.maps.android:android-maps-utils:0.4+'
     compile 'com.android.support:multidex:1.0.2'
 

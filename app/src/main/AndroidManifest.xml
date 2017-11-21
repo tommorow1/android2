@@ -105,10 +105,16 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.RouteMapActivity"
-            android:label=""/>
+            android:label=""
+            android:theme="@style/AppThemeSimple"/>
+        <activity
+            android:name=".ui.ChooseEditFieldActivity"
+            android:label="@string/edit_object_title"
+            android:theme="@style/AppThemeSimple"/>
         <activity
             android:name=".ui.ImageViewActivity"
-            android:label=""/>
+            android:label=""
+            android:theme="@style/AppThemeSimple"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
