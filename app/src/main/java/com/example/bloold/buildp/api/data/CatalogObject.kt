@@ -38,6 +38,8 @@ class CatalogObject {
     var propertyMap: String?=null
     @get: JsonProperty("IS_FAVORITE")
     var isFavourite: Boolean? = false
+    @get: JsonProperty("PROPERTY_CONDITION")
+    var condition: String? = null //Состояние объекта
     /*
     @get: JsonProperty("DOCS_DATA")
     var docsData: Object =""

@@ -72,6 +72,7 @@
         <activity
             android:name=".ui.CatalogObjectDetailsActivity"
             android:label="@string/title_activity_fullscreen"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".search.SearchActivity"
@@ -110,10 +111,17 @@
         <activity
             android:name=".ui.ChooseEditFieldActivity"
             android:label="@string/edit_object_title"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSimple"/>
+        <activity
+            android:name=".ui.EditStateActivity"
+            android:label="@string/edit_object_title"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
         <activity
             android:name=".ui.ImageViewActivity"
-            android:label=""
+            android:label="@string/photo"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -133,6 +141,15 @@
         <service
             android:name=".services.NetworkIntentService"
             android:exported="false" />
+        <provider
+            android:name=".components.GenericFileProvider"
+            android:authorities="com.example.bloold.buildp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -13,7 +13,7 @@ import java.util.HashSet
 
 object Settings {
     private val KEY_CATALOG_FILTERS = "catalogFilters"
-    private val KEY_USER_TOKEN = "user_token"
+    private val KEY_USER_TOKEN = "AuthToken"
 
     /*** Фильтры для каталога  */
     var catalogFilters: Set<String>?
@@ -27,5 +27,5 @@ object Settings {
         set(value) = prefs.edit().putString(KEY_USER_TOKEN, userToken).apply()
 
     private val prefs: SharedPreferences
-        get() = MyApplication.instance.getSharedPreferences("buildp", 0)
+        get() = MyApplication.instance.getSharedPreferences("main", 0)
 }

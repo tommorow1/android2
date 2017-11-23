@@ -1,5 +1,6 @@
 package com.example.bloold.buildp.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
@@ -21,7 +22,7 @@ import com.example.bloold.buildp.R
 import com.example.bloold.buildp.adapter.CatalogObjectDetailsPagerAdapter
 import com.example.bloold.buildp.api.ApiHelper
 import com.example.bloold.buildp.api.ServiceGenerator
-import com.example.bloold.buildp.api.data.BaseResponse
+import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
@@ -55,7 +56,6 @@ class CatalogObjectDetailsActivity : EventActivity() {
     private lateinit var tvDistance: TextView
     private lateinit var tvAddress: TextView
     private lateinit var tvTitle: TextView
-    private val URL = "http://ruinnet.idefa.ru/api_app/object/list/?select[]=ID&select[]=NAME&select[]=PREVIEW_TEXT&select[]=PROPERTY_ADDRESS&select[]=DETAIL_PICTURE&select[]=PHOTOS_DATA&select[]=DOCS_DATA&select[]=PUBLICATIONS_DATA&select[]=VIDEO_DATA&select[]=AUDIO_DATA&select[]=DETAIL_PAGE_URL&select[]=IS_FAVORITE&select[]=PROPERTY_MAP=Y&filter[INCLUDE_SUBSECTIONS]=Y&filter[ID][0]="
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +92,17 @@ class CatalogObjectDetailsActivity : EventActivity() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode== Activity.RESULT_OK)
+        {
+            if(requestCode==ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT||
+                    requestCode==EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+            {
+                catalogObject?.let { loadObjectDetails(it.id) }
+            }
+        }
+    }
     //companion object {
        // val EXTRA_OBJECT_KEY = "object"
    // }
@@ -164,8 +175,8 @@ class CatalogObjectDetailsActivity : EventActivity() {
                     }
                     else finish()
                 }
-                .subscribeWith(object : DisposableSingleObserver<BaseResponse<CatalogObject>>() {
-                    override fun onSuccess(result: BaseResponse<CatalogObject>) {
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<CatalogObject>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<CatalogObject>) {
                         catalogObject=result.data?.items?.firstOrNull()
                     }
                     override fun onError(e: Throwable) {
@@ -194,11 +205,17 @@ class CatalogObjectDetailsActivity : EventActivity() {
     }
     fun onEditClick(v:View)
     {
-        //TODO
+        catalogObject?.let {
+            startActivityForResult(Intent(this, ChooseEditFieldActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+        }
     }
     fun onAlertClick(v:View)
     {
-        //TODO
+        catalogObject?.let {
+            startActivityForResult(Intent(this, EditStateActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+        }
     }
     fun onRouteClick(v:View)
     {

@@ -7,7 +7,7 @@ import android.support.annotation.StringRes
 import android.text.TextUtils
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
-import com.example.bloold.buildp.api.data.BaseResponse
+import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.common.IntentHelper
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
@@ -31,8 +31,8 @@ class NetworkIntentService : IntentService(TAG) {
     private fun toggleFavourite(objectId: Int) {
         ServiceGenerator.serverApi.toggleFavourite(objectId)
                 .subscribeOn(Schedulers.newThread())
-                .subscribeWith(object : DisposableSingleObserver<BaseResponse<Void>>() {
-                    override fun onSuccess(result: BaseResponse<Void>) {
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<Void>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<Void>) {
                       /*  if (result.isSuccessful)
                             sendEvent(IntentHelper.ACTION_ARCHIVE_PRODUCT, null)
                         else {

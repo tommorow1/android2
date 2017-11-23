@@ -25,11 +25,36 @@
     <string name="edit_object_title">Редактирование объекта</string>
     <string name="add_object_item">Добавление объекта</string>
     <string name="route_item">Проложить маршрут</string>
-    <string name="status_item">Состояние объекта</string>
+    <string name="state_item">Состояние объекта</string>
     <string name="photo_video_audio_item">Фото, видео, аудио</string>
     <string name="main_info_item">Основные сведения</string>
     <string name="archive_item">Архивные материалы</string>
     <string name="science_pub_info">Научные публикации</string>
+
+    <!-- Редактирование состояния -->
+    <string name="state_description">Описание состояния</string>
+    <string name="state_condition">Оценка состояния</string>
+    <string name="add_photo_title">Добавить фотографии</string>
+    <string name="add_video_title">Добавить видео</string>
+    <string name="add_audio_title">Добавить аудио</string>
+    <string name="add_photo_rules"><a href="https://ruin.net.ru/recommendations/">Правила добавления фотографий</a></string>
+    <string name="add">Добавить</string>
+    <string name="audio_record">Аудиозапись</string>
+    <string name="youtube_link">Сссылка на youtube видео</string>
+    <string name="need_only_youtube_link">Можно использовать только ссылки на youtube</string>
+    <string name="choose_condition">Выберите состояние</string>
+
+    <!-- Просмотр изображения -->
+    <string name="photo">Фото</string>
+
+    <!-- Выбор изображения -->
+    <string name="add_photo">Добавить фото</string>
+    <string name="open_gallery">Открыть галерею</string>
+    <string name="open_camera">Открыть камеру</string>
+    <string name="choose_application">Выберите приложение</string>
+    <string name="cant_create_image_file">Невозможно создать файл изображение, проверьте место на устройстве и попроуйте позже</string>
+    <string name="cant_convert_image_file">Невозможно сжать изображение для отправки, попробуйте выбрать другой файл изображения</string>
+    <string name="no_capture_image">Вы не выбрали изображение</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_object_in_map">Обьекты на карте</string>
@@ -83,5 +108,7 @@
     <string name="error_check_internet">Нет подключения к сети. Проверьте подключение и попробуйте позже</string>
     <string name="server_error">Ошибка сервера. Обратитесь к разработчику или попробуйте позже</string>
     <string name="google_services_error">Ошибка при обращении к Google Play Services. Попробуйте позже или обратитесь к разработчику</string>
+    <string name="need_write_external">Для прикрепления файла разрешите запись</string>
+    <string name="need_read_external">Для прикрепления файла разрешите доступ к файлам</string>
 
 </resources>

@@ -16,4 +16,8 @@
     <color name="loadingBackground">#ffffff</color>
     <color name="colorPanel">#fafafa</color>
     <color name="colorGrayDivider">#aaa</color>
+
+    <color name="colorBtnBlue">#65bacc</color>
+    <color name="colorBtnBluePressed">#4c8d9b</color>
+
 </resources>

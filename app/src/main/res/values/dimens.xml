@@ -13,6 +13,9 @@
     <dimen name="btn_radius">40dp</dimen>
     <dimen name="button_height">48dp</dimen>
 
+    <dimen name="title_size">18sp</dimen>
+    <dimen name="subtitle_size">16sp</dimen>
     <dimen name="bottom_panel_height">50dp</dimen>
     <dimen name="img_panel_size">38dp</dimen>
+    <dimen name="play_video_icon_size">50dp</dimen>
 </resources>

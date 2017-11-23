@@ -17,11 +17,11 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  */
 object ServiceGenerator {
     val SITE_URL = "http://ruinnet.idefa.ru"
-    private val BASE_URL = SITE_URL+"/api_app/"
+    val BASE_URL = SITE_URL+"/api_app/"
     private val httpClient = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
             //.authenticator(new TokenAuthenticator())
             .addNetworkInterceptor(AddAccessTokenInterceptor())
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -37,6 +37,6 @@ object ServiceGenerator {
     val serverApi: ServerApi
         get() = retrofit(BASE_URL).create(ServerApi::class.java)
 
-    private fun retrofit(domain: String): Retrofit =
+    fun retrofit(domain: String): Retrofit =
             builder.client(httpClient.build()).baseUrl(domain).build()
 }

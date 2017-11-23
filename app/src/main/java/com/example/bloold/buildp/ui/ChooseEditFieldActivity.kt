@@ -1,22 +1,16 @@
 package com.example.bloold.buildp.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.CollapsingToolbarLayout
-import android.support.design.widget.TabLayout
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
-import android.widget.ImageView
-import android.widget.TextView
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.adapter.StringPairAdapter
-import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
-import com.example.bloold.buildp.components.EventActivity
 import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.databinding.ActivityChooseEditFieldBinding
 
@@ -41,14 +35,30 @@ class ChooseEditFieldActivity : AppCompatActivity() {
         mBinding.rvFields.layoutManager = LinearLayoutManager(this)
         mBinding.rvFields.addItemDecoration(DividerItemDecoration(this, OrientationHelper.VERTICAL))
         mBinding.rvFields.adapter = StringPairAdapter(OnItemClickListener {
+            when(it.second)
+            {
+                "status_item" -> startActivityForResult(Intent(this, EditStateActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+            }
             //TODO открываем в зависимости от того что выбрали
         },
                 arrayListOf(Pair(getString(R.string.add_object_item), "add_object_item"),
                         Pair(getString(R.string.route_item), "route_item"),
-                        Pair(getString(R.string.status_item), "status_item"),
+                        Pair(getString(R.string.state_item), "status_item"),
                         Pair(getString(R.string.photo_video_audio_item), "photo_video_audio_item"),
                         Pair(getString(R.string.main_info_item), "main_info_item"),
                         Pair(getString(R.string.archive_item), "archive_item"),
                         Pair(getString(R.string.science_pub_info), "science_pub_info")))
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode== Activity.RESULT_OK)
+            setResult(Activity.RESULT_OK)
     }
 }

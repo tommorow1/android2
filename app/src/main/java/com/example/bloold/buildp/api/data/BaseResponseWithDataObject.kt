@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * Created by sagus on 18.11.2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class CatalogResponse {
+class BaseResponseWithDataObject<T> {
     @get: JsonProperty("USER_ID")
     var userId:Int?=null
     @get: JsonProperty("CODE")
@@ -15,5 +15,5 @@ class CatalogResponse {
     @get: JsonProperty("MESSAGE")
     var message:String?=null
     @get: JsonProperty("DATA")
-    var data:Array<CatalogObject>?=null
+    var data:DataObject<T>?=null
 }

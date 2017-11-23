@@ -11,7 +11,7 @@ import android.widget.Toast
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.adapter.CatalogObjectAdapter
 import com.example.bloold.buildp.api.ServiceGenerator
-import com.example.bloold.buildp.api.data.BaseResponse
+import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
@@ -139,8 +139,8 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                     lazyScrollPageUploader.setLoading(false)
                     updateNoItemsView()
                 }
-                .subscribeWith(object : DisposableSingleObserver<BaseResponse<CatalogObject>>() {
-                    override fun onSuccess(result: BaseResponse<CatalogObject>) {
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<CatalogObject>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<CatalogObject>) {
                         result.data?.items?.let {
                             val allItemsLoaded = it.size < ITEMS_ON_PAGE
                             catalogObjectAdapter.isShowLoadingFooter = !allItemsLoaded

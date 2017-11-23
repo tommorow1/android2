@@ -10,17 +10,21 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 class AudioModel(): Parcelable {
+    @get: JsonProperty("ID")
+    var id: Long=-1
     @get: JsonProperty("NAME")
     var name: String? = null
     @get: JsonProperty("SRC")
-    var src: String? = null
+    lateinit var src: String
 
     constructor(parcel: Parcel) : this() {
+        id = parcel.readLong()
         name = parcel.readString()
         src = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
         parcel.writeString(name)
         parcel.writeString(src)
 

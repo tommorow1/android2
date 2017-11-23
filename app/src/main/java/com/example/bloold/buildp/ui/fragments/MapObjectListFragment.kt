@@ -23,7 +23,8 @@ import com.example.bloold.buildp.MyApplication
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponse
-import com.example.bloold.buildp.api.data.CatalogResponse
+import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
+import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
@@ -32,6 +33,7 @@ import com.example.bloold.buildp.databinding.FragmentMapObjectsBinding
 import com.example.bloold.buildp.model.MyItem
 import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.ui.ChooseEditFieldActivity
+import com.example.bloold.buildp.ui.EditStateActivity
 import com.example.bloold.buildp.utils.PermissionUtil
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -115,7 +117,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode== Activity.RESULT_OK)
         {
-            if(requestCode==ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+            if(requestCode==ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT||
+                    requestCode==EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
             {
                 mBinding.mapInfo.visibility=View.GONE
                 loadObjectsOnMap()
@@ -180,8 +183,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     {
        getCompositeDisposable().add(ServiceGenerator.serverApi.getMapStructure()
                 .compose(RxHelper.applySchedulers())
-                .subscribeWith(object : DisposableSingleObserver<CatalogResponse>() {
-                    override fun onSuccess(result: CatalogResponse) {
+                .subscribeWith(object : DisposableSingleObserver<BaseResponse<CatalogObject>>() {
+                    override fun onSuccess(result: BaseResponse<CatalogObject>) {
                         result.data?.forEach { mBinding.tabs.addTab(mBinding.tabs.newTab().setText(it.name).setTag(it.id)) }
                         mBinding.tabs.visibility=if(mBinding.tabs.tabCount==0) View.GONE else View.VISIBLE
                         if(mBinding.tabs.visibility==View.VISIBLE)
@@ -247,8 +250,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             }
             getCompositeDisposable().add(ServiceGenerator.serverApi.searchMapObjects(filters, 3500, 1)
                     .compose(RxHelper.applySchedulers())
-                    .subscribeWith(object : DisposableSingleObserver<BaseResponse<MyItem>>() {
-                        override fun onSuccess(result: BaseResponse<MyItem>) {
+                    .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<MyItem>>() {
+                        override fun onSuccess(result: BaseResponseWithDataObject<MyItem>) {
                             mClusterManager.clearItems()
                             mClusterManager.addItems(result.data?.items?.toMutableList())
                             mClusterManager.cluster()
@@ -368,21 +371,22 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     {
         var results=FloatArray(1)
         Location.distanceBetween(startPointLat, startPointLon, endPointLat, endPointLon, results)
-        return results[0];
+        return results[0]
     }
 
     fun onEditClick(v:View)
     {
-        val item = mEventMapItem[currentMarker?.id]
-        item?.let {
+        mEventMapItem[currentMarker?.id]?.let {
             startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
-                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, item.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
         }
-
     }
     fun onAlertClick(v:View)
     {
-        //TODO
+        mEventMapItem[currentMarker?.id]?.let {
+            startActivityForResult(Intent(activity, EditStateActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+        }
     }
     fun onPhotoClick(v:View)
     {
