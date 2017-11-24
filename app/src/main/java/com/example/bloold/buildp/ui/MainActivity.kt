@@ -422,7 +422,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 BASE_URL + CATALOG_OBJECTS_URL + CATALOG_OBJECTS_SELECT + CATALOG_OBJECTS_FILTER + item.id
             }
             Log.d("mainListener", url)
-            navigator?.navigateTo(FilterMainNavigator.FilterScreens.CATALOG_OBJECTS, url)
+            navigator?.navigateTo(FilterMainNavigator.FilterScreens.CATALOG_OBJECTS, url, item)
         }
     }
 }
