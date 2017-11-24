@@ -76,7 +76,7 @@
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".search.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.WithStatus" />
         <activity
             android:name=".filter.object.FilterObjectsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

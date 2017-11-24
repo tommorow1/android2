@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter
 import com.example.bloold.buildp.ListActivityObjects.ListObjectsActivity
 import com.example.bloold.buildp.callback
 import com.example.bloold.buildp.common.IntentHelper
+import com.example.bloold.buildp.components.SpinnerWithoutLPaddingAdapter
+import com.example.bloold.buildp.components.UIHelper
 import com.example.bloold.buildp.databinding.ActivitySearchBinding
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
@@ -41,7 +43,7 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_search)
-
+        mBinding.listener=this
         val intent = intent
         val fromActivity = intent.getStringExtra("fromActivity") as String
 
@@ -50,27 +52,27 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         lvObjects = findViewById(R.id.lvNames)
         btnViewFind = findViewById(R.id.btnViewFind)
 
-        val adapterS = ArrayAdapter.createFromResource(this,
-                R.array.spinner_choice_object_address, android.R.layout.simple_spinner_item)
+        val adapterS = ArrayAdapter.createFromResource(this, R.array.spinner_choice_object_address, android.R.layout.simple_spinner_item)
 
         adapterS.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         adapter = ArrayAdapter(this,
-            android.R.layout.simple_list_item_1, ArrayList<String>());
+            android.R.layout.simple_list_item_1, ArrayList<String>())
 
         spinnerChoice.adapter = adapterS
         spinnerChoice.onItemSelectedListener = this
 
         etChoice.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
-
+                mBinding.ivClear.visibility=if(mBinding.etChoice.text.toString().isBlank()) View.INVISIBLE else View.VISIBLE
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int)
+            {
                 if(indexChoice == INDEX_ADDRESS){
                     presenter.findAddress(p0.toString())
                 } else {
@@ -107,6 +109,11 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         lvObjects.adapter = adapter
     }
 
+    fun onClearSearch(v:View)
+    {
+        mBinding.etChoice.setText("")
+        UIHelper.hideKeyboard(mBinding.etChoice)
+    }
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
     }

@@ -3,6 +3,8 @@ package com.example.bloold.buildp.components
 import android.content.Context
 import android.text.TextUtils
 import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import com.example.bloold.buildp.R
@@ -33,6 +35,13 @@ object UIHelper
                 MotionEvent.ACTION_UP -> v.parent.requestDisallowInterceptTouchEvent(false)
             }
             false
+        }
+    }
+
+    fun hideKeyboard(view: View?) {
+        view?.let {
+            val imm = it.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
     fun getYoutubePreviewImage(youtubeUrl: String?): String?

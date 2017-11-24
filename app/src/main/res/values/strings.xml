@@ -9,6 +9,7 @@
     <string name="action_find">Find</string>
 
     <!-- Экран поиска -->
+    <string name="object_search">Поиск объекта</string>
     <string name="show">Показать</string>
     <string name="extra_static_filters">Особые приметы</string>
     <string name="nothing_to_show">Ничего не найдено</string>
