@@ -5,19 +5,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
-        android:layout_marginTop="@dimen/activity_vertical_margin_half"
-        android:layout_marginBottom="@dimen/activity_vertical_margin_half"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp">
+        android:layout_margin="@dimen/activity_vertical_margin_half">
         <ImageView
             android:id="@+id/ivPhoto"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"/>
         <ImageView
             android:id="@+id/ivRemove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+
             android:padding="6dp"
             android:layout_gravity="end"
             app:srcCompat="@drawable/ic_remove_white"/>

@@ -38,8 +38,10 @@ class ApiHelper {
             val data = HashMap<String,String>()
             for (i in 0 until videoForUploading.size)
             {
-                data.put("FORM[PROPS][VIDEO][$i][CODE]",videoForUploading[i].src)
-                data.put("FORM[PROPS][VIDEO][$i][CHANGED]","1")
+                videoForUploading[i].youtubeCode?.let {
+                    data.put("FORM[PROPS][VIDEO][$i][CODE]", it)
+                    data.put("FORM[PROPS][VIDEO][$i][CHANGED]", "1")
+                }
             }
             return data
         }

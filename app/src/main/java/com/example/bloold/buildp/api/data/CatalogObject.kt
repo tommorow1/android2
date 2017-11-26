@@ -23,17 +23,17 @@ class CatalogObject {
     @get: JsonProperty("DETAIL_PAGE_URL")
     var detailPageUrl: String?=null
     @get: JsonProperty("DETAIL_PICTURE")
-    var detailPicture: PhotoModel?=null
+    var detailPicture: DetailPictureModel?=null
     @get: JsonProperty("PHOTOS_DATA")
-    var photosData: Array<PhotoData>?=null
+    var photosData: Array<PhotoModel>?=null
     @get: JsonProperty("DOCS_DATA")
     var docsData: Array<DocModel>?=null
-    @get: JsonProperty("PUBLICATIONS_DATA")
-    var publicationsData: Array<DocModel>?=null
     @get: JsonProperty("VIDEO_DATA")
     var videoData: Array<VideoModel>?=null
     @get: JsonProperty("AUDIO_DATA")
     var audioData: Array<AudioModel>?=null
+    @get: JsonProperty("PUBLICATIONS_DATA")
+    var publicationsData: Array<PublicationsModel>?=null
     @get: JsonProperty("PROPERTY_MAP")
     var propertyMap: String?=null
     @get: JsonProperty("IS_FAVORITE")

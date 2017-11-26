@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.components.BindingViewHolder
 import com.example.bloold.buildp.components.OnItemClickListener
@@ -52,7 +51,7 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
             holder.mLayoutBinding.name.text=catalogObject.name
 
             Glide.with(holderRaw.itemView.context)
-                    .load(catalogObject.detailPicture?.fullImagePath())
+                    .load(catalogObject.detailPicture?.fullPath())
                     .into(holder.mLayoutBinding.ivBuild)
             holder.itemView.setOnClickListener({onItemClickListener?.onItemClick(mData[holder.adapterPosition])})
         }

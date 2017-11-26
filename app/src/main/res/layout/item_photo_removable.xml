@@ -18,6 +18,7 @@
             android:id="@+id/ivRemove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:padding="6dp"
             android:layout_gravity="end"
             app:srcCompat="@drawable/ic_remove_white"/>

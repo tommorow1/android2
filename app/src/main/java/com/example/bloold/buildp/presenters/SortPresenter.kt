@@ -102,7 +102,7 @@ class SortPresenter(private val view: callback) : AsyncTask<String, String, Arra
 
         var finalObjects = ArrayList<SortObject>()
 
-        for(i: Int in 0..(responseArr?.length()?:0) - 1){
+        for(i: Int in 0 until (responseArr?.length()?:0)){
             var currentObject = responseArr?.getJSONObject(i)
 
             val sortModel = SortObject()

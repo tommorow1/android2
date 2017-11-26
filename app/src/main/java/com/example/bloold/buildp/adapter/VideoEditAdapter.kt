@@ -28,7 +28,7 @@ class VideoEditAdapter(private val onItemClickListener:OnItemClickListener<Video
     override fun onBindViewHolder(holder:BindingViewHolder<ItemVideoRemovableBinding>, position:Int)
     {
         Glide.with(holder.itemView.context)
-            .load(UIHelper.getYoutubePreviewImage(mValues[position].src)?:"")
+            .load(UIHelper.getYoutubePreviewImage(mValues[position].getYoutubeLink())?:"")
             .into(holder.mLayoutBinding.ivPhoto)
 
         holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(mValues[holder.adapterPosition]) }

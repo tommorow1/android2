@@ -1,18 +1,13 @@
 package com.example.bloold.buildp.adapter
 
 import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.components.BindingViewHolder
 import com.example.bloold.buildp.components.OnItemClickListener
-import com.example.bloold.buildp.databinding.ItemLoadingBinding
 import com.example.bloold.buildp.databinding.ItemPhotoRemovableBinding
 import com.example.bloold.buildp.model.PhotoModel
 
@@ -31,7 +26,7 @@ class PhotoEditAdapter(private val onItemClickListener:OnItemClickListener<Photo
         val photoModel=mValues[position]
         //Отображаем либо из сети, либо локальный(если ещё не загружен и нет id)
         Glide.with(holder.itemView.context)
-            .load(if(photoModel.id==-1L) photoModel.src else photoModel.fullImagePath())
+            .load(if(photoModel.id==-1L) photoModel.src else photoModel.fullPath())
             .into(holder.mLayoutBinding.ivPhoto)
 
         holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(mValues[holder.adapterPosition]) }

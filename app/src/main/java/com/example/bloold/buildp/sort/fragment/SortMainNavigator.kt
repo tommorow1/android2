@@ -60,14 +60,14 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
         listener.onScreenNavigate(screen)
     }
 
-    fun navigateTo(filterScreens: FilterScreens, data: Any? = null){
+    fun navigateTo(filterScreens: FilterScreens, data: Any? = null, sortObject: SortObject? = null){
         when(filterScreens){
             FilterScreens.MAIN_FILTER -> {
                 if(data != null) {
                     showFragment(SortFragment.newInstance(data as ArrayList<SortObject>, R.layout.item_hight_level_filter), filterScreens)
                 }
             }
-            FilterScreens.CATALOG_OBJECTS -> showFragment(CatalogObjectListFragment.newInstance(), filterScreens)
+            FilterScreens.CATALOG_OBJECTS -> showFragment(CatalogObjectListFragment.newInstance(sortObject), filterScreens)
             FilterScreens.FILTER -> {
             showFragment(ChooseCatalogFiltersFragment.newInstance((currentFragment.peek() as CatalogObjectListFragment).sortedObject), FilterScreens.FILTER)
         }

@@ -8,6 +8,9 @@
     <string name="action_settings">Settings</string>
     <string name="action_find">Find</string>
 
+    <!-- Карточка объекта -->
+    <string name="doc_code">Шифр документа</string>
+
     <!-- Экран поиска -->
     <string name="object_search">Поиск объекта</string>
     <string name="show">Показать</string>
@@ -21,6 +24,7 @@
 
     <!-- Карта -->
     <string name="all">Все</string>
+    <string name="no_materials">Нет материалов</string>
 
     <!-- Редактирование -->
     <string name="edit_object_title">Редактирование объекта</string>

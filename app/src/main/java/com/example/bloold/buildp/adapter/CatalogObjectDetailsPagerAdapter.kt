@@ -2,12 +2,12 @@ package com.example.bloold.buildp.adapter
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.data.CatalogObject
-import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.single.`object`.DescriptionFragment
-import com.example.bloold.buildp.single.`object`.base.list.ListFragment
 import com.example.bloold.buildp.single.`object`.photos.PhotoFragment
+import com.example.bloold.buildp.ui.fragments.AudioListFragment
+import com.example.bloold.buildp.ui.fragments.DocPubListFragment
+import com.example.bloold.buildp.ui.fragments.VideoListFragment
 
 /**
  * Created by bloold on 19.10.17.
@@ -18,7 +18,6 @@ class CatalogObjectDetailsPagerAdapter(private val item: CatalogObject, fragment
         private val DESCRIPTION = "Описание"
         private val PHOTO = "Фото"
         //private val STATE = "Состояние"
-        private val SECURITY = "Охрана"
         private val MATERIALS = "Материалы"
         private val AUDIO = "Аудио"
         private val VIDEO = "Видео"
@@ -27,11 +26,10 @@ class CatalogObjectDetailsPagerAdapter(private val item: CatalogObject, fragment
         private val KEY_DESCRIPTION = 0
         private val KEY_PHOTO = 1
         //private val KEY_STATE = 2
-        //private val KEY_SECURITY = 2
-        //private val KEY_MATERIALS = 2
-        private val KEY_AUDIO = 2
-        private val KEY_VIDEO = 3
-        private val KEY_PUBLICATIONS = 4
+        private val KEY_MATERIALS = 2
+        private val KEY_AUDIO = 3
+        private val KEY_VIDEO = 4
+        private val KEY_PUBLICATIONS = 5
     }
 
     enum class LIST_TYPE {
@@ -49,25 +47,24 @@ class CatalogObjectDetailsPagerAdapter(private val item: CatalogObject, fragment
                 return DescriptionFragment.newInstance(item.previewText)
             } KEY_PHOTO -> {
                 return PhotoFragment.newInstance(item.photosData)
-            } /*KEY_STATE -> {
+            }
+            KEY_MATERIALS -> {
+                return DocPubListFragment.newInstance(item.docsData)
+            }/*KEY_STATE -> {
                 return
-            } KEY_SECURITY -> {
-                return ListFragment.newInstance(R.layout.item_publications, LIST_TYPE.SECURITY, item.)
-            } KEY_MATERIALS -> {
-                return ListFragment.newInstance(R.layout.item_publications, LIST_TYPE.MATERIALS, item.publications)
             }*/ KEY_AUDIO -> {
-                return ListFragment.newInstance(R.layout.item_publications, LIST_TYPE.MATERIALS, item.publicationsData)
+                return AudioListFragment.newInstance(item.audioData)
             } KEY_VIDEO -> {
-                return ListFragment.newInstance(R.layout.item_publications, LIST_TYPE.VIDEO, item.videoData)
+                return VideoListFragment.newInstance(item.videoData)
             } KEY_PUBLICATIONS -> {
-                return ListFragment.newInstance(R.layout.item_publications, LIST_TYPE.MATERIALS, item.publicationsData)
+                return DocPubListFragment.newInstance(item.publicationsData)
             }
         }
         return null
     }
 
     override fun getCount(): Int {
-        return 5
+        return 6
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -76,13 +73,9 @@ class CatalogObjectDetailsPagerAdapter(private val item: CatalogObject, fragment
                 return DESCRIPTION
             } KEY_PHOTO -> {
                 return PHOTO
-            } /*KEY_STATE -> {
-                return STATE
-            }KEY_SECURITY -> {
-                return SECURITY
             } KEY_MATERIALS -> {
                 return MATERIALS
-            }*/ KEY_AUDIO -> {
+            } KEY_AUDIO -> {
                 return AUDIO
             } KEY_VIDEO -> {
                 return VIDEO
@@ -90,7 +83,6 @@ class CatalogObjectDetailsPagerAdapter(private val item: CatalogObject, fragment
                 return PUBLICATIONS
             }
         }
-
         return null
     }
 }

@@ -13,23 +13,24 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class VideoModel(): Parcelable {
     @get: JsonProperty("NAME")
     var name: String? = null
-    @get: JsonProperty("PROPERTY_DOCUMENT_CODE")
-    var code: String? = null
-    @get: JsonProperty("SRC")
-    lateinit var src: String
+    @get: JsonProperty("CODE")
+    var youtubeCode: String? =null
+
+    fun getYoutubeLink():String
+    {
+        return "https://www.youtube.com/watch?v="+youtubeCode
+    }
 
     override fun writeToParcel(parcel: Parcel, p1: Int) {
         parcel.writeString(name)
-        parcel.writeString(code)
-        parcel.writeString(src)
+        parcel.writeString(youtubeCode)
     }
 
     override fun describeContents(): Int = 0
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
-        code = parcel.readString()
-        src = parcel.readString()
+        youtubeCode = parcel.readString()
     }
 
     companion object CREATOR : Parcelable.Creator<VideoModel> {

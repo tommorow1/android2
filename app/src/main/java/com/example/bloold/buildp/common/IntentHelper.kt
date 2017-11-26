@@ -15,6 +15,9 @@ class IntentHelper {
         val EXTRA_SEARCH_TYPE="searchType"
         val EXTRA_ORIGIN="Origin"
         val EXTRA_DESTINATION="Destination"
+        val EXTRA_AUDIO_MODEL_LIST="audioModelList"
+        val EXTRA_DOC_PUB_MODEL_LIST="docPubModelList"
+        val EXTRA_VIDEO_MODEL_LIST="videoModelList"
 
         val EXTRA_ERROR_MSG="errorMsg"
         val EXTRA_VALUE="value"

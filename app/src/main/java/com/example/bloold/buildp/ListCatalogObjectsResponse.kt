@@ -200,10 +200,9 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
                 for(i: Int in 0..videosJsonArray.length() - 1){
                     val video = VideoModel()
                     video.name = videosJsonArray.getJSONObject(i).getString("NAME")
-                    video.code = "http://ruinnet.idefa.ru/" +
-                            videosJsonArray.getJSONObject(i).getString("CODE")
+                    video.youtubeCode = videosJsonArray.getJSONObject(i).getString("CODE")
 
-                    if(!video.code.isNullOrEmpty()){
+                    if(!video.youtubeCode.isNullOrEmpty()){
                         videos.add(video)
                     }
                 }
@@ -510,10 +509,9 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
                 for(i: Int in 0..videosJsonArray.length() - 1){
                     val video = VideoModel()
                     video.name = videosJsonArray.getJSONObject(i).getString("NAME")
-                    video.code = "http://ruinnet.idefa.ru/" +
-                            videosJsonArray.getJSONObject(i).getString("CODE")
+                    video.youtubeCode = videosJsonArray.getJSONObject(i).getString("CODE")
 
-                    if(!video.code.isNullOrEmpty()){
+                    if(!video.youtubeCode.isNullOrEmpty()){
                         videos.add(video)
                     }
                 }
@@ -525,7 +523,7 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
 
                 val audiosJsonArray = finalObject.getJSONArray("AUDIO_DATA")
 
-                for(i: Int in 0..audiosJsonArray.length() - 1){
+                for(i: Int in 0 until audiosJsonArray.length()){
                     val audio = AudioModel()
                     audio.name = audiosJsonArray .getJSONObject(i).getString("NAME")
                     audio.src = "http://ruinnet.idefa.ru/" +
@@ -542,7 +540,7 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
 
                 val docsJsonArray = finalObject.getJSONArray("AUDIO_DATA")
 
-                for(i: Int in 0..docsJsonArray.length() - 1){
+                for(i: Int in 0 until docsJsonArray.length()){
                     val doc = DocModel()
                     doc.name = docsJsonArray.getJSONObject(i).getString("NAME")
                     doc.code = "http://ruinnet.idefa.ru/" +

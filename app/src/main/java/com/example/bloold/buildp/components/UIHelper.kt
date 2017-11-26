@@ -46,31 +46,35 @@ object UIHelper
     }
     fun getYoutubePreviewImage(youtubeUrl: String?): String?
     {
-        youtubeUrl?.let {
-            try {
-                val videoId = extractYoutubeId(youtubeUrl)
-                return "http://img.youtube.com/vi/$videoId/0.jpg" // this is link which will give u thumnail image of that video
-            } catch (e: MalformedURLException) {
-                e.printStackTrace()
-            }
+        extractYoutubeId(youtubeUrl)?.let {
+            return "http://img.youtube.com/vi/$it/0.jpg" // this is link which will give u thumnail image of that video
         }
         return null
     }
 
-    @Throws(MalformedURLException::class)
-    private fun extractYoutubeId(url: String): String? {
-        val query:String? = URL(url).query
-        val param:List<String>? = query?.split("&".toRegex())?.dropLastWhile({ it.isEmpty() })
-        var id: String? = null
-        param?.let { it.map { row -> row.split("=".toRegex()).dropLastWhile({ it.isEmpty() }) }
-                .filter { it[0] == "v" }
-                .forEach { id = it[1] } }
-        if(id==null)
-        {
-            val splashPos=url.lastIndexOf("/")
-            if(splashPos!=-1&&splashPos!=url.length-1)
-                id=url.substring(splashPos+1)
+    fun extractYoutubeId(url: String?): String?
+    {
+        try {
+            url?.let {
+                val query:String? = URL(url).query
+                val param:List<String>? = query?.split("&".toRegex())?.dropLastWhile({ it.isEmpty() })
+                var id: String? = null
+                param?.let { it.map { row -> row.split("=".toRegex()).dropLastWhile({ it.isEmpty() }) }
+                        .filter { it[0] == "v" }
+                        .forEach { id = it[1] } }
+                if(id==null)
+                {
+                    val splashPos=url.lastIndexOf("/")
+                    if(splashPos!=-1&&splashPos!=url.length-1)
+                        id=url.substring(splashPos+1)
+                }
+                return id
+            }
         }
-        return id
+        catch (ex: Exception)
+        {
+            ex.printStackTrace()
+        }
+        return null
     }
 }

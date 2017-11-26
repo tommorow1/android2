@@ -32,7 +32,7 @@ class PhotoRecyclerViewAdapter(private val mListener:OnItemClickListener<PhotoMo
     override fun onBindViewHolder(holder:ViewHolder, position:Int) {
 
         Glide.with(context)
-            .load(mValues.get(position).fullImagePath())
+            .load(mValues.get(position).fullPath())
             .into(holder.mIvPhoto)
 
         holder.mView.setOnClickListener { mListener?.onItemClick(mValues[holder.adapterPosition]) }

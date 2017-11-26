@@ -50,6 +50,11 @@ class ChooseCatalogFiltersFragment : android.support.v4.app.Fragment()
     companion object{
         private val ITEMS_KEY = "items"
         fun newInstance(items: SortObject?): ChooseCatalogFiltersFragment
-                = ChooseCatalogFiltersFragment().apply { arguments= Bundle() }.apply { arguments.putParcelable(ITEMS_KEY, items) }
+                = ChooseCatalogFiltersFragment().apply { arguments= Bundle().apply { putParcelable(ITEMS_KEY, items) } }
+
+/*
+        fun newInstance(items: SortObject?): ChooseCatalogFiltersFragment
+                = ChooseCatalogFiltersFragment().apply { arguments= Bundle().apply { putParcelable(ITEMS_KEY, items) } }
+*/
     }
 }

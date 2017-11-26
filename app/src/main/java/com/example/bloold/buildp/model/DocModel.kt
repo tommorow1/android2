@@ -9,11 +9,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * Created by bloold on 20.10.17.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class DocModel() : Parcelable {
+class DocModel() : Parcelable, NameCodeInterface {
     @get: JsonProperty("NAME")
     var name: String? = null
     @get: JsonProperty("PROPERTY_DOCUMENT_CODE")
     var code: String? = null
+
+    override fun getDocName(): String? = name
+    override fun getDocCode(): String? = code
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()

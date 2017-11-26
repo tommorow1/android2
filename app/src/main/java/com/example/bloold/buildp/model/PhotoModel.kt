@@ -9,13 +9,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * Created by bloold on 20.10.17.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 class PhotoModel(): Parcelable {
-    @get: JsonProperty("ID")
     var id: Long=-1
-    @get: JsonProperty("NAME")
     var name: String? = null
-    @get: JsonProperty("SRC")
     lateinit var src: String
 
     constructor(parcel: Parcel) : this() {
@@ -23,7 +19,7 @@ class PhotoModel(): Parcelable {
         name = parcel.readString()
         src = parcel.readString()
     }
-    fun fullImagePath() = ServiceGenerator.SITE_URL+src
+    fun fullPath() = ServiceGenerator.SITE_URL+src
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)

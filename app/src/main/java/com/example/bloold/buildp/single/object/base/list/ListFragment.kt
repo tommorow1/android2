@@ -2,6 +2,7 @@ package com.example.bloold.buildp.single.`object`.base.list
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -31,7 +32,7 @@ class ListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.item_list, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_recycler_view, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -73,23 +74,25 @@ class ListFragment : Fragment() {
 
         fun newInstance(childRes: Int,
                         listType: CatalogObjectDetailsPagerAdapter.LIST_TYPE,
-                        items: Any?): ListFragment {
+                        items: Array<out Parcelable>?): ListFragment {
             return ListFragment().apply {
-                if(items != null && (items as Array<Any>)?.isNotEmpty() ?: false){
-                    when(listType){
-                        CatalogObjectDetailsPagerAdapter.LIST_TYPE.AUDIO -> {
-                            arguments.putParcelableArray(ITEMS_KEY, items as Array<AudioModel>)
-                        } CatalogObjectDetailsPagerAdapter.LIST_TYPE.VIDEO -> {
-                            arguments.putParcelableArray(ITEMS_KEY, items as Array<VideoModel>)
-                        } CatalogObjectDetailsPagerAdapter.LIST_TYPE.PUBLICATIONS -> {
-                            arguments.putParcelableArray(ITEMS_KEY, items as Array<DocModel>)
+                arguments= Bundle()
+                items?.let {
+                    if(it.isNotEmpty()){
+                        when(listType){
+                            CatalogObjectDetailsPagerAdapter.LIST_TYPE.AUDIO -> {
+                                arguments.putParcelableArray(ITEMS_KEY, items as Array<AudioModel>)
+                            } CatalogObjectDetailsPagerAdapter.LIST_TYPE.VIDEO -> {
+                                arguments.putParcelableArray(ITEMS_KEY, items as Array<VideoModel>)
+                            } CatalogObjectDetailsPagerAdapter.LIST_TYPE.PUBLICATIONS -> {
+                                arguments.putParcelableArray(ITEMS_KEY, items as Array<DocModel>)
+                            }
                         }
+
+                        arguments.putInt(CHILD_RES_KEY, childRes)
+                        arguments.putInt(TYPE_KEY, listType.ordinal)
                     }
-
-                    arguments.putInt(CHILD_RES_KEY, childRes)
-                    arguments.putInt(TYPE_KEY, listType.ordinal)
                 }
-
             }
         }
     }

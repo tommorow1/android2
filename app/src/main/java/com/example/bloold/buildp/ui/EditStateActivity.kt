@@ -3,6 +3,8 @@ package com.example.bloold.buildp.ui
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -58,6 +60,8 @@ class EditStateActivity : ChooseImageActivity() {
     private lateinit var photoEditAdapter: PhotoEditAdapter
     private lateinit var videoEditAdapter: VideoEditAdapter
     private lateinit var audioEditAdapter: AudioEditAdapter
+    private var player: MediaPlayer = MediaPlayer().apply { setAudioStreamType(AudioManager.STREAM_MUSIC) }
+
 
     private var catalogObject: CatalogObject? = null
     private var objectId: Int = -1
@@ -74,33 +78,52 @@ class EditStateActivity : ChooseImageActivity() {
         mBinding.listener=this
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         objectId=intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, -1)
+        player.setOnPreparedListener { it.start() }
 
         UIHelper.makeEditTextScrollable(mBinding.etStateDescription)
         mBinding.tvPhotoRules.movementMethod = LinkMovementMethod.getInstance()
 
         photoEditAdapter= PhotoEditAdapter(OnItemClickListener {
                     startActivity(Intent(this, ImageViewActivity::class.java)
-                            .putExtra(IntentHelper.EXTRA_IMAGE_URL, if(it.id==-1L) it.src else it.fullImagePath()))
+                            .putExtra(IntentHelper.EXTRA_IMAGE_URL, if(it.id==-1L) it.src else it.fullPath()))
                 },
                 OnItemClickListener { item ->
-                        catalogObject?.photosData?.filterNot { it.detailPicture.src == item.src }
+                        catalogObject?.photosData?.filterNot { it.src == item.src }
                         photoEditAdapter.remove(item)
                 })
         mBinding.rvPhotos.layoutManager=LinearLayoutManager(this)
         mBinding.rvPhotos.adapter=photoEditAdapter
 
         videoEditAdapter= VideoEditAdapter(OnItemClickListener {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.src)))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.getYoutubeLink())))
                 },
                 OnItemClickListener { item ->
-                    catalogObject?.videoData?.filterNot { it.src == item.src }
+                    catalogObject?.videoData?.filterNot { it.youtubeCode == item.youtubeCode }
                     videoEditAdapter.remove(item)
                 })
         mBinding.rvVideos.layoutManager=LinearLayoutManager(this)
         mBinding.rvVideos.adapter=videoEditAdapter
 
         audioEditAdapter= AudioEditAdapter(OnItemClickListener {
-                    startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(it.src)), getString(R.string.choose_application)))
+            audioEditAdapter.getPlayAudioModelNow()?.let { item ->
+                    if(item==it)
+                    {
+                        audioEditAdapter.stopPlay()
+                        player.reset()
+                        return@OnItemClickListener
+                    }
+                }
+                try {
+                    audioEditAdapter.startPlay(it)
+                    if(player.isPlaying)
+                        player.reset()
+                    player.setDataSource(it.fullPath())
+                    player.prepareAsync()
+                    //player.start()
+                } catch (e: Exception) {
+                    audioEditAdapter.stopPlay()
+                    e.printStackTrace()
+                }
                 },
                 OnItemClickListener { item ->
                     catalogObject?.audioData?.filterNot { it.src == item.src }
@@ -110,6 +133,20 @@ class EditStateActivity : ChooseImageActivity() {
         mBinding.rvAudios.adapter=audioEditAdapter
 
         loadConditionMarks()
+    }
+
+    override fun onPause() {
+        if(player.isPlaying)
+        {
+            audioEditAdapter.stopPlay()
+            player.reset()
+        }
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        player.release()
+        super.onDestroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -151,7 +188,9 @@ class EditStateActivity : ChooseImageActivity() {
     {
         catalogObject?.let {
             mBinding.etStateDescription.setText(it.condition)
-            photoEditAdapter.addAll(it.photosData?.map { it.detailPicture })
+            photoEditAdapter.addAll(it.photosData?.toList())
+            videoEditAdapter.addAll(it.videoData?.toList())
+            audioEditAdapter.addAll(it.audioData?.toList())
         }
     }
 
@@ -256,7 +295,7 @@ class EditStateActivity : ChooseImageActivity() {
                 .setPositiveButton(R.string.add, { _, _ ->
                     if(UIHelper.getYoutubePreviewImage(binding.etName.text.toString())!=null) {
                         val videoModel=VideoModel()
-                        videoModel.src=binding.etName.text.toString()
+                        videoModel.youtubeCode=UIHelper.extractYoutubeId(binding.etName.text.toString())
                         videoEditAdapter.addData(videoModel)
                     } else Toast.makeText(this@EditStateActivity, R.string.need_only_youtube_link, Toast.LENGTH_LONG).show()
                 })
@@ -314,7 +353,6 @@ class EditStateActivity : ChooseImageActivity() {
                         })
             }
         }
-        //TODO доделать удаление фото и видео
         else
         {
             compositeDisposable.add(ServiceGenerator.serverApi.editObject(objectId,
@@ -322,7 +360,7 @@ class EditStateActivity : ChooseImageActivity() {
                     (mBinding.spConditionMark.selectedItem as ConditionMark).id,
                     ApiHelper.generateChangedPhotosParams(uploadedPhotos)+
                             ApiHelper.generateChangedAudiosParams(uploadedAudios)+
-                            ApiHelper.generateChangedVideoParams(videoEditAdapter.mValues.filter { it.name==null&&it.code==null }))
+                            ApiHelper.generateChangedVideoParams(videoEditAdapter.mValues.filter { it.name==null&&it.youtubeCode==null }))
                     .compose(RxHelper.applySchedulers())
                     .doFinally { showProgress(false) }
                     .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {

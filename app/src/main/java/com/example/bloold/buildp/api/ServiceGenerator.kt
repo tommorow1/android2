@@ -1,5 +1,9 @@
 package com.example.bloold.buildp.api
 
+import com.example.bloold.buildp.api.deserializers.AudioDataDeserializer
+import com.example.bloold.buildp.api.deserializers.PhotoModelDeserializer
+import com.example.bloold.buildp.model.AudioModel
+import com.example.bloold.buildp.model.PhotoModel
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 
@@ -28,7 +32,9 @@ object ServiceGenerator {
 
     private val builder = Retrofit.Builder()
             .addConverterFactory(JacksonConverterFactory.create(
-                    ObjectMapper().registerModule(SimpleModule())
+                    ObjectMapper().registerModule(SimpleModule()
+                            .addDeserializer(AudioModel::class.java, AudioDataDeserializer())
+                            .addDeserializer(PhotoModel::class.java, PhotoModelDeserializer()))
                             .setTimeZone(TimeZone.getDefault())
             ))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

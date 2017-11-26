@@ -88,7 +88,8 @@ class CatalogObjectDetailsActivity : EventActivity() {
 
         viewPager = findViewById(R.id.vpSingleObject)
 
-        loadObjectDetails(intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, 0))
+        loadObjectDetails(164080)
+        //loadObjectDetails(intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, 0))
 
     }
 
@@ -110,10 +111,10 @@ class CatalogObjectDetailsActivity : EventActivity() {
     {
         catalogObject?.let {
             Glide.with(this)
-                    .load(it.detailPicture?.fullImagePath())
+                    .load(it.detailPicture?.fullPath())
                     .into(mBinding.ivAvatar)
             Glide.with(this)
-                    .load(it.detailPicture?.fullImagePath())
+                    .load(it.detailPicture?.fullPath())
                     .into(object: SimpleTarget<Drawable>(resources.displayMetrics.widthPixels, 100){
                         override fun onResourceReady(resource: Drawable?, transition: Transition<in Drawable>?) {
                             toolbar.contentScrim = resource

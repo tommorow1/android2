@@ -11,13 +11,13 @@ import android.view.ViewGroup
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.components.OnItemClickListener
-import com.example.bloold.buildp.model.PhotoData
+import com.example.bloold.buildp.model.PhotoModel
 import com.example.bloold.buildp.ui.ImageViewActivity
 
 class PhotoFragment : Fragment()
 {
     private var mColumnCount = 3
-    private var photoList: Array<PhotoData>? = null
+    private var photoList: Array<PhotoModel>? = null
     private lateinit var adapter: PhotoRecyclerViewAdapter
     private lateinit var rvPhotos: RecyclerView
 
@@ -26,7 +26,7 @@ class PhotoFragment : Fragment()
 
         mColumnCount = 3
 
-        arguments?.let { photoList= it.getParcelableArray(IntentHelper.EXTRA_PHOTO_DATA_ARRAY) as Array<PhotoData>? }
+        arguments?.let { photoList= it.getParcelableArray(IntentHelper.EXTRA_PHOTO_DATA_ARRAY) as Array<PhotoModel>? }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +44,9 @@ class PhotoFragment : Fragment()
             adapter = PhotoRecyclerViewAdapter(OnItemClickListener
             {
                 startActivity(Intent(activity, ImageViewActivity::class.java)
-                        .putExtra(IntentHelper.EXTRA_IMAGE_URL, it.fullImagePath()))
+                        .putExtra(IntentHelper.EXTRA_IMAGE_URL, it.fullPath()))
             }, view.context)
-            adapter.addAll(photoList?.map { it.detailPicture })
+            adapter.addAll(photoList?.toList())
 
             rvPhotos.adapter = adapter
         }
@@ -55,7 +55,7 @@ class PhotoFragment : Fragment()
     companion object {
 
         private val ARG_COLUMN_COUNT = "column-count"
-        fun newInstance(photos: Array<PhotoData>?): PhotoFragment
+        fun newInstance(photos: Array<PhotoModel>?): PhotoFragment
                 = PhotoFragment().apply {  arguments = Bundle().apply { putParcelableArray(IntentHelper.EXTRA_PHOTO_DATA_ARRAY, photos) } }
     }
 }
