@@ -1,6 +1,8 @@
 package com.example.bloold.buildp.ui.fragments
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
@@ -13,6 +15,7 @@ import android.view.ViewGroup
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.adapter.NameCodeAdapter
 import com.example.bloold.buildp.common.IntentHelper
+import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.databinding.FragmentRecyclerViewBinding
 import com.example.bloold.buildp.model.NameCodeInterface
 
@@ -31,7 +34,8 @@ class DocPubListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.recyclerView.addItemDecoration(DividerItemDecoration(activity, OrientationHelper.VERTICAL))
         mBinding.recyclerView.layoutManager=LinearLayoutManager(activity)
-        adapter = NameCodeAdapter()
+        adapter = NameCodeAdapter(OnItemClickListener {
+            it.getSrcFile()?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }})
         arguments?.let { adapter.addAll((it.getParcelableArray(IntentHelper.EXTRA_DOC_PUB_MODEL_LIST) as Array<NameCodeInterface>).asList()) }
         mBinding.recyclerView.adapter=adapter
         updateNoItemsView()

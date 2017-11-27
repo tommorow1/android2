@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.components.BindingViewHolder
+import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.databinding.ItemPublicationsBinding
 import com.example.bloold.buildp.model.NameCodeInterface
 
-class NameCodeAdapter():RecyclerView.Adapter<BindingViewHolder<ItemPublicationsBinding>>() {
+class NameCodeAdapter(private val onItemClickListener: OnItemClickListener<NameCodeInterface>?):RecyclerView.Adapter<BindingViewHolder<ItemPublicationsBinding>>() {
 
     var mValues: ArrayList<NameCodeInterface> = ArrayList()
 
@@ -24,6 +26,7 @@ class NameCodeAdapter():RecyclerView.Adapter<BindingViewHolder<ItemPublicationsB
         holder.mLayoutBinding.tvName.text=item.getDocName()
         holder.mLayoutBinding.flCodeBlock.visibility=if(item.getDocCode().isNullOrEmpty()) View.GONE else View.VISIBLE
         holder.mLayoutBinding.tvDocumentCode.text=item.getDocCode()
+        holder.itemView.setOnClickListener({onItemClickListener?.onItemClick(mValues[holder.adapterPosition])})
     }
 
     override fun getItemCount():Int = mValues.size

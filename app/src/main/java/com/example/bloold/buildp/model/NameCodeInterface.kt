@@ -6,4 +6,5 @@ package com.example.bloold.buildp.model
 interface NameCodeInterface {
     fun getDocName():String?
     fun getDocCode():String?
+    fun getSrcFile():String?
 }
