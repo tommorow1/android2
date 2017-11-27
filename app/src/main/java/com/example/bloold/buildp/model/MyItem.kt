@@ -38,4 +38,8 @@ class MyItem : ClusterItem {
     var isFavourite:Boolean?=null
 
     override fun getPosition(): LatLng = LatLng(lat,lng)
+
+    override fun toString(): String {
+        return snippet?:""
+    }
 }

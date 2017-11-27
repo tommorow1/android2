@@ -44,8 +44,11 @@ interface ServerApi {
     //-------
     @GET("object/index/")
     fun searchMapObjects(@QueryMap filter:Map<String, String>?,
-                         @Query("limit") limit: Int, @Query("page") page: Int,
+                         @Query("limit") limit: Int?=null, @Query("page") page: Int?=null,
                          @Query("select[]") selectParams: Array<String> = ApiHelper.mapParams): Single<BaseResponseWithDataObject<MyItem>>
+    @GET("object/index/")
+    fun searchMapObjectsByName(@Query("filter[0][?NAME]=") query: String,
+                               @Query("select[]") selectParams: Array<String> = ApiHelper.mapParams): Single<BaseResponseWithDataObject<MyItem>>
     @POST("object/favorite/toggle/")
     @FormUrlEncoded
     fun toggleFavourite(@Field("OBJECT_ID") objectId:Int): Single<BaseResponseWithDataObject<Void>>

@@ -136,8 +136,10 @@
             android:value="@string/google_maps_key" />
         <activity android:name=".ui.MapActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".map.RouteActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.RouteActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:label="@string/route_item"
+            android:theme="@style/AppThemeSimple" />
         <service
             android:name=".services.NetworkIntentService"
             android:exported="false" />

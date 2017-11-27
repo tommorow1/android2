@@ -220,7 +220,7 @@ class CatalogObjectDetailsActivity : EventActivity() {
     }
     fun onRouteClick(v:View)
     {
-        //TODO
+        catalogObject?.let { RouteActivity.launch(this, it.id) }
     }
     fun onPhotoClick(v:View)
     {

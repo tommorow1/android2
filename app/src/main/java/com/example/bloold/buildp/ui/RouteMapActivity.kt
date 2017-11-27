@@ -1,8 +1,11 @@
 package com.example.bloold.buildp.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
 
 /**
@@ -23,5 +26,12 @@ class RouteMapActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    companion object {
+        fun launch(cntx: Activity, latFrom:Double,lngFrom:Double, latTo:Double, lngTo:Double) {
+            /*cntx.startActivity(Intent(cntx, RouteMapActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId))*/
+        }
     }
 }

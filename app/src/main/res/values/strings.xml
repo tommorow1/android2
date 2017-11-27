@@ -25,6 +25,11 @@
     <!-- Карта -->
     <string name="all">Все</string>
     <string name="no_materials">Нет материалов</string>
+    <string name="my_location">Моё местоположение</string>
+    <string name="need_gps_permission">Для работы приложения необходим доступ к GPS. Разрешить доступ?</string>
+    <string name="gps_not_enabled">Невозможно получить доступ к GPS. Включите определение координат и попробуйте ещё раз.</string>
+    <string name="need_set_origin_location">Укажите начальную точку маршрута</string>
+    <string name="need_set_destination_location">Укажите конечную точку маршрута</string>
 
     <!-- Редактирование -->
     <string name="edit_object_title">Редактирование объекта</string>

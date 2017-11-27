@@ -19,6 +19,10 @@ class IntentHelper {
         val EXTRA_DOC_PUB_MODEL_LIST="docPubModelList"
         val EXTRA_VIDEO_MODEL_LIST="videoModelList"
 
+        val EXTRA_LATITUDE="latitude"
+        val EXTRA_LONGITUDE="longitude"
+        val EXTRA_OBJECT_NAME="objName"
+
         val EXTRA_ERROR_MSG="errorMsg"
         val EXTRA_VALUE="value"
     }

@@ -34,6 +34,7 @@ import com.example.bloold.buildp.model.MyItem
 import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.ui.ChooseEditFieldActivity
 import com.example.bloold.buildp.ui.EditStateActivity
+import com.example.bloold.buildp.ui.RouteActivity
 import com.example.bloold.buildp.utils.PermissionUtil
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -394,7 +395,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     fun onRouteClick(v:View)
     {
-        //TODO
+        mEventMapItem[currentMarker?.id]?.let { RouteActivity.launch(activity, it.id) }
     }
 
     //---- Ловим события от сервиса ----
