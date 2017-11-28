@@ -88,8 +88,8 @@ class CatalogObjectDetailsActivity : EventActivity() {
 
         viewPager = findViewById(R.id.vpSingleObject)
 
-        loadObjectDetails(164080)
-        //loadObjectDetails(intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, 0))
+        //loadObjectDetails(164080)
+        loadObjectDetails(intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, 0))
 
     }
 

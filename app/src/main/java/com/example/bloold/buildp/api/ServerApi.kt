@@ -1,13 +1,11 @@
 package com.example.bloold.buildp.api
 
-import com.example.bloold.buildp.api.data.BaseResponse
-import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
-import com.example.bloold.buildp.api.data.CatalogObject
-import com.example.bloold.buildp.api.data.CurrentUserCondition
+import com.example.bloold.buildp.api.data.*
 import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.model.ConditionMark
 import com.example.bloold.buildp.model.MyItem
 import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -15,6 +13,10 @@ import retrofit2.http.*
  * Created by Leonov Oleg, http://pandorika-it.com on 24.05.16.
  */
 interface ServerApi {
+    @POST("user/set-push-token/")
+    @FormUrlEncoded
+    fun setPushToken(@Field("PUSH_TOKEN") pushToken:String): Single<Response<Void>>
+
     @GET("directory/type-catalog-structure/")
     fun getCategories(): Single<BaseResponse<Category>>
     @GET("object/list/")
@@ -60,4 +62,12 @@ interface ServerApi {
     @POST("file/upload/")
     @FormUrlEncoded
     fun uploadFile(@FieldMap uploadFileData:Map<String,String>): Single<Response<BaseResponseWithDataObject<Long>>>
+
+    /*** Добавление объекта */
+    @POST("object/add/")
+    @FormUrlEncoded
+    fun addObject(@Field("FORM[NAME]") name:String,
+                   @Field("FORM[PROPS][PUBLIC_NAME][0]") folkName:String,
+                   @Field("FORM[PROPS][ADDRESS]") address:String,
+                   @Field("FORM[PROPS][MAP]") latLng:String): Single<Response<BaseResponseWithoutData>>
 }

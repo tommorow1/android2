@@ -183,7 +183,11 @@ class RouteActivity : NetworkActivity()
                 .doOnSubscribe { showProgress(true) }
                 .doFinally {
                     showProgress(false)
-                    if(itemObject==null) finish()
+                    if(itemObject==null)
+                    {
+                        Toast.makeText(applicationContext, R.string.object_not_found, Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
                     else updateUI()
                 }
                 .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<MyItem>>() {

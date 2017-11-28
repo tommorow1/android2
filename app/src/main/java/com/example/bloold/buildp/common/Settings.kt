@@ -12,6 +12,7 @@ import java.util.HashSet
  */
 
 object Settings {
+    val DIRECTIONS_API_KEY = "AIzaSyA0SGbiZ28WwwukGWgPwmqIKTd7GJMUDfY"
     private val KEY_CATALOG_FILTERS = "catalogFilters"
     private val KEY_USER_TOKEN = "AuthToken"
 

@@ -1,11 +1,14 @@
 package com.example.bloold.buildp.components
 
 import android.content.Context
+import android.support.design.widget.TextInputLayout
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewParent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ErrorUtils
@@ -27,6 +30,35 @@ object UIHelper
         else
             Toast.makeText(cntx.applicationContext, R.string.server_error, Toast.LENGTH_LONG).show()
     }
+    /*** Показываем ошибку для TextView если пустой
+     * @return true если ошибка
+     */
+    fun setErrorIfEmpty(editText: TextView, errorMsg: String): Boolean {
+        val value = editText.text.toString()
+
+        return if (TextUtils.isEmpty(value)) {
+            setError(editText, errorMsg)
+            true
+        } else {
+            setError(editText, null)
+            false
+        }
+    }
+    /*** Показываем ошибку для TextView или TextInputLayout если в него завёрнут EditText  */
+    fun setError(editText: TextView, errorMsg: String?) {
+        val textInputLayout = getParentTextInputLayout(editText)
+        if (textInputLayout != null)
+            textInputLayout.error = errorMsg
+        else
+            editText.error = errorMsg
+    }
+    private fun getParentTextInputLayout(textView: TextView): TextInputLayout? {
+        var parent: ViewParent? = textView.parent
+        while (parent != null && parent !is TextInputLayout)
+            parent = parent.parent
+        return parent as TextInputLayout?
+    }
+
     fun makeEditTextScrollable(editText:EditText)
     {
         editText.setOnTouchListener { v, event ->

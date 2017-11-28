@@ -107,7 +107,7 @@
         <activity
             android:name=".ui.RouteMapActivity"
             android:label=""
-            android:theme="@style/AppThemeSimple"/>
+            android:theme="@style/AppTheme.NoActionBar.WithStatus"/>
         <activity
             android:name=".ui.ChooseEditFieldActivity"
             android:label="@string/edit_object_title"
@@ -116,6 +116,18 @@
         <activity
             android:name=".ui.ChooseFiltersActivity"
             android:label="@string/filters"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSimple"/>
+        <activity
+            android:name=".ui.AddObjectActivity"
+            android:label="@string/add_object_item"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSimple"/>
+        <activity
+            android:name=".ui.ChooseLocationActivity"
+            android:label="@string/choose_location"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
         <activity

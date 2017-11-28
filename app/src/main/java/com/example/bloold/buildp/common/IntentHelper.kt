@@ -23,6 +23,7 @@ class IntentHelper {
 
         val EXTRA_LATITUDE="latitude"
         val EXTRA_LONGITUDE="longitude"
+        val EXTRA_ADDRESS="address"
         val EXTRA_OBJECT_NAME="objName"
 
         val EXTRA_ERROR_MSG="errorMsg"

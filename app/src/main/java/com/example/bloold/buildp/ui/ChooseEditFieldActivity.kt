@@ -37,6 +37,7 @@ class ChooseEditFieldActivity : AppCompatActivity() {
         mBinding.rvFields.adapter = StringPairAdapter(OnItemClickListener {
             when(it.second)
             {
+                "add_object_item" -> startActivity(Intent(this, AddObjectActivity::class.java))
                 "route_item" -> RouteActivity.launch(this, objectId)
                 "status_item" -> startActivityForResult(Intent(this, EditStateActivity::class.java)
                         .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)

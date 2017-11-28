@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * Created by sagus on 18.11.2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class BaseResponse<T>:BaseResponseWithoutData() {
-    @get: JsonProperty("DATA")
-    var data:Array<T>?=null
+open class BaseResponseWithoutData{
+    @get: JsonProperty("USER_ID")
+    var userId:Int?=null
+    @get: JsonProperty("CODE")
+    var code = 0
+    @get: JsonProperty("MESSAGE")
+    var message:String?=null
 }

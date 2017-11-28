@@ -1,172 +1,120 @@
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"  >
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:paddingTop="10dp"
-        android:layout_height="70dp">
-
-        <include layout="@layout/app_bar_map" />
-
-    </android.support.design.widget.AppBarLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="listener"
+            type="com.example.bloold.buildp.ui.RouteMapActivity"/>
+    </data>
     <LinearLayout
-        android:id="@+id/routeInfo"
+        tools:context=".ui.RouteMapActivity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:visibility="gone"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingTop="30dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/ivWalk"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/walk" />
-
-            <ImageView
-                android:id="@+id/ivCar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/car" />
-
-            <ImageView
-                android:id="@+id/ivBus"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/bus" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:id="@+id/llTime"
+        android:layout_height="match_parent"
+        android:orientation="vertical"  >
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/vk_white"
-            android:visibility="invisible">
-
-            <TextView
-                android:id="@+id/tvTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:text="TextView"
-                android:textColor="@color/vk_black"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/map_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/vk_white"
-            android:orientation="vertical"
-            >
-
-            <TextView
-                android:id="@+id/marker_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingBottom="5dp"
-                android:paddingLeft="17dp"
-                android:paddingTop="5dp"
-                android:text="TextView"
-                android:textColor="@color/vk_black"
-                android:textSize="22sp" />
-
-            <TextView
-                android:id="@+id/marker_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingBottom="5dp"
-                android:paddingLeft="17dp"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/tvDist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="8dp"
-                android:drawableStart="@drawable/pointer"
-                android:paddingBottom="5dp"
-                android:paddingLeft="17dp"
-                android:text="250m" />
-            <LinearLayout
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:padding="15dp"
-                android:background="@color/grey"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center_vertical"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/routeInfo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
                     android:gravity="center"
                     android:orientation="horizontal">
-                    <ImageView
-                        android:id="@+id/menu_edit"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:layout_marginRight="50dp"
-                        android:src="@drawable/edit" />
 
-                    <ImageView
-                        android:id="@+id/menu_alert"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:layout_marginRight="50dp"
-                        android:src="@drawable/alert_circle" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/menu_camera"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:layout_marginRight="50dp"
-                        android:src="@drawable/camera" />
+                        <ImageView
+                            android:id="@+id/ivWalk"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:onClick="@{listener::onWalkingClick}"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/walk" />
 
-                    <ImageView
-                        android:id="@+id/menu_route"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:src="@drawable/route"/>
+                        <ImageView
+                            android:id="@+id/ivCar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:onClick="@{listener::onDrivingClick}"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/car" />
+
+                        <ImageView
+                            android:id="@+id/ivBus"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:onClick="@{listener::onTransitClick}"
+                            android:src="@drawable/bus" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <fragment
+                    android:id="@+id/fMap"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="0dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_panel_height"
+                    android:background="@color/colorPanel"
+                    android:layout_gravity="bottom"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_gravity="center"
+                        android:textColor="@color/blue"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="100 км"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
+            <FrameLayout
+                android:id="@+id/flLoading"
+                android:clickable="true"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha=".5"
+                android:background="@color/loadingBackground">
+                <ProgressBar
+                    style="?android:progressBarStyleLarge"
+                    android:indeterminate="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
 
-        </LinearLayout>
+        </FrameLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</layout>

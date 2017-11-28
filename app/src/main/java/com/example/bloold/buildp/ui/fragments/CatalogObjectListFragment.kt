@@ -137,8 +137,12 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
     private fun loadCatalogObjects(page: Int)
     {
         val filters = HashMap<String,String>()
-        category?.let { filters.put("filter[${it.id}]","Y") }
-        Settings.catalogFilters?.forEach { filters.put("filter[$it]","Y") }
+        Settings.catalogFilters?.let {
+            for(i in 0 until it.size) {
+                filters.put("filter[IBLOCK_SECTION_ID][$i]", it.elementAt(i).toString())
+            }
+        }
+        category?.id?.let { filters.put("filter[IBLOCK_SECTION_ID][${filters.size}]",it) }
         getCompositeDisposable().add(ServiceGenerator.serverApi.getCatalogObjects(filters, ITEMS_ON_PAGE, page, category?.id)
                 .compose(RxHelper.applySchedulers())
                 .doOnSubscribe { lazyScrollPageUploader.setLoading(true) }
