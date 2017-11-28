@@ -35,12 +35,14 @@ import com.example.bloold.buildp.components.ChooseImageActivity
 import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.components.SpinnerWithoutLPaddingAdapter
 import com.example.bloold.buildp.components.UIHelper
+import com.example.bloold.buildp.databinding.ActivityEditPhotoVideoAudioBinding
 import com.example.bloold.buildp.databinding.ActivityEditStateBinding
 import com.example.bloold.buildp.databinding.DialogAddVideoUrlBinding
 import com.example.bloold.buildp.model.AudioModel
 import com.example.bloold.buildp.model.ConditionMark
 import com.example.bloold.buildp.model.PhotoModel
 import com.example.bloold.buildp.model.VideoModel
+import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
 import com.example.bloold.buildp.utils.PermissionUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,8 +61,8 @@ import kotlin.collections.ArrayList
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class EditStateActivity : ChooseImageActivity() {
-    private lateinit var mBinding: ActivityEditStateBinding
+class EditPhotoVideoAudioActivity : ChooseImageActivity() {
+    private lateinit var mBinding: ActivityEditPhotoVideoAudioBinding
     private lateinit var photoEditAdapter: PhotoEditAdapter
     private lateinit var videoEditAdapter: VideoEditAdapter
     private lateinit var audioEditAdapter: AudioEditAdapter
@@ -73,18 +75,17 @@ class EditStateActivity : ChooseImageActivity() {
     private var uploadedAudios: ArrayList<Long> = ArrayList()
 
     companion object {
-        val REQUEST_CODE_EDIT_STATE_OBJECT=124
         private val REQUEST_CODE_CHOOSE_FILE=125
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_state)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_photo_video_audio)
         mBinding.listener=this
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         objectId=intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, -1)
         player.setOnPreparedListener { it.start() }
 
-        UIHelper.makeEditTextScrollable(mBinding.etStateDescription)
         mBinding.tvPhotoRules.movementMethod = LinkMovementMethod.getInstance()
 
         photoEditAdapter= PhotoEditAdapter(OnItemClickListener {
@@ -136,7 +137,7 @@ class EditStateActivity : ChooseImageActivity() {
         mBinding.rvAudios.layoutManager=LinearLayoutManager(this)
         mBinding.rvAudios.adapter=audioEditAdapter
 
-        loadConditionMarks()
+        loadObjectDetails(objectId)
     }
 
     override fun onPause() {
@@ -191,7 +192,6 @@ class EditStateActivity : ChooseImageActivity() {
     private fun updateUI()
     {
         catalogObject?.let {
-            mBinding.etStateDescription.setText(it.condition)
             photoEditAdapter.addAll(it.photosData?.toList())
             videoEditAdapter.addAll(it.videoData?.toList())
             audioEditAdapter.addAll(it.audioData?.toList())
@@ -204,7 +204,6 @@ class EditStateActivity : ChooseImageActivity() {
     private fun loadObjectDetails(objectId:Int)
     {
         val filters = HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) }
-        filters.put("filter[ID][0]", objectId.toString())
         Settings.catalogFilters?.forEach { filters.put("filter[$it]","Y") }
         compositeDisposable.add(ServiceGenerator.serverApi.getCatalogObjects(HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) },
                 1, 1,  selectParams = ApiHelper.fullParams)
@@ -230,57 +229,6 @@ class EditStateActivity : ChooseImageActivity() {
                     }
                 }))
     }
-    private fun loadConditionMarks()
-    {
-        compositeDisposable.add(ServiceGenerator.serverApi.getConditionMark()
-                .compose(RxHelper.applySchedulers())
-                .doOnSubscribe { showProgress(true) }
-                .subscribeWith(object : DisposableSingleObserver<BaseResponse<ConditionMark>>() {
-                    override fun onSuccess(result: BaseResponse<ConditionMark>) {
-                        result.data?.let {
-                            val notSetCondition=ConditionMark()
-                            notSetCondition.value=getString(R.string.choose_condition)
-                            mBinding.spConditionMark.adapter = SpinnerWithoutLPaddingAdapter(this@EditStateActivity,
-                                    android.R.layout.simple_spinner_dropdown_item, arrayOf(notSetCondition)+ it)
-                            loadCurrentCondition()
-                        }
-                    }
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        if (e is UnknownHostException || e is ConnectException)
-                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
-                        else
-                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                }))
-    }
-    private fun loadCurrentCondition()
-    {
-        compositeDisposable.add(ServiceGenerator.serverApi.getObjectConditionMark(objectId)
-                .compose(RxHelper.applySchedulers())
-                .subscribeWith(object : DisposableSingleObserver<CurrentUserCondition>() {
-                    override fun onSuccess(result: CurrentUserCondition) {
-                        result.data?.items?.firstOrNull()?.let {
-                            for(i in 0..mBinding.spConditionMark.adapter.count)
-                                if(i==it.conditionId)
-                                {
-                                    mBinding.spConditionMark.setSelection(i)
-                                    break
-                                }
-                        }
-                        loadObjectDetails(objectId)
-                    }
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        if (e is UnknownHostException || e is ConnectException)
-                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
-                        else
-                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
-                    }
-                }))
-    }
-
     override fun onImageChosen(imagePath: String) {
         val photo=PhotoModel()
         photo.src=imagePath
@@ -301,13 +249,12 @@ class EditStateActivity : ChooseImageActivity() {
                         val videoModel=VideoModel()
                         videoModel.youtubeCode=UIHelper.extractYoutubeId(binding.etName.text.toString())
                         videoEditAdapter.addData(videoModel)
-                    } else Toast.makeText(this@EditStateActivity, R.string.need_only_youtube_link, Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(this@EditPhotoVideoAudioActivity, R.string.need_only_youtube_link, Toast.LENGTH_LONG).show()
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .setTitle(R.string.add_video_title)
         builder.create().show()
     }
-
     fun onAddAudioClick(v: View?)
     {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -330,7 +277,6 @@ class EditStateActivity : ChooseImageActivity() {
         //Загружаем файлы фото
         //Загружаем файлы аудио
         //Удаляем аудио, видео и фото
-        //Отправляем состояние(оценку и описание)
         //Сохраняем данные и записываем id фото, аудио и отправляем ссылки на видео
         showProgress(true)
         val firstNotUploadedPhoto=photoEditAdapter.mValues.firstOrNull { it.id==-1L }
@@ -372,9 +318,8 @@ class EditStateActivity : ChooseImageActivity() {
         }
         else
         {
-            compositeDisposable.add(ServiceGenerator.serverApi.editObject(objectId,
-                    mBinding.etStateDescription.text.toString(),
-                    (mBinding.spConditionMark.selectedItem as ConditionMark).id,
+            compositeDisposable.add(ServiceGenerator.serverApi.editObject(objectId, null,
+                    null,
                     ApiHelper.generateChangedPhotosParams(uploadedPhotos)+
                             ApiHelper.generateChangedAudiosParams(uploadedAudios)+
                             ApiHelper.generateChangedVideoParams(videoEditAdapter.mValues.filter { it.name==null&&it.youtubeCode==null }))
@@ -389,7 +334,7 @@ class EditStateActivity : ChooseImageActivity() {
                                 finish()
                             }
                             else
-                                UIHelper.showServerError(result, this@EditStateActivity)
+                                UIHelper.showServerError(result, this@EditPhotoVideoAudioActivity)
                         }
                         override fun onError(e: Throwable) {
                             e.printStackTrace()
@@ -403,35 +348,6 @@ class EditStateActivity : ChooseImageActivity() {
         }
 
         //else sendConditionMark()
-    }
-    private fun sendConditionMark()
-    {
-        //TODO Сообщение не должно быть пустое
-        compositeDisposable.add(ServiceGenerator.serverApi.sendCondition(objectId, mBinding.etStateDescription.text.toString(),
-                (mBinding.spConditionMark.selectedItem as ConditionMark).id,
-                SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(Date()))
-                .compose(RxHelper.applySchedulers())
-                .doFinally { showProgress(false) }
-                .doOnSubscribe { showProgress(true) }
-                .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
-                    override fun onSuccess(result: Response<Void>) {
-                        if(result.isSuccessful)
-                        {
-                            //TODO
-                        }
-                        else
-                            UIHelper.showServerError(result, this@EditStateActivity)
-                    }
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        if (e is UnknownHostException || e is ConnectException)
-                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
-                        else
-                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
-                        //TODO
-                    }
-                }))
-
     }
     private fun compressPhotoAndSend(filePath: String, key:Long, onFileUploadListener: OnFileUploadListener)
     {
@@ -463,7 +379,7 @@ class EditStateActivity : ChooseImageActivity() {
                             onFileUploadListener.onFileUploaded(filePath, result.body()?.data?.items?.first(),true)
                         }
                         else {
-                            UIHelper.showServerError(result, this@EditStateActivity)
+                            UIHelper.showServerError(result, this@EditPhotoVideoAudioActivity)
                             onFileUploadListener.onFileUploaded(filePath, key, false)
                         }
                     }
@@ -502,7 +418,7 @@ class EditStateActivity : ChooseImageActivity() {
                                     onFileUploadListener.onFileUploaded(filePath, result.body()?.data?.items?.first(),true)
                                 }
                                 else {
-                                    UIHelper.showServerError(result, this@EditStateActivity)
+                                    UIHelper.showServerError(result, this@EditPhotoVideoAudioActivity)
                                     onFileUploadListener.onFileUploaded(filePath, key, false)
                                 }
                             }

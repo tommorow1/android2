@@ -131,6 +131,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
         <activity
+            android:name=".ui.EditPhotoVideoAudioActivity"
+            android:label="@string/edit_object_title"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSimple"/>
+        <activity
             android:name=".ui.EditStateActivity"
             android:label="@string/edit_object_title"
             android:screenOrientation="portrait"

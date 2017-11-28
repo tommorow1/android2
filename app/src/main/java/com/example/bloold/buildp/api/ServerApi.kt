@@ -30,8 +30,8 @@ interface ServerApi {
     @POST("object/edit/")
     @FormUrlEncoded
     fun editObject(@Field("FORM[ID]") objectId:Int,
-                   @Field("FORM[PROPS][CONDITION][DETAIL_TEXT]") conditionDescription:String,
-                   @Field("FORM[PROPS][CONDITION][PROPS][MARK]") conditionMarkId:Int,
+                   @Field("FORM[PROPS][CONDITION][DETAIL_TEXT]") conditionDescription:String?,
+                   @Field("FORM[PROPS][CONDITION][PROPS][MARK]") conditionMarkId:Int?,
                    @FieldMap extraFields:Map<String,String>): Single<Response<Void>>
     //------ Состояния объектов ---------
     @GET("directory/condition-mark/")
