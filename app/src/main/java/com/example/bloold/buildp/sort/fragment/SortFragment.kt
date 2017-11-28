@@ -1,52 +1,43 @@
 package com.example.bloold.buildp.sort.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.SortObject
+import com.example.bloold.buildp.components.OnItemClickListener
+import com.example.bloold.buildp.model.Category
+import com.example.bloold.buildp.ui.MainActivity
 
-class SortFragment : Fragment(), onFilterClickListener<SortObject> {
-
-    private var mListener: OnListFragmentInteractionListener? = null
-    private var mItems: ArrayList<SortObject>? = null
-    private var mItemRes: Int = 0
-    private var adapter: SortAdapter<SortObject>? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (arguments != null) {
-            mItems = arguments.getParcelableArrayList(ITEMS_KEY)
-            mItemRes = arguments.getInt(RESOURCE_ITEM_KEY)
-        }
-    }
-
+class SortFragment : Fragment(), OnItemClickListener<Category> {
+    private var adapter: SortAdapter? = null
+    var isMain:Boolean=false
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_filter_start_list, container, false)
+        return inflater!!.inflate(R.layout.fragment_filter_start_list, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        isMain=arguments?.getBoolean(KEY_IS_MAIN, false)==true
 
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()
 
-            adapter = SortAdapter(mItems!!, mItemRes, this)
+            adapter = SortAdapter(arguments.getParcelableArrayList(ITEMS_KEY)!!, R.layout.item_hight_level_filter, this)
 
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
         }
-        return view
     }
 
 
-    override fun onAttach(context: Context?) {
+    /*override fun onAttach(context: Context?) {
         super.onAttach(context)
         try {
             mListener = context as OnListFragmentInteractionListener
@@ -54,33 +45,34 @@ class SortFragment : Fragment(), onFilterClickListener<SortObject> {
             e.printStackTrace()
         }
 
-    }
+    }*/
 
-    override fun onDetach() {
+    /*override fun onDetach() {
         super.onDetach()
         mListener = null
         mItems = null
-    }
+    }*/
 
-    interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: SortObject)
-    }
+    /*interface OnListFragmentInteractionListener {
+        fun onListFragmentInteraction(item: Category)
+    }*/
 
-    override fun onClick(item: SortObject) {
-        Log.d("onClickFragment", item.name)
-        mListener?.onListFragmentInteraction(item)
+    override fun onItemClick(item: Category) {
+        (activity as MainActivity).showCategoryListFragment(item)
+        //mListener?.onListFragmentInteraction(item)
     }
 
     companion object{
 
         private val ITEMS_KEY = "items"
+        private val KEY_IS_MAIN = "main"
         private val RESOURCE_ITEM_KEY = "container"
 
-        fun newInstance(items: ArrayList<SortObject>, itemRes: Int): SortFragment {
+        fun newInstance(items: ArrayList<Category>, isMain:Boolean): SortFragment {
             val fragment = SortFragment()
             val args = Bundle()
             args.putParcelableArrayList(ITEMS_KEY, items)
-            args.putInt(RESOURCE_ITEM_KEY, itemRes)
+            args.putBoolean(KEY_IS_MAIN, isMain)
             fragment.arguments = args
             return fragment
         }

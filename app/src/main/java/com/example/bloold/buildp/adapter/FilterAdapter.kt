@@ -6,21 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.model.SortObject
+import com.example.bloold.buildp.model.Category
 
 /**
  * Created by mikha on 29-Oct-17.
  */
-class FilterAdapter(var mContext: Context?, var mGroups : Array<SortObject>) : BaseExpandableListAdapter() {
+class FilterAdapter(var mContext: Context?, var mGroups : Array<Category>) : BaseExpandableListAdapter() {
     val selectedIds=HashSet<String>()
     override fun getGroupCount(): Int = mGroups.size
 
-    override fun getChildrenCount(groupPosition: Int): Int = mGroups[groupPosition].child?.size ?: 0
+    override fun getChildrenCount(groupPosition: Int): Int = mGroups[groupPosition].children?.size ?: 0
 
     override fun getGroup(groupPosition: Int): Any? = mGroups
 
     override fun getChild(groupPosition: Int, childPosition: Int): Any? =
-            mGroups[groupPosition].child?.get(childPosition)
+            mGroups[groupPosition].children?.get(childPosition)
 
     override fun getGroupId(groupPosition: Int): Long = groupPosition.toLong()
 
@@ -60,7 +60,7 @@ class FilterAdapter(var mContext: Context?, var mGroups : Array<SortObject>) : B
 //        val textGroup = convertView2?.findViewById<android.support.v7.widget.AppCompatTextView>(R.id.tvName)
 //        textGroup?.text = mGroups?.get(groupPosition)?.get(childPosition)?.name
 
-        val sortObject=mGroups[groupPosition].child?.get(childPosition)
+        val sortObject=mGroups[groupPosition].children?.get(childPosition)
         val checkBox = convertView2.findViewById<CheckBox>(R.id.chbFilter)
         checkBox.tag = sortObject?.id
         checkBox.text = sortObject?.name

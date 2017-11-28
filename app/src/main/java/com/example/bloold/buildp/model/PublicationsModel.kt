@@ -13,12 +13,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class PublicationsModel() : Parcelable, NameCodeInterface {
     @get: JsonProperty("NAME")
     var name: String? = null
-    @get: JsonProperty("SRC")
-    var src: String? = null
+    @get: JsonProperty("PROPERTY_FILE")
+    var propertyFile: PropertyFile? = null
 
     override fun getDocName(): String? = name
     override fun getDocCode(): String? = null
-    override fun getSrcFile(): String? = if(src!=null) ServiceGenerator.SITE_URL+src else null
+    override fun getSrcFile(): String? = if(!propertyFile?.src.isNullOrEmpty()) ServiceGenerator.SITE_URL+propertyFile?.src else null
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()

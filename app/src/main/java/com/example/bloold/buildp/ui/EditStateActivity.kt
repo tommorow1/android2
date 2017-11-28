@@ -203,7 +203,7 @@ class EditStateActivity : ChooseImageActivity() {
         filters.put("filter[ID][0]", objectId.toString())
         Settings.catalogFilters?.forEach { filters.put("filter[$it]","Y") }
         compositeDisposable.add(ServiceGenerator.serverApi.getCatalogObjects(HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) },
-                1, 1, ApiHelper.fullParams)
+                1, 1,  selectParams = ApiHelper.fullParams)
                 .compose(RxHelper.applySchedulers())
                 .doFinally {
                     if(catalogObject!=null)

@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.ui.fragments.CatalogObjectListFragment
-import com.example.bloold.buildp.filter.`object`.ChooseCatalogFiltersFragment
 import com.example.bloold.buildp.model.HightFilterModelLevel
 import com.example.bloold.buildp.model.SortObject
 import java.util.*
@@ -29,9 +29,9 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
     var currentFragment: Stack<Fragment> = Stack()
 
     enum class FilterScreens {
-        MAIN_FILTER,
+        //MAIN_FILTER,
         CATALOG_OBJECTS,
-        FILTER
+        //FILTER
     }
 
 
@@ -60,17 +60,17 @@ class FilterMainNavigator(private val activity: AppCompatActivity,
         listener.onScreenNavigate(screen)
     }
 
-    fun navigateTo(filterScreens: FilterScreens, data: Any? = null, sortObject: SortObject? = null){
+    fun navigateTo(filterScreens: FilterScreens, data: Any? = null, category: Category? = null){
         when(filterScreens){
-            FilterScreens.MAIN_FILTER -> {
+            /*FilterScreens.MAIN_FILTER -> {
                 if(data != null) {
-                    showFragment(SortFragment.newInstance(data as ArrayList<SortObject>, R.layout.item_hight_level_filter), filterScreens)
+                    showFragment(SortFragment.newInstance(data as ArrayList<Category>, R.layout.item_hight_level_filter), filterScreens)
                 }
-            }
-            FilterScreens.CATALOG_OBJECTS -> showFragment(CatalogObjectListFragment.newInstance(sortObject), filterScreens)
-            FilterScreens.FILTER -> {
+            }*/
+            FilterScreens.CATALOG_OBJECTS -> showFragment(CatalogObjectListFragment.newInstance(category), filterScreens)
+/*            FilterScreens.FILTER -> {
             showFragment(ChooseCatalogFiltersFragment.newInstance((currentFragment.peek() as CatalogObjectListFragment).sortedObject), FilterScreens.FILTER)
-        }
+        }*/
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.bloold.buildp.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.bloold.buildp.api.ServiceGenerator
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -14,9 +15,12 @@ class DocModel() : Parcelable, NameCodeInterface {
     var name: String? = null
     @get: JsonProperty("PROPERTY_DOCUMENT_CODE")
     var code: String? = null
+    @get: JsonProperty("PROPERTY_FILE")
+    var propertyFile: PropertyFile? = null
 
     override fun getDocName(): String? = name
     override fun getDocCode(): String? = code
+    override fun getSrcFile(): String? = if(!propertyFile?.src.isNullOrEmpty()) ServiceGenerator.SITE_URL+propertyFile?.src else null
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()

@@ -114,6 +114,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
         <activity
+            android:name=".ui.ChooseFiltersActivity"
+            android:label="@string/filters"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSimple"/>
+        <activity
             android:name=".ui.EditStateActivity"
             android:label="@string/edit_object_title"
             android:screenOrientation="portrait"

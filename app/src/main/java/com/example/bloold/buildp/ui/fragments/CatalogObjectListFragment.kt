@@ -21,6 +21,7 @@ import com.example.bloold.buildp.components.NetworkFragment
 import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.databinding.FragmentCatalogObjectBinding
 import com.example.bloold.buildp.model.CatalogObjectsModel
+import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.model.SortObject
 import com.example.bloold.buildp.ui.CatalogObjectDetailsActivity
 import io.reactivex.observers.DisposableSingleObserver
@@ -33,7 +34,7 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
     private var lazyScrollPageUploader = LazyScrollPageUploader(this)
     private var objectsArray: ArrayList<CatalogObjectsModel> = ArrayList()
     private var isHaveCatalog: Boolean = false
-    var sortedObject: SortObject? = null
+    var category: Category? = null
 
     companion object {
         private val ITEMS_ON_PAGE = 5
@@ -41,8 +42,9 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
         private val KEY_RESPONSE_HAVE_CATALOG = "catalog"
         private val KEY_RESPONSE_SORTED_OBJECTS = "sorted"
 
-        fun newInstance(): CatalogObjectListFragment = CatalogObjectListFragment()
-
+        /*fun newInstance(): CatalogObjectListFragment = CatalogObjectListFragment()
+                .apply { arguments = Bundle().apply { putInt(IntentHelper.EXTRA_CATEGORY_ID, categoryId) } }
+*/
 /*
         fun newInstance(items: ArrayList<String>): CatalogObjectListFragment {
             return CatalogObjectListFragment()
@@ -56,10 +58,10 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                     putBoolean(KEY_RESPONSE_HAVE_CATALOG, isHave)} }
         }
 
-        fun newInstance(sortObject: SortObject?): CatalogObjectListFragment {
+        fun newInstance(category: Category?): CatalogObjectListFragment {
             return CatalogObjectListFragment()
                     .apply { arguments = Bundle().apply {
-                        putParcelable(KEY_RESPONSE_SORTED_OBJECTS, sortObject)
+                        putParcelable(KEY_RESPONSE_SORTED_OBJECTS, category)
                     } }
         }
     }
@@ -73,7 +75,7 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                 isHaveCatalog = arguments.getBoolean(KEY_RESPONSE_HAVE_CATALOG)
             }
             if(arguments.containsKey(KEY_RESPONSE_SORTED_OBJECTS)){
-                sortedObject = arguments.getParcelable(KEY_RESPONSE_SORTED_OBJECTS)
+                category = arguments.getParcelable(KEY_RESPONSE_SORTED_OBJECTS)
             }
         }
     }
@@ -104,6 +106,10 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
             }
         }*/
     }
+    fun refreshCatalogList()
+    {
+        loadCatalogObjects(1)
+    }
 
     private fun showProgress(showProgress: Boolean) {
         mBinding.pbLoading.visibility = if (showProgress) View.VISIBLE else View.GONE
@@ -131,9 +137,11 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
     private fun loadCatalogObjects(page: Int)
     {
         val filters = HashMap<String,String>()
+        category?.let { filters.put("filter[${it.id}]","Y") }
         Settings.catalogFilters?.forEach { filters.put("filter[$it]","Y") }
-        getCompositeDisposable().add(ServiceGenerator.serverApi.getCatalogObjects(filters, ITEMS_ON_PAGE, page)
+        getCompositeDisposable().add(ServiceGenerator.serverApi.getCatalogObjects(filters, ITEMS_ON_PAGE, page, category?.id)
                 .compose(RxHelper.applySchedulers())
+                .doOnSubscribe { lazyScrollPageUploader.setLoading(true) }
                 .doFinally {
                     showProgress(false)
                     lazyScrollPageUploader.setLoading(false)

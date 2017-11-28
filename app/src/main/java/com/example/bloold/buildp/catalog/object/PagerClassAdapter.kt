@@ -43,7 +43,7 @@ class PagerClassAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(
 
         //return CatalogObjectListFragment.newInstance(urlResponse)
         //TODO сделать дял разных табов свой список
-        return CatalogObjectListFragment.newInstance()
+        return CatalogObjectListFragment.newInstance(null)
     }
 
     override fun getCount(): Int {

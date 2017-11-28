@@ -4,6 +4,7 @@ import com.example.bloold.buildp.api.data.BaseResponse
 import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.api.data.CurrentUserCondition
+import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.model.ConditionMark
 import com.example.bloold.buildp.model.MyItem
 import io.reactivex.Single
@@ -14,9 +15,13 @@ import retrofit2.http.*
  * Created by Leonov Oleg, http://pandorika-it.com on 24.05.16.
  */
 interface ServerApi {
+    @GET("directory/type-catalog-structure/")
+    fun getCategories(): Single<BaseResponse<Category>>
     @GET("object/list/")
     fun getCatalogObjects(@QueryMap filter:Map<String, String>?,
                           @Query("limit") limit: Int, @Query("page") page: Int,
+                          @Query("filter[IBLOCK_SECTION_ID][0]") categoryId: String?=null,
+                          @Query("filter[INCLUDE_SUBSECTIONS]") includeSubsections: String="Y",
                           @Query("select[]") selectParams: Array<String> = ApiHelper.defaultParams): Single<BaseResponseWithDataObject<CatalogObject>>
     @GET("directory/type-map-structure/")
     fun getMapStructure(): Single<BaseResponse<CatalogObject>>
