@@ -24,7 +24,9 @@ class ApiHelper {
                 "PROPERTY_TYPE",
                 "PROPERTY_VALUE_CATEGORY",
                 "PROPERTY_CONDITION",//Описание состояния
-                "CONDITION_ID"//Оценка состояния
+                "CONDITION_ID",//Оценка состояния
+                "PROPERTY_LAT",
+                "PROPERTY_LNG"
         )}
         fun generateUploadFileParams(name:String, base64FileData:String, key: Long)
                 = HashMap<String,String>()

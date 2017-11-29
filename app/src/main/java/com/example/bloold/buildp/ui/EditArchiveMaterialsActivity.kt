@@ -131,8 +131,6 @@ class EditArchiveMaterialsActivity : NetworkActivity() {
     }
     private fun loadObjectDetails(objectId:Int)
     {
-        val filters = HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) }
-        Settings.catalogFilters?.forEach { filters.put("filter[$it]","Y") }
         compositeDisposable.add(ServiceGenerator.serverApi.getCatalogObjects(HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) },
                 1, 1,  selectParams = ApiHelper.fullParams)
                 .compose(RxHelper.applySchedulers())

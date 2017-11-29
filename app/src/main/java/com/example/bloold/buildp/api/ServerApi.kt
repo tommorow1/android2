@@ -89,6 +89,26 @@ interface ServerApi {
                    @Field("FORM[PROPS][VALUABLE]") isValuable:String?,
                    @Field("FORM[PROPS][HISTORIC_SETTLEMENT]") isHistoricSettlement:String?): Single<Response<BaseResponseWithoutData>>
 
+    /*** Редактирование объекта */
+    @POST("object/edit/")
+    @FormUrlEncoded
+    fun editObject(@Field("FORM[ID]") objectId:Int,
+                   @Field("FORM[NAME]") name:String,
+                  @Field("FORM[PROPS][PUBLIC_NAME][0]") folkName:String,
+                  @Field("FORM[PROPS][ADDRESS]") address:String,
+                  @Field("FORM[PROPS][MAP]") latLng:String,
+                  @Field("FORM[DETAIL_TEXT]") description:String?,
+                  @Field("FORM[PROPS][ARCHITECT]") architect:String?,
+                  @Field("FORM[PROPS][DATE_CREATE][VALUE]") createDate_dd_mm_yy:String?,
+                  @Field("FORM[PROPS][DATE_CREATE][DESCRIPTION]") createDateDescription:String?,
+                  @Field("FORM[PROPS][DATE_RECONSTRUCTION][0][VALUE]") reconstructionDate_dd_mm_yy:String?,
+                  @Field("FORM[PROPS][TYPE]") objectType:String?,
+                  @Field("FORM[PROPS][VALUE_CATEGORY]") valueCategory:String?,
+                  @Field("FORM[PROPS][PROTECTIVE_STATUS]") protectiveStatus:String?,
+                  @Field("FORM[PROPS][UNESCO]") isUnesco:String?,
+                  @Field("FORM[PROPS][VALUABLE]") isValuable:String?,
+                  @Field("FORM[PROPS][HISTORIC_SETTLEMENT]") isHistoricSettlement:String?): Single<Response<BaseResponseWithoutData>>
+
     @POST("object/edit/")
     @FormUrlEncoded
     fun addArchiveMaterials(@Field("FORM[ID]") objectId:Int,

@@ -48,6 +48,10 @@ class CatalogObject {
     var propertyType: String? = null
     @get: JsonProperty("PROPERTY_VALUE_CATEGORY")
     var propertyCategory: String? = null
+    @get: JsonProperty("PROPERTY_LAT")
+    var latitude: Double? = null
+    @get: JsonProperty("PROPERTY_LNG")
+    var longitude: Double? = null
     /*
     @get: JsonProperty("DOCS_DATA")
     var docsData: Object =""

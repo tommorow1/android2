@@ -25,10 +25,8 @@ import com.example.bloold.buildp.common.PhotoHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.ChooseImageActivity
-import com.example.bloold.buildp.components.NetworkActivity
 import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.components.UIHelper
-import com.example.bloold.buildp.databinding.ActivityEditArchiveMaterialsBinding
 import com.example.bloold.buildp.databinding.ActivityEditPublicationsBinding
 import com.example.bloold.buildp.model.DocModel
 import com.example.bloold.buildp.model.NameCodeInterface
@@ -122,8 +120,6 @@ class EditPublicationsActivity : ChooseImageActivity() {
     }
     private fun loadObjectDetails(objectId:Int)
     {
-        val filters = HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) }
-        Settings.catalogFilters?.forEach { filters.put("filter[$it]","Y") }
         compositeDisposable.add(ServiceGenerator.serverApi.getCatalogObjects(HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) },
                 1, 1,  selectParams = ApiHelper.fullParams)
                 .compose(RxHelper.applySchedulers())

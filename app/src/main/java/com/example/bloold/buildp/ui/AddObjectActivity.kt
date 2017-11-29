@@ -11,11 +11,14 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.Toast
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.api.ApiHelper
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.api.data.BaseResponseWithoutData
+import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
+import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.NetworkActivity
 import com.example.bloold.buildp.components.SpinnerWithoutLPaddingAdapter
 import com.example.bloold.buildp.components.UIHelper
@@ -37,6 +40,7 @@ class AddObjectActivity : NetworkActivity() {
     private var longitude:Double?=null
     private var createDate: Date?=null
     private var rebuildDate: Date?=null
+    private var catalogObject: CatalogObject?=null
 
     companion object {
         private val EXTRA_FULL_FORM="fullForm"
@@ -57,11 +61,55 @@ class AddObjectActivity : NetworkActivity() {
 
         if(intent.getBooleanExtra(EXTRA_FULL_FORM, false))
             showFullForm()
+        (intent.getSerializableExtra(IntentHelper.EXTRA_OBJECT_ID) as Int?)?.let {
+            loadObjectDetails(it)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun loadObjectDetails(objectId:Int)
+    {
+        compositeDisposable.add(ServiceGenerator.serverApi.getCatalogObjects(HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) },
+                1, 1,  selectParams = ApiHelper.fullParams)
+                .compose(RxHelper.applySchedulers())
+                .doOnSubscribe { showProgress(true) }
+                .doFinally {
+                    if(catalogObject!=null)
+                    {
+                        updateUI()
+                        showProgress(false)
+                    }
+                    else finish()
+                }
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<CatalogObject>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<CatalogObject>) {
+                        catalogObject=result.data?.items?.firstOrNull()
+                    }
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        if (e is UnknownHostException || e is ConnectException)
+                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
+                    }
+                }))
+    }
+    private fun updateUI()
+    {
+        catalogObject?.let {
+            mBinding.tvTitle.setText(R.string.edit_object_title)
+            mBinding.etName.setText(it.name)
+            mBinding.tvAddress.text=it.propertyAddress
+            latitude=it.latitude
+            longitude=it.longitude
+            mBinding.etObjectDescription.setText(it.previewText)
+            mBinding.scUnesco.isChecked=it.isUnesco=="Y"
+            mBinding.scImportantObject.isChecked=it.isValuable=="Y"
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -211,45 +259,87 @@ class AddObjectActivity : NetworkActivity() {
         val objectType=mBinding.spObjectType.selectedItem as ObjectType?
         val objectCategory=mBinding.spObjectCategory.selectedItem as ObjectCategory?
         val protectiveStatus=mBinding.spProtectionStatus.selectedItem as ProtectiveStatus?
-        compositeDisposable.add(ServiceGenerator.serverApi.addObject(mBinding.etName.text.toString(),
-                mBinding.etFolkName.text.toString(),
-                mBinding.tvAddress.text.toString(),
-                latitude.toString()+","+longitude.toString(),
-                mBinding.etObjectDescription.text.toString(),
-                mBinding.etArchitect.text.toString(),
-                if(createDate!=null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(createDate) else null,
-                mBinding.etDateComment.text.toString(),
-                if(rebuildDate!=null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(rebuildDate) else null,
-                if(objectType?.id.isNullOrEmpty()) null else objectType?.value,
-                if(objectCategory?.id.isNullOrEmpty()) null else objectCategory?.value,
-                if(protectiveStatus?.id.isNullOrEmpty()) null else protectiveStatus?.value,
-                getSwitchState(mBinding.scUnesco),
-                getSwitchState(mBinding.scImportantObject),
-                getSwitchState(mBinding.scHistoryColonyObject))
-                .compose(RxHelper.applySchedulers())
-                .doOnSubscribe { showProgress(true) }
-                .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
-                    override fun onSuccess(result: Response<BaseResponseWithoutData>) {
-                        if(result.isSuccessful&&result.body()?.code==200)
-                        {
-                            Toast.makeText(this@AddObjectActivity, R.string.object_added, Toast.LENGTH_SHORT).show()
-                            finish()
+        if(catalogObject==null) {
+            //Новый объект
+            compositeDisposable.add(ServiceGenerator.serverApi.addObject(mBinding.etName.text.toString(),
+                    mBinding.etFolkName.text.toString(),
+                    mBinding.tvAddress.text.toString(),
+                    latitude.toString() + "," + longitude.toString(),
+                    mBinding.etObjectDescription.text.toString(),
+                    mBinding.etArchitect.text.toString(),
+                    if (createDate != null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(createDate) else null,
+                    mBinding.etDateComment.text.toString(),
+                    if (rebuildDate != null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(rebuildDate) else null,
+                    if (objectType?.id.isNullOrEmpty()) null else objectType?.value,
+                    if (objectCategory?.id.isNullOrEmpty()) null else objectCategory?.value,
+                    if (protectiveStatus?.id.isNullOrEmpty()) null else protectiveStatus?.value,
+                    getSwitchState(mBinding.scUnesco),
+                    getSwitchState(mBinding.scImportantObject),
+                    getSwitchState(mBinding.scHistoryColonyObject))
+                    .compose(RxHelper.applySchedulers())
+                    .doOnSubscribe { showProgress(true) }
+                    .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
+                        override fun onSuccess(result: Response<BaseResponseWithoutData>) {
+                            if (result.isSuccessful && result.body()?.code == 200) {
+                                Toast.makeText(this@AddObjectActivity, R.string.object_added, Toast.LENGTH_SHORT).show()
+                                finish()
+                            } else {
+                                UIHelper.showServerError(result, this@AddObjectActivity)
+                                showProgress(false)
+                            }
                         }
-                        else
-                        {
-                            UIHelper.showServerError(result, this@AddObjectActivity)
+
+                        override fun onError(e: Throwable) {
+                            e.printStackTrace()
                             showProgress(false)
+                            if (e is UnknownHostException || e is ConnectException)
+                                Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
                         }
-                    }
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        showProgress(false)
-                        if (e is UnknownHostException || e is ConnectException)
-                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
-                        else
-                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
-                    }
-                }))
+                    }))
+        }
+        else
+        {
+            //Редактирование объекта
+            compositeDisposable.add(ServiceGenerator.serverApi.editObject(catalogObject?.id?:-1, mBinding.etName.text.toString(),
+                    mBinding.etFolkName.text.toString(),
+                    mBinding.tvAddress.text.toString(),
+                    latitude.toString() + "," + longitude.toString(),
+                    mBinding.etObjectDescription.text.toString(),
+                    mBinding.etArchitect.text.toString(),
+                    if (createDate != null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(createDate) else null,
+                    mBinding.etDateComment.text.toString(),
+                    if (rebuildDate != null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(rebuildDate) else null,
+                    if (objectType?.id.isNullOrEmpty()) null else objectType?.value,
+                    if (objectCategory?.id.isNullOrEmpty()) null else objectCategory?.value,
+                    if (protectiveStatus?.id.isNullOrEmpty()) null else protectiveStatus?.value,
+                    getSwitchState(mBinding.scUnesco),
+                    getSwitchState(mBinding.scImportantObject),
+                    getSwitchState(mBinding.scHistoryColonyObject))
+                    .compose(RxHelper.applySchedulers())
+                    .doOnSubscribe { showProgress(true) }
+                    .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
+                        override fun onSuccess(result: Response<BaseResponseWithoutData>) {
+                            if (result.isSuccessful && result.body()?.code == 200) {
+                                Toast.makeText(this@AddObjectActivity, R.string.object_edited, Toast.LENGTH_SHORT).show()
+                                finish()
+                            } else {
+                                UIHelper.showServerError(result, this@AddObjectActivity)
+                                showProgress(false)
+                            }
+                        }
+
+                        override fun onError(e: Throwable) {
+                            e.printStackTrace()
+                            showProgress(false)
+                            if (e is UnknownHostException || e is ConnectException)
+                                Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
+                        }
+                    }))
+        }
     }
     private fun getSwitchState(switch:SwitchCompat):String?
     {

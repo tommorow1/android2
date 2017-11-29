@@ -43,6 +43,7 @@ class ChooseEditFieldActivity : AppCompatActivity() {
                         .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
                 "photo_video_audio_item" -> startActivity(Intent(this, EditPhotoVideoAudioActivity::class.java)
                         .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId))
+                "main_info_item" -> AddObjectActivity.launch(this, true, objectId)
                 "archive_item" -> startActivity(Intent(this, EditArchiveMaterialsActivity::class.java)
                         .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId))
                 "science_pub_info" -> startActivity(Intent(this, EditPublicationsActivity::class.java)
