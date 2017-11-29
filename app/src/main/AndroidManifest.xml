@@ -147,6 +147,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
         <activity
+            android:name=".ui.EditPublicationsActivity"
+            android:label="@string/edit_object_title"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSimple"/>
+        <activity
             android:name=".ui.ImageViewActivity"
             android:label="@string/photo"
             android:screenOrientation="portrait"

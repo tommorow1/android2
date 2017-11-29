@@ -94,6 +94,12 @@
     <string name="upload_file">Загрузить файл</string>
     <string name="code_must_be_number">Шифр документа должен быть числом</string>
 
+    <!-- Научные публикации -->
+    <string name="publication_name">Название публикации</string>
+    <string name="add_cover">Добавить обложку</string>
+    <string name="change_cover">Изменить обложку</string>
+    <string name="add_publication">Добавить публикацию</string>
+
     <!-- Выбор точки на карте -->
     <string name="choose_location">Выбор местоположения</string>
 

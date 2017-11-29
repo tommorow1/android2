@@ -97,4 +97,10 @@ interface ServerApi {
                    @Field("FORM[PROPS][DOCS][0][PROPS][DOCUMENT_CODE]") docCode:Int?,
                    @Field("FORM[PROPS][DOCS][0][PROPS][FILE][DESCRIPTION]") description:String?,
                    @FieldMap materials:Map<String,String>): Single<Response<Void>>
+    @POST("object/edit/")
+    @FormUrlEncoded
+    fun addPublication(@Field("FORM[ID]") objectId:Int,
+                            @Field("FORM[PROPS][PUBLICATIONS][0][NAME]") pubName:String,
+                            @Field("FORM[PROPS][PUBLICATIONS][0][DETAIL_PICTURE] ") coverPictureId:Long?,
+                            @FieldMap materials:Map<String,String>): Single<Response<Void>>
 }

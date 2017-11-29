@@ -42,6 +42,10 @@ class ApiHelper {
                 =HashMap<String,String>().apply { archiveDocsFiles.forEach {
             put("FORM[PROPS][DOCS][$it][PROPS][FILE][VALUE]", it.toString())
             put("FORM[PROPS][DOCS][$it][CHANGED]", "1") }}
+        fun generatePublicationParams(archiveDocsFiles:List<Long>):HashMap<String,String>
+                =HashMap<String,String>().apply { archiveDocsFiles.forEach {
+            put("FORM[PROPS][PUBLICATIONS][$it][PROPS][FILE][VALUE]", it.toString())
+            put("FORM[PROPS][PUBLICATIONS][$it][CHANGED]", "1") }}
         fun generateChangedVideoParams(videoForUploading:List<VideoModel>):HashMap<String,String>
         {
             val data = HashMap<String,String>()
