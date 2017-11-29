@@ -1,32 +1,52 @@
 package com.example.bloold.buildp.ui
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.widget.SwitchCompat
+import android.text.format.DateFormat
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.Toast
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
-import com.example.bloold.buildp.api.data.BaseResponse
+import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.api.data.BaseResponseWithoutData
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.components.NetworkActivity
+import com.example.bloold.buildp.components.SpinnerWithoutLPaddingAdapter
 import com.example.bloold.buildp.components.UIHelper
 import com.example.bloold.buildp.databinding.ActivityAddObjectBinding
+import com.example.bloold.buildp.model.ObjectCategory
+import com.example.bloold.buildp.model.ObjectType
+import com.example.bloold.buildp.model.ProtectiveStatus
 import io.reactivex.observers.DisposableSingleObserver
 import retrofit2.Response
 import java.net.ConnectException
 import java.net.UnknownHostException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AddObjectActivity : NetworkActivity() {
     private lateinit var mBinding: ActivityAddObjectBinding
     private var latitude:Double?=null
     private var longitude:Double?=null
+    private var createDate: Date?=null
+    private var rebuildDate: Date?=null
 
+    companion object {
+        private val EXTRA_FULL_FORM="fullForm"
+        fun launch(act: Activity, fullForm:Boolean = false, objectId:Int?=null)
+        {
+            act.startActivity(Intent(act, AddObjectActivity::class.java)
+                    .putExtra(EXTRA_FULL_FORM, fullForm)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId))
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_object)
@@ -34,6 +54,9 @@ class AddObjectActivity : NetworkActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         mBinding.tvAddObjectRules.movementMethod = LinkMovementMethod.getInstance()
+
+        if(intent.getBooleanExtra(EXTRA_FULL_FORM, false))
+            showFullForm()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -55,9 +78,125 @@ class AddObjectActivity : NetworkActivity() {
             }
         }
     }
+    private fun showFullForm()
+    {
+        loadObjectTypes()
+        loadObjectValueCategoriesTypes()
+        loadProtectiveStatuses()
+        mBinding.tvFullForm.visibility=View.GONE
+        mBinding.llFullBlock.visibility=View.VISIBLE
+    }
+    private fun loadObjectTypes()
+    {
+        compositeDisposable.add(ServiceGenerator.serverApi.getObjectTypes()
+                .compose(RxHelper.applySchedulers())
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<ObjectType>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<ObjectType>) {
+                        result.data?.items?.let {
+                            val objectType= ObjectType()
+                            objectType.value=getString(R.string.choose)
+                            mBinding.spObjectType.adapter = SpinnerWithoutLPaddingAdapter(this@AddObjectActivity,
+                                    android.R.layout.simple_spinner_dropdown_item, arrayOf(objectType) + it)
+                        }
+                    }
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        if (e is UnknownHostException || e is ConnectException)
+                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }))
+    }
+    private fun loadObjectValueCategoriesTypes()
+    {
+        compositeDisposable.add(ServiceGenerator.serverApi.getValueCategories()
+                .compose(RxHelper.applySchedulers())
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<ObjectCategory>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<ObjectCategory>) {
+                        result.data?.items?.let {
+                            val objectType= ObjectCategory()
+                            objectType.value=getString(R.string.choose)
+                            mBinding.spObjectCategory.adapter = SpinnerWithoutLPaddingAdapter(this@AddObjectActivity,
+                                    android.R.layout.simple_spinner_dropdown_item, arrayOf(objectType) + it)
+                        }
+                    }
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        if (e is UnknownHostException || e is ConnectException)
+                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }))
+    }
+    private fun loadProtectiveStatuses()
+    {
+        compositeDisposable.add(ServiceGenerator.serverApi.getProtectiveStatuses()
+                .compose(RxHelper.applySchedulers())
+                .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<ProtectiveStatus>>() {
+                    override fun onSuccess(result: BaseResponseWithDataObject<ProtectiveStatus>) {
+                        result.data?.items?.let {
+                            val objectType= ProtectiveStatus()
+                            objectType.value=getString(R.string.choose)
+                            mBinding.spProtectionStatus.adapter = SpinnerWithoutLPaddingAdapter(this@AddObjectActivity,
+                                    android.R.layout.simple_spinner_dropdown_item, arrayOf(objectType) + it)
+                        }
+                    }
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                        if (e is UnknownHostException || e is ConnectException)
+                            Toast.makeText(applicationContext, R.string.error_check_internet, Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }))
+    }
+    fun onBuildDateClick(v:View)
+    {
+        UIHelper.showDatePickerDialog(this, Calendar.getInstance().apply { createDate?.let { time=it } })
+                .onDateSetListener= DatePickerDialog.OnDateSetListener({ _,year, month, day ->
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+            createDate = calendar.time
+            updateCreateDate()
+        })
+    }
+    fun onReBuildDateClick(v:View)
+    {
+        UIHelper.showDatePickerDialog(this, Calendar.getInstance()
+                .apply { rebuildDate?.let { time=it } })
+                .onDateSetListener= DatePickerDialog.OnDateSetListener({ _,year, month, day ->
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+            rebuildDate = calendar.time
+            updateReBuildDate()
+        })
+    }
+    private fun updateCreateDate()
+    {
+        if (createDate != null)
+            mBinding.tvBuildDate.text = DateFormat.getMediumDateFormat(this).format(createDate)
+        else
+            mBinding.tvBuildDate.text = ""
+    }
+    private fun updateReBuildDate()
+    {
+        if (rebuildDate != null)
+            mBinding.tvBuildDate.text = DateFormat.getMediumDateFormat(this).format(rebuildDate)
+        else
+            mBinding.tvBuildDate.text = ""
+    }
     fun onGoToFullFormClick(v:View)
     {
-        //TODO
+        showFullForm()
     }
     fun onAddObjectClick(v:View)
     {
@@ -69,10 +208,24 @@ class AddObjectActivity : NetworkActivity() {
         }
         if(error) return
 
+        val objectType=mBinding.spObjectType.selectedItem as ObjectType?
+        val objectCategory=mBinding.spObjectCategory.selectedItem as ObjectCategory?
+        val protectiveStatus=mBinding.spProtectionStatus.selectedItem as ProtectiveStatus?
         compositeDisposable.add(ServiceGenerator.serverApi.addObject(mBinding.etName.text.toString(),
                 mBinding.etFolkName.text.toString(),
                 mBinding.tvAddress.text.toString(),
-                latitude.toString()+","+longitude.toString())
+                latitude.toString()+","+longitude.toString(),
+                mBinding.etObjectDescription.text.toString(),
+                mBinding.etArchitect.text.toString(),
+                if(createDate!=null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(createDate) else null,
+                mBinding.etDateComment.text.toString(),
+                if(rebuildDate!=null) SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(rebuildDate) else null,
+                if(objectType?.id.isNullOrEmpty()) null else objectType?.value,
+                if(objectCategory?.id.isNullOrEmpty()) null else objectCategory?.value,
+                if(protectiveStatus?.id.isNullOrEmpty()) null else protectiveStatus?.value,
+                getSwitchState(mBinding.scUnesco),
+                getSwitchState(mBinding.scImportantObject),
+                getSwitchState(mBinding.scHistoryColonyObject))
                 .compose(RxHelper.applySchedulers())
                 .doOnSubscribe { showProgress(true) }
                 .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
@@ -97,6 +250,12 @@ class AddObjectActivity : NetworkActivity() {
                             Toast.makeText(applicationContext, R.string.server_error, Toast.LENGTH_SHORT).show()
                     }
                 }))
+    }
+    private fun getSwitchState(switch:SwitchCompat):String?
+    {
+        return if(mBinding.llFullBlock.visibility==View.VISIBLE)
+            if(switch.isChecked) "Y" else "N"
+        else null
     }
     fun onChooseAddressClick(v:View)
     {

@@ -10,7 +10,9 @@ class ApiHelper {
     companion object {
         val defaultParams:Array<String> by lazy { arrayOf("ID", "NAME","DETAIL_PICTURE","IS_FAVORITE")}
         val mapParams:Array<String> by lazy { arrayOf("OBJECT_ID", "NAME","ADDRESS","MAP_TYPE","LAT","LNG")}
-        val fullParams:Array<String> by lazy { defaultParams+arrayOf("PREVIEW_TEXT", "PROPERTY_ADDRESS",
+        val fullParams:Array<String> by lazy { defaultParams+arrayOf(
+                "PREVIEW_TEXT",
+                "PROPERTY_ADDRESS",
                 "PHOTOS_DATA",
                 "DOCS_DATA",
                 "PUBLICATIONS_DATA",
@@ -18,6 +20,9 @@ class ApiHelper {
                 "AUDIO_DATA",
                 "DETAIL_PAGE_URL",
                 "PROPERTY_MAP",
+                "PROPERTY_UNESCO",
+                "PROPERTY_TYPE",
+                "PROPERTY_VALUE_CATEGORY",
                 "PROPERTY_CONDITION",//Описание состояния
                 "CONDITION_ID"//Оценка состояния
         )}

@@ -40,6 +40,14 @@ class CatalogObject {
     var isFavourite: Boolean? = false
     @get: JsonProperty("PROPERTY_CONDITION")
     var condition: String? = null //Состояние объекта
+    @get: JsonProperty("PROPERTY_UNESCO")
+    var isUnesco: String? = null
+    @get: JsonProperty("PROPERTY_VALUABLE")
+    var isValuable: String? = null
+    @get: JsonProperty("PROPERTY_TYPE")
+    var propertyType: String? = null
+    @get: JsonProperty("PROPERTY_VALUE_CATEGORY")
+    var propertyCategory: String? = null
     /*
     @get: JsonProperty("DOCS_DATA")
     var docsData: Object =""

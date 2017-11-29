@@ -1,9 +1,7 @@
 package com.example.bloold.buildp.api
 
 import com.example.bloold.buildp.api.data.*
-import com.example.bloold.buildp.model.Category
-import com.example.bloold.buildp.model.ConditionMark
-import com.example.bloold.buildp.model.MyItem
+import com.example.bloold.buildp.model.*
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Response
@@ -16,6 +14,15 @@ interface ServerApi {
     @POST("user/set-push-token/")
     @FormUrlEncoded
     fun setPushToken(@Field("PUSH_TOKEN") pushToken:String): Single<Response<Void>>
+
+    @GET("directory/type/")
+    fun getObjectTypes(): Single<BaseResponseWithDataObject<ObjectType>>
+
+    @GET("directory/value-category/")
+    fun getValueCategories(): Single<BaseResponseWithDataObject<ObjectCategory>>
+
+    @GET("directory/protective-status/")
+    fun getProtectiveStatuses(): Single<BaseResponseWithDataObject<ProtectiveStatus>>
 
     @GET("directory/type-catalog-structure/")
     fun getCategories(): Single<BaseResponse<Category>>
@@ -69,5 +76,16 @@ interface ServerApi {
     fun addObject(@Field("FORM[NAME]") name:String,
                    @Field("FORM[PROPS][PUBLIC_NAME][0]") folkName:String,
                    @Field("FORM[PROPS][ADDRESS]") address:String,
-                   @Field("FORM[PROPS][MAP]") latLng:String): Single<Response<BaseResponseWithoutData>>
+                   @Field("FORM[PROPS][MAP]") latLng:String,
+                   @Field("FORM[DETAIL_TEXT]") description:String?,
+                   @Field("FORM[PROPS][ARCHITECT]") architect:String?,
+                   @Field("FORM[PROPS][DATE_CREATE][VALUE]") createDate_dd_mm_yy:String?,
+                   @Field("FORM[PROPS][DATE_CREATE][DESCRIPTION]") createDateDescription:String?,
+                   @Field("FORM[PROPS][DATE_RECONSTRUCTION][0][VALUE]") reconstructionDate_dd_mm_yy:String?,
+                   @Field("FORM[PROPS][TYPE]") objectType:String?,
+                   @Field("FORM[PROPS][VALUE_CATEGORY]") valueCategory:String?,
+                   @Field("FORM[PROPS][PROTECTIVE_STATUS]") protectiveStatus:String?,
+                   @Field("FORM[PROPS][UNESCO]") isUnesco:String?,
+                   @Field("FORM[PROPS][VALUABLE]") isValuable:String?,
+                   @Field("FORM[PROPS][HISTORIC_SETTLEMENT]") isHistoricSettlement:String?): Single<Response<BaseResponseWithoutData>>
 }

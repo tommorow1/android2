@@ -1,5 +1,6 @@
 package com.example.bloold.buildp.components
 
+import android.app.Activity
 import android.content.Context
 import android.support.design.widget.TextInputLayout
 import android.text.TextUtils
@@ -15,6 +16,7 @@ import com.example.bloold.buildp.api.ErrorUtils
 import retrofit2.Response
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.*
 
 
 /**
@@ -45,7 +47,7 @@ object UIHelper
         }
     }
     /*** Показываем ошибку для TextView или TextInputLayout если в него завёрнут EditText  */
-    fun setError(editText: TextView, errorMsg: String?) {
+    private fun setError(editText: TextView, errorMsg: String?) {
         val textInputLayout = getParentTextInputLayout(editText)
         if (textInputLayout != null)
             textInputLayout.error = errorMsg
@@ -68,6 +70,13 @@ object UIHelper
             }
             false
         }
+    }
+
+    fun showDatePickerDialog(act: Activity, defaultValue: Calendar): DatePickerFragment {
+        val newFragment = DatePickerFragment()
+        newFragment.setDefaultValue(defaultValue)
+        newFragment.show(act.fragmentManager, "datePicker")
+        return newFragment
     }
 
     fun hideKeyboard(view: View?) {

@@ -70,6 +70,22 @@
     <string name="need_address_for_adding_object">Для добавления объекта введите адрес</string>
     <string name="object_added">Объект успешно добавлен</string>
 
+    <!-- Редактирование основных сведений -->
+    <string name="main_info_title">Основные сведения</string>
+    <string name="object_description">Описание объекта</string>
+    <string name="architect">Архитектор / скульптор</string>
+    <string name="build_date">Дата создания объекта</string>
+    <string name="date_comment">Комментарий к дате</string>
+    <string name="rebuild_date">Дата перестройки</string>
+    <string name="unesco_object">Является объектом ЮНЕСКО</string>
+    <string name="important_object">Является особо ценнным объектом</string>
+    <string name="history_colony">Является историческим поселением</string>
+    <string name="comment">Комментарий</string>
+    <string name="object_type">Вид объекта</string>
+    <string name="choose">Выберите</string>
+    <string name="object_category">Категория объекта</string>
+    <string name="protection_status">Охранный статус объект</string>
+
 
     <!-- Выбор точки на карте -->
     <string name="choose_location">Выбор местоположения</string>
