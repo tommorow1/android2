@@ -20,7 +20,8 @@ class DocModel() : Parcelable, NameCodeInterface {
 
     override fun getDocName(): String? = name
     override fun getDocCode(): String? = code
-    override fun getSrcFile(): String? = if(!propertyFile?.src.isNullOrEmpty()) ServiceGenerator.SITE_URL+propertyFile?.src else null
+    //Если code пустой, то считаем, что файл локальный и возвращаем локальный путь
+    override fun getSrcFile(): String? = if(!propertyFile?.src.isNullOrEmpty()) (if(code.isNullOrEmpty()) propertyFile?.src else ServiceGenerator.SITE_URL+propertyFile?.src) else null
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()

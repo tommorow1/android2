@@ -33,6 +33,7 @@ import com.example.bloold.buildp.databinding.FragmentMapObjectsBinding
 import com.example.bloold.buildp.model.MyItem
 import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.ui.ChooseEditFieldActivity
+import com.example.bloold.buildp.ui.EditPhotoVideoAudioActivity
 import com.example.bloold.buildp.ui.EditStateActivity
 import com.example.bloold.buildp.ui.RouteActivity
 import com.example.bloold.buildp.utils.PermissionUtil
@@ -391,7 +392,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     fun onPhotoClick(v:View)
     {
-        //TODO
+        mEventMapItem[currentMarker?.id]?.let { startActivity(Intent(activity, EditPhotoVideoAudioActivity::class.java)
+                .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
     }
     fun onRouteClick(v:View)
     {

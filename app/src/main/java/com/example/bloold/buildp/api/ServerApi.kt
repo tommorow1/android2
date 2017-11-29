@@ -88,4 +88,13 @@ interface ServerApi {
                    @Field("FORM[PROPS][UNESCO]") isUnesco:String?,
                    @Field("FORM[PROPS][VALUABLE]") isValuable:String?,
                    @Field("FORM[PROPS][HISTORIC_SETTLEMENT]") isHistoricSettlement:String?): Single<Response<BaseResponseWithoutData>>
+
+    @POST("object/edit/")
+    @FormUrlEncoded
+    fun addArchiveMaterials(@Field("FORM[ID]") objectId:Int,
+                   @Field("FORM[PROPS][DOCS][0][NAME]") docName:String,
+                   @Field("FORM[PROPS][DOCS][0][PROPS][ARCHIVE_NAME]") archiveName:String,
+                   @Field("FORM[PROPS][DOCS][0][PROPS][DOCUMENT_CODE]") docCode:Int?,
+                   @Field("FORM[PROPS][DOCS][0][PROPS][FILE][DESCRIPTION]") description:String?,
+                   @FieldMap materials:Map<String,String>): Single<Response<Void>>
 }

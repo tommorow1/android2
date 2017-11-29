@@ -221,7 +221,8 @@ class CatalogObjectDetailsActivity : EventActivity() {
     }
     fun onPhotoClick(v:View)
     {
-        //TODO
+        catalogObject?.let { startActivity(Intent(this, EditPhotoVideoAudioActivity::class.java)
+                .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
     }
 
     //----- Следим за событиями с сервиса --------

@@ -86,6 +86,13 @@
     <string name="object_category">Категория объекта</string>
     <string name="protection_status">Охранный статус объект</string>
 
+    <!-- Архивные материалы -->
+    <string name="document_name">Наименование документа</string>
+    <string name="archive_name">Наименование архива</string>
+    <string name="document_code">Шифр документа</string>
+    <string name="comments">Комментарии</string>
+    <string name="upload_file">Загрузить файл</string>
+    <string name="code_must_be_number">Шифр документа должен быть числом</string>
 
     <!-- Выбор точки на карте -->
     <string name="choose_location">Выбор местоположения</string>

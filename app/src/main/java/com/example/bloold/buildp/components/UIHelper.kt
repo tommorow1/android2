@@ -47,7 +47,7 @@ object UIHelper
         }
     }
     /*** Показываем ошибку для TextView или TextInputLayout если в него завёрнут EditText  */
-    private fun setError(editText: TextView, errorMsg: String?) {
+    fun setError(editText: TextView, errorMsg: String?) {
         val textInputLayout = getParentTextInputLayout(editText)
         if (textInputLayout != null)
             textInputLayout.error = errorMsg
