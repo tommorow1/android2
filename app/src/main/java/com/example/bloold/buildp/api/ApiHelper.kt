@@ -8,6 +8,12 @@ import com.example.bloold.buildp.model.VideoModel
  */
 class ApiHelper {
     companion object {
+        val SUGGESTION_ALL=""
+        val SUGGESTION_ON_MODERATION="check/"
+        val SUGGESTION_APPROVED="approved/"
+        val SUGGESTION_DECLINED="declined/"
+        val suggestionParams: Array<String> by lazy { arrayOf("OBJECT_ID", "OBJECT_NAME", "STATE_NAME", "DATE_CREATE") }
+
         val defaultParams: Array<String> by lazy { arrayOf("ID", "NAME", "DETAIL_PICTURE", "IS_FAVORITE","PROPERTY_MAP") }
         val mapParams: Array<String> by lazy { arrayOf("OBJECT_ID", "NAME", "ADDRESS", "MAP_TYPE","PROPERTY_MAP", "LAT", "LNG") }
         val fullParams: Array<String> by lazy {

@@ -11,6 +11,7 @@ import com.example.bloold.buildp.R
 import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.ui.MainActivity
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 class SortFragment : Fragment(), OnItemClickListener<Category> {
     private var adapter: SortAdapter? = null
@@ -37,25 +38,10 @@ class SortFragment : Fragment(), OnItemClickListener<Category> {
     }
 
 
-    /*override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        try {
-            mListener = context as OnListFragmentInteractionListener
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }*/
-
-    /*override fun onDetach() {
-        super.onDetach()
-        mListener = null
-        mItems = null
-    }*/
-
-    /*interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: Category)
-    }*/
+    override fun onResume() {
+        super.onResume()
+        activity.toolbar.setTitle(R.string.navigation_drawer_catalog_object)
+    }
 
     override fun onItemClick(item: Category) {
         (activity as MainActivity).showCategoryListFragment(item)

@@ -24,8 +24,9 @@
                 android:title="Избраное" />
             <item
                 android:id="@+id/nav_my_suggestions"
+                android:checkable="true"
                 android:icon="@drawable/ic_menu_suggestions"
-                android:title="Мои предложения" />
+                android:title="@string/my_suggestions" />
             <item
                 android:id="@+id/nav_notice"
                 android:icon="@drawable/ic_menu_notice"

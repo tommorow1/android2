@@ -45,6 +45,7 @@ import com.example.bloold.buildp.sort.fragment.SortFragment
 import com.example.bloold.buildp.sort.fragment.onFilterListener
 import com.example.bloold.buildp.ui.fragments.CatalogObjectListFragment
 import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
+import com.example.bloold.buildp.ui.fragments.SuggestionTabsFragment
 import com.facebook.login.LoginManager
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.RequestParams
@@ -140,7 +141,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
 
         supportFragmentManager.addOnBackStackChangedListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-            //currentFragment.onResume()//Для обновления информации в фрагменте, который вернули из стека
+            currentFragment.onResume()//Для обновления информации в фрагменте, который вернули из стека
             /*if (currentFragment is SortFragment) {
                 mBinding.appBarLayout?.fabFilter?.hide()
                 getSearchView().setQuery(userCatalogQuery, false)
@@ -149,24 +150,25 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
             if(currentFragment is SortFragment)
                 navigationView.setCheckedItem(R.id.nav_catalog)
 
-            if (currentFragment is SortFragment||
-                    currentFragment is MapObjectListFragment)
-                mBinding.appBarIncludeLayout?.fabFilter?.hide()
-            else
+            if(currentFragment is CatalogObjectListFragment)
                 mBinding.appBarIncludeLayout?.fabFilter?.show()
-        }
-        //navigator = FilterMainNavigator(this, R.id.mainContainer, this)
-        //presenter.execute(URL)
-        loadCategories()
+            else
+                mBinding.appBarIncludeLayout?.fabFilter?.hide()
 
-        supportFragmentManager.addOnBackStackChangedListener {
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-            currentFragment.onResume()
-            if (currentFragment is MapObjectListFragment) {
+            if (currentFragment is MapObjectListFragment||
+                    currentFragment is SuggestionTabsFragment) {
                 showAppBarElevation(false)
             } else
                 showAppBarElevation(true)
+
+            invalidateOptionsMenu()
+/*            if (currentFragment is SortFragment||
+                    currentFragment is MapObjectListFragment)
+                mBinding.appBarIncludeLayout?.fabFilter?.hide()
+            else
+                mBinding.appBarIncludeLayout?.fabFilter?.show()*/
         }
+        loadCategories()
     }
 
     private fun showProgress(showProgress: Boolean) {
@@ -389,7 +391,9 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
+        if(currentFragment !is SuggestionTabsFragment)
+            menuInflater.inflate(R.menu.main, menu)
 
 
         val sPref = getSharedPreferences("main", Context.MODE_PRIVATE) as SharedPreferences
@@ -447,16 +451,16 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         val id = item.itemId
         if (id == R.id.nav_map) {
             showMap(null)
-            //startActivity(Intent(this, BigClusteringDemoActivity::class.java))
         } else if (id == R.id.nav_catalog) {
             showAppBarElevation(true)
             fabFilter.show()
             showCategoryListFragment()
-            //startActivity(Intent(this, MainActivity::class.java))
-        }/* else if (id == R.id.nav_slideshow) {
-        } else if (id == R.id.nav_share) {
-        } else if (id == R.id.nav_send) {
-        }*/
+        } else if (id == R.id.nav_my_suggestions) {
+            showAppBarElevation(false)
+            fabFilter.hide()
+            fragmentClass=SuggestionTabsFragment::class.java
+        }
+
         fragmentClass?.newInstance()?.let { supportFragmentManager.beginTransaction().replace(R.id.mainContainer, it)
                 .addToBackStack(null).commit() }
 

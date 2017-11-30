@@ -131,6 +131,16 @@
     <string name="fb_login_protocol_scheme">fb893853807441584</string>
     <integer name="com_vk_sdk_AppId">6219142</integer>
 
+    <!-- Мои предложения -->
+    <string name="my_suggestions">Мои предложения</string>
+    <string name="suggestion_all">Все</string>
+    <string name="suggestion_on_expert_checking">На проверке эксперта</string>
+    <string name="suggestion_approved">Одобрено</string>
+    <string name="suggestion_declined">Отклонено</string>
+    <string name="suggestion_status_moderation">На модерации</string>
+    <string name="suggestion_status_declined">Отклонено как нежелательное</string>
+    <string name="suggestion_status_approved">Одобрено</string>
+
     <string-array name="spinner_choice_object_address">
         <item>По обьекту</item>
         <item>По адресу</item>

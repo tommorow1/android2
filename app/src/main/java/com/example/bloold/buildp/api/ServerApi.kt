@@ -124,4 +124,10 @@ interface ServerApi {
                             @Field("FORM[PROPS][PUBLICATIONS][0][NAME]") pubName:String,
                             @Field("FORM[PROPS][PUBLICATIONS][0][DETAIL_PICTURE] ") coverPictureId:Long?,
                             @FieldMap materials:Map<String,String>): Single<Response<Void>>
+
+    /*** Предложения */
+    @GET("object/suggestions/{type}")
+    fun getSuggestions(@Path("type", encoded = true) suggestionType:String,
+                       @Query("limit") limit: Int, @Query("page") page: Int,
+                       @Query("select[]") selectParams: Array<String> = ApiHelper.suggestionParams): Single<Response<BaseResponseWithDataObject<Suggestion>>>
 }

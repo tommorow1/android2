@@ -47,6 +47,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import io.reactivex.observers.DisposableSingleObserver
+import kotlinx.android.synthetic.main.app_bar_main.*
 import java.io.UnsupportedEncodingException
 import java.net.ConnectException
 import java.net.URLEncoder
@@ -104,6 +105,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             if(lngMoveTo==-1.0) lngMoveTo=null
         }
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -149,6 +151,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     override fun onResume() {
         super.onResume()
+        activity.toolbar.setTitle(R.string.navigation_drawer_object_in_map)
         val resCode= GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
         when(resCode)
         {
