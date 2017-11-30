@@ -295,7 +295,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             val item = mEventMapItem[it.id]
             it.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("red_marker",67,96)))
             currentMarker = it
-            val ObjId = item?.objId
+            //val ObjId = item?.objId
 
             val mrLatitude = it.position.latitude.toString()
             val mrLongitude = it.position.longitude.toString()

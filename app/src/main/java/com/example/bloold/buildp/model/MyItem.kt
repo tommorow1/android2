@@ -27,9 +27,9 @@ class MyItem : ClusterItem {
     @get: JsonProperty("NAME")
     var snippet: String? = null
     @get: JsonProperty("OBJECT_ID")
-    var objId: String? = null
-    @get: JsonProperty("ID")
-    var id: Int =0
+    var id: Int=0
+    /*@get: JsonProperty("ID")
+    var id: Int =0*/
     @get: JsonProperty("LAT")
     var lat:Double=0.0
     @get: JsonProperty("LNG")

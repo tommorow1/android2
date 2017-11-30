@@ -19,6 +19,7 @@ import com.example.bloold.buildp.components.UIHelper
 import com.example.bloold.buildp.databinding.ActivitySearchBinding
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.HightFilterModelLevel
+import com.example.bloold.buildp.ui.CatalogObjectDetailsActivity
 import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
 
 
@@ -107,6 +108,10 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
         }
 
         lvObjects.adapter = adapter
+        lvObjects.setOnItemClickListener({ _, _, position, _ ->
+            startActivity(Intent(this, CatalogObjectDetailsActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, objects[position].id?.toInt()))
+        })
     }
 
     fun onClearSearch(v:View)
