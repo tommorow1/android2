@@ -1,5 +1,6 @@
 package com.example.bloold.buildp.search
 
+import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
@@ -41,6 +42,10 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
     private val presenter: SearchPresenter = SearchPresenter(this, this)
 
     private lateinit var adapter: ArrayAdapter<String>
+
+    companion object {
+        val REQUEST_CODE_SEARCH=378
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_search)
@@ -99,9 +104,14 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
                             .putExtra(IntentHelper.EXTRA_SEARCH_TYPE, searchType)
                             .putExtra(IntentHelper.EXTRA_SEARCH_TEXT, mBinding.etChoice.text.toString()))
                 }else{
-                    val intent = Intent(this, ListObjectsActivity::class.java)
+                    setResult(Activity.RESULT_OK, Intent()
+                            .putExtra(IntentHelper.EXTRA_QUERY_STRING, etChoice.text.toString())
+                            .putExtra(IntentHelper.EXTRA_QUERY_TYPE, getSearchType())
+                    )
+                    finish()
+                    /*val intent = Intent(this, ListObjectsActivity::class.java)
                     intent.putExtras(Bundle().apply { putParcelableArrayList(ListObjectsActivity.KEY_LIST_OBJECT, objects) } )
-                    startActivity(intent)
+                    startActivity(intent)*/
                 }
 
             }
@@ -112,6 +122,15 @@ class SearchActivity : AppCompatActivity(), callback, AdapterView.OnItemSelected
             startActivity(Intent(this, CatalogObjectDetailsActivity::class.java)
                     .putExtra(IntentHelper.EXTRA_OBJECT_ID, objects[position].id?.toInt()))
         })
+    }
+    private fun getSearchType():String?
+    {
+        return when(spinnerChoice.selectedItemPosition)
+        {
+            0 -> "NAME"
+            1 -> "PROPERTY_ADDRESS"
+            else -> null
+        }
     }
 
     fun onClearSearch(v:View)

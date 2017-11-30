@@ -17,7 +17,8 @@ import java.util.*
 /**
  * Created by sagus on 18.11.2017.
  */
-class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<CatalogObject>?): RecyclerView.Adapter<BindingViewHolder<out ViewDataBinding>>()
+class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<CatalogObject>?,
+                           private val onMapMarkerClickListener: OnItemClickListener<CatalogObject>?): RecyclerView.Adapter<BindingViewHolder<out ViewDataBinding>>()
 {
     var isShowLoadingFooter = false
         set(showLoadingFooter) {
@@ -30,7 +31,7 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
                     notifyItemInserted(mData.size)
             }
         }
-    private val mData = ArrayList<CatalogObject>()
+    val mData = ArrayList<CatalogObject>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder<out ViewDataBinding> {
         return if (viewType == TYPE_FOOTER) {
@@ -49,10 +50,11 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
             val catalogObject = mData[position]
 
             holder.mLayoutBinding.name.text=catalogObject.name
-
             Glide.with(holderRaw.itemView.context)
                     .load(catalogObject.detailPicture?.fullPath())
                     .into(holder.mLayoutBinding.ivBuild)
+
+            holder.mLayoutBinding.ivLocation.setOnClickListener({onMapMarkerClickListener?.onItemClick(mData[holder.adapterPosition])})
             holder.itemView.setOnClickListener({onItemClickListener?.onItemClick(mData[holder.adapterPosition])})
         }
     }

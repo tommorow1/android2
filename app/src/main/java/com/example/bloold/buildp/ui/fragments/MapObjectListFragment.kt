@@ -32,16 +32,16 @@ import com.example.bloold.buildp.components.EventFragment
 import com.example.bloold.buildp.databinding.FragmentMapObjectsBinding
 import com.example.bloold.buildp.model.MyItem
 import com.example.bloold.buildp.services.NetworkIntentService
-import com.example.bloold.buildp.ui.ChooseEditFieldActivity
-import com.example.bloold.buildp.ui.EditPhotoVideoAudioActivity
-import com.example.bloold.buildp.ui.EditStateActivity
-import com.example.bloold.buildp.ui.RouteActivity
+import com.example.bloold.buildp.ui.*
 import com.example.bloold.buildp.utils.PermissionUtil
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.maps.CameraUpdate
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
@@ -80,10 +80,29 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     private var searchType: String?=null
     private var searchQuery: String?=null
 
+    // Координаты куда надо переметстить карту, если кликнули по объекту
+    private var latMoveTo:Double?=null
+    private var lngMoveTo:Double?=null
+
     companion object {
         private val REQUEST_RESOLVE_SERVICES_ERROR = 125
         private val REQUEST_USER_LOCATION = 128
-        fun newInstance(): MapObjectListFragment = MapObjectListFragment()
+        fun newInstance(obj:CatalogObject?=null): MapObjectListFragment
+                = MapObjectListFragment().apply { arguments=Bundle() }
+                .apply { obj?.getLocation().let {
+                    arguments.putDouble(IntentHelper.EXTRA_LATITUDE, it?.latitude?:-1.0)
+                    arguments.putDouble(IntentHelper.EXTRA_LONGITUDE, it?.longitude?:-1.0)
+                }}
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            latMoveTo=arguments.getDouble(IntentHelper.EXTRA_LATITUDE)
+            lngMoveTo=arguments.getDouble(IntentHelper.EXTRA_LONGITUDE)
+            if(latMoveTo==-1.0) latMoveTo=null
+            if(lngMoveTo==-1.0) lngMoveTo=null
+        }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
@@ -144,9 +163,11 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     private fun setupMap()
     {
+        if(googleMap!=null) return
         (childFragmentManager.findFragmentById(R.id.fMap) as SupportMapFragment).getMapAsync({
             googleMap=it
             googleMap?.let {
+                it.uiSettings.isMyLocationButtonEnabled=true
                 mClusterManager = ClusterManager(activity, it)
                 //mClusterManager.setOnClusterItemClickListener(this)
                 //it.setOnInfoWindowClickListener(mClusterManager)
@@ -160,23 +181,44 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
                     mBinding.mapInfo.visibility=View.GONE
                     loadObjectsOnMap()
-
+                }
+                if(latMoveTo!=null&&lngMoveTo!=null)
+                {
+                    //Перемещаем на место объекта
+                    googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latMoveTo?:0.0, lngMoveTo?:0.0), 16f))
+                }
+                else {
+                    //Перемещаем на местоположения пользователя
                     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
-                    }
+                    } else moveToUserLocation()
                 }
             }
         })
+    }
+    private fun moveToUserLocation()
+    {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            try {
+                val locationManager = (activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+                val userLocation=locationManager.getLastKnownLocation(locationManager.getBestProvider(Criteria(), true))
+                if(userLocation!=null)
+                    googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(userLocation.latitude, userLocation.longitude), 16f))
+            }
+            catch(ex:Exception)
+            {
+                ex.printStackTrace()
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_USER_LOCATION) {
             if (PermissionUtil.verifyPermissions(grantResults)) {
-
-            } else {
-
+                moveToUserLocation()
             }
         }
     }
@@ -306,7 +348,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             var location: Location?
             try {
-                location = locationManager.getLastKnownLocation(locationManager.getBestProvider(Criteria(), false))
+                location = locationManager.getLastKnownLocation(locationManager.getBestProvider(Criteria(), true))
                 if(location!=null) {
                     geoLatitude = location.latitude
                     geoLongitude = location.longitude
@@ -348,6 +390,16 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
         }
         return true
+    }
+
+    fun onInfoBlockClick(v:View)
+    {
+        currentMarker?.let {
+            val item = mEventMapItem[it.id]
+            if(item!=null)
+                startActivity(Intent(activity, CatalogObjectDetailsActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, item.id))
+        }
     }
 
     private fun updateFavouriteBtn(isFavourite:Boolean)

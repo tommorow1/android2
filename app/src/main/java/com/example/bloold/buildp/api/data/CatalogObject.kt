@@ -4,6 +4,7 @@ import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.model.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.android.gms.maps.model.LatLng
 
 /**
  * Created by sagus on 18.11.2017.
@@ -52,6 +53,24 @@ class CatalogObject {
     var latitude: Double? = null
     @get: JsonProperty("PROPERTY_LNG")
     var longitude: Double? = null
+
+    fun getLocation():LatLng?
+    {
+        propertyMap?.let {
+            val coords=it.split(",")
+            if(coords.size==2)
+            {
+                try {
+                    return LatLng(coords[0].toDouble(), coords[1].toDouble())
+                }
+                catch (ex:Exception)
+                {
+                    ex.printStackTrace()
+                }
+            }
+        }
+        return null
+    }
     /*
     @get: JsonProperty("DOCS_DATA")
     var docsData: Object =""

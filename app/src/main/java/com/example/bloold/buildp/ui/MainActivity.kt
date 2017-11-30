@@ -29,6 +29,8 @@ import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponse
+import com.example.bloold.buildp.api.data.CatalogObject
+import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.NetworkActivity
@@ -203,6 +205,12 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
                 val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
                 (currentFragment as? CatalogObjectListFragment)?.refreshCatalogList()
             }
+            else if(requestCode == SearchActivity.REQUEST_CODE_SEARCH)
+            {
+                showObjectList(currentCategory,
+                        data?.getStringExtra(IntentHelper.EXTRA_QUERY_TYPE),
+                        data?.getStringExtra(IntentHelper.EXTRA_QUERY_STRING))
+            }
         }
     }
 
@@ -215,7 +223,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         var params = RequestParams()
 
         client.setBasicAuth("defa","defa")
-        client.addHeader("Device-Id","0000")
+        client.addHeader("Device-Id",Settings.getUdid())
         client.addHeader("Auth-Token",AuthTokenSuccess)
 
         var context = this
@@ -421,9 +429,8 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         val id = item.itemId
 
         if (id == R.id.action_settings) {
-            val intentSearch = Intent(this, SearchActivity::class.java)
-            intentSearch.putExtra("fromActivity", "catalog")
-            startActivity(intentSearch)
+            startActivityForResult(Intent(this, SearchActivity::class.java)
+                    .putExtra("fromActivity", "catalog"), SearchActivity.REQUEST_CODE_SEARCH)
             return true
         } else {
             return super.onOptionsItemSelected(item)
@@ -439,9 +446,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         var fragmentClass: Class<out Fragment>? = null
         val id = item.itemId
         if (id == R.id.nav_map) {
-            showAppBarElevation(false)
-            fragmentClass = MapObjectListFragment::class.java
-            fabFilter.hide()
+            showMap(null)
             //startActivity(Intent(this, BigClusteringDemoActivity::class.java))
         } else if (id == R.id.nav_catalog) {
             showAppBarElevation(true)
@@ -505,12 +510,16 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         }
         else
         {
-            mBinding.appBarIncludeLayout?.fabFilter?.show()
-            supportFragmentManager.beginTransaction().add(R.id.mainContainer,
-                    CatalogObjectListFragment.newInstance(if(parentCategory.id=="-1") null else parentCategory))
-                    .addToBackStack(null)
-                    .commit()
+            showObjectList(parentCategory)
         }
+    }
+    private fun showObjectList(category: Category?, typeQuery:String?=null, stringQuery:String?=null)
+    {
+        mBinding.appBarIncludeLayout?.fabFilter?.show()
+        supportFragmentManager.beginTransaction().add(R.id.mainContainer,
+                CatalogObjectListFragment.newInstance(if(category==null||category.id=="-1") null else category, typeQuery, stringQuery))
+                .addToBackStack(null)
+                .commit()
     }
     fun showCategoryListFragment(categoryList: ArrayList<Category>?=null)
     {
@@ -520,6 +529,14 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         supportFragmentManager.beginTransaction().replace(R.id.mainContainer,
                 SortFragment.newInstance(getItems(categoryList?:allCategories), categoryList==null))
                 .commit()
+    }
+
+    fun showMap(obj:CatalogObject?=null)
+    {
+        showAppBarElevation(false)
+        fabFilter.hide()
+        MapObjectListFragment.newInstance(obj).let { supportFragmentManager.beginTransaction().replace(R.id.mainContainer, it)
+                .addToBackStack(null).commit() }
     }
 
     /*override fun onListFragmentInteraction(item: Category) {

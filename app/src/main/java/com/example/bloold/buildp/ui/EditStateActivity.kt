@@ -26,10 +26,7 @@ import com.example.bloold.buildp.adapter.PhotoEditAdapter
 import com.example.bloold.buildp.adapter.VideoEditAdapter
 import com.example.bloold.buildp.api.ApiHelper
 import com.example.bloold.buildp.api.ServiceGenerator
-import com.example.bloold.buildp.api.data.BaseResponse
-import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
-import com.example.bloold.buildp.api.data.CatalogObject
-import com.example.bloold.buildp.api.data.CurrentUserCondition
+import com.example.bloold.buildp.api.data.*
 import com.example.bloold.buildp.common.*
 import com.example.bloold.buildp.components.ChooseImageActivity
 import com.example.bloold.buildp.components.OnItemClickListener
@@ -377,9 +374,9 @@ class EditStateActivity : ChooseImageActivity() {
                             ApiHelper.generateChangedVideoParams(videoEditAdapter.mValues.filter { it.name==null&&it.youtubeCode==null }))
                     .compose(RxHelper.applySchedulers())
                     .doFinally { showProgress(false) }
-                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
-                        override fun onSuccess(result: Response<Void>) {
-                            if(result.isSuccessful)
+                    .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
+                        override fun onSuccess(result: Response<BaseResponseWithoutData>) {
+                            if(result.isSuccessful&&result.body()?.code==200)
                             {
                                 //TODO
                                 setResult(Activity.RESULT_OK)

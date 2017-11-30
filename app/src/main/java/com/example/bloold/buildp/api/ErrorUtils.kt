@@ -1,6 +1,7 @@
 package com.example.bloold.buildp.api
 
 import com.example.bloold.buildp.api.data.BaseResponse
+import com.example.bloold.buildp.api.data.BaseResponseWithoutData
 import retrofit2.Response
 
 /**
@@ -8,12 +9,12 @@ import retrofit2.Response
  */
 
 object ErrorUtils {
-    fun parseError(response: Response<*>?): BaseResponse<*>? {
+    fun parseError(response: Response<*>?): BaseResponseWithoutData? {
         val converter = ServiceGenerator.retrofit(ServiceGenerator.BASE_URL)
                 .responseBodyConverter<BaseResponse<*>>(BaseResponse::class.java, arrayOfNulls(0))
 
-        if (response?.body() != null && response.body() is BaseResponse<*>) {
-            val errorResponse = response.body() as BaseResponse<*>?
+        if (response?.body() != null && response.body() is BaseResponseWithoutData) {
+            val errorResponse = response.body() as? BaseResponseWithoutData
             if (errorResponse != null)
                 return errorResponse
         }

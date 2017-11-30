@@ -15,7 +15,21 @@ object Settings {
     val DIRECTIONS_API_KEY = "AIzaSyA0SGbiZ28WwwukGWgPwmqIKTd7GJMUDfY"
     private val KEY_CATALOG_FILTERS = "catalogFilters"
     private val KEY_USER_TOKEN = "AuthToken"
+    private val KEY_UDID = "udid"
 
+    fun getUdid(): String? {
+        var udid:String? = prefs.getString(KEY_UDID, "")
+        if (TextUtils.isEmpty(udid)) {
+            udid = android.provider.Settings.System.getString(MyApplication.instance.contentResolver, android.provider.Settings.Secure.ANDROID_ID)
+            if(udid.isNullOrEmpty())
+                udid=System.currentTimeMillis().toString()
+            udid="android_$udid"
+            prefs.edit()
+                    .putString(KEY_UDID, udid)
+                    .apply()
+        }
+        return udid
+    }
     /*** Фильтры для каталога  */
     var catalogFilters: Set<String>?
         get() = prefs.getStringSet(KEY_CATALOG_FILTERS, HashSet<String>())

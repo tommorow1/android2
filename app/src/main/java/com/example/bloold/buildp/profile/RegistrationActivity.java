@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bloold.buildp.common.Settings;
 import com.example.bloold.buildp.ui.MainActivity;
 import com.example.bloold.buildp.R;
 import com.facebook.CallbackManager;
@@ -332,7 +333,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
         client.setBasicAuth("defa","defa");
-        client.addHeader("Device-Id","0000");
+        client.addHeader("Device-Id",Settings.INSTANCE.getUdid());
 
         final Context context = this;
         client.post(url, params, new TextHttpResponseHandler() {
@@ -405,7 +406,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
                 connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
-                connection.setRequestProperty("Device-Id", "0000");
+                connection.setRequestProperty("Device-Id", Settings.INSTANCE.getUdid());
                 String header = "Basic " + new String(android.util.Base64.encode("defa:defa".getBytes(), android.util.Base64.NO_WRAP));
                 connection.addRequestProperty("Authorization", header);
                 connection.setDoOutput(true);

@@ -8,26 +8,35 @@ import com.example.bloold.buildp.model.VideoModel
  */
 class ApiHelper {
     companion object {
-        val defaultParams:Array<String> by lazy { arrayOf("ID", "NAME","DETAIL_PICTURE","IS_FAVORITE")}
-        val mapParams:Array<String> by lazy { arrayOf("OBJECT_ID", "NAME","ADDRESS","MAP_TYPE","LAT","LNG")}
-        val fullParams:Array<String> by lazy { defaultParams+arrayOf(
-                "PREVIEW_TEXT",
-                "PROPERTY_ADDRESS",
-                "PHOTOS_DATA",
-                "DOCS_DATA",
-                "PUBLICATIONS_DATA",
-                "VIDEO_DATA",
-                "AUDIO_DATA",
-                "DETAIL_PAGE_URL",
-                "PROPERTY_MAP",
-                "PROPERTY_UNESCO",
-                "PROPERTY_TYPE",
-                "PROPERTY_VALUE_CATEGORY",
-                "PROPERTY_CONDITION",//Описание состояния
-                "CONDITION_ID",//Оценка состояния
-                "PROPERTY_LAT",
-                "PROPERTY_LNG"
-        )}
+        val defaultParams: Array<String> by lazy { arrayOf("ID", "NAME", "DETAIL_PICTURE", "IS_FAVORITE","PROPERTY_MAP") }
+        val mapParams: Array<String> by lazy { arrayOf("OBJECT_ID", "NAME", "ADDRESS", "MAP_TYPE","PROPERTY_MAP", "LAT", "LNG") }
+        val fullParams: Array<String> by lazy {
+            defaultParams + arrayOf(
+                    "PREVIEW_TEXT",
+                    "PROPERTY_ADDRESS",
+                    "PHOTOS_DATA",
+                    "DOCS_DATA",
+                    "PUBLICATIONS_DATA",
+                    "VIDEO_DATA",
+                    "AUDIO_DATA",
+                    "DETAIL_PAGE_URL",
+                    "PROPERTY_MAP",
+                    "PROPERTY_UNESCO",
+                    "PROPERTY_TYPE",
+                    "PROPERTY_VALUE_CATEGORY",
+                    "PROPERTY_CONDITION",//Описание состояния
+                    "CONDITION_ID",//Оценка состояния
+                    "PROPERTY_LAT",
+                    "PROPERTY_LNG"
+            )
+        }
+
+        fun generateSearchParams(type: String?, query: String?):HashMap<String,String>? {
+            val res=HashMap<String,String>()
+            if(type!=null&&query!=null)
+                res.apply { put("filter[0][?$type]", query) }
+            return res
+        }
         fun generateUploadFileParams(name:String, base64FileData:String, key: Long)
                 = HashMap<String,String>()
                     .apply { put("FILES[$key][DATA]", base64FileData) }

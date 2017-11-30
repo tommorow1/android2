@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.adapter.CatalogObjectAdapter
+import com.example.bloold.buildp.api.ApiHelper
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
 import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
+import com.example.bloold.buildp.components.EventFragment
 import com.example.bloold.buildp.components.LazyScrollPageUploader
 import com.example.bloold.buildp.components.NetworkFragment
 import com.example.bloold.buildp.components.OnItemClickListener
@@ -23,18 +25,22 @@ import com.example.bloold.buildp.databinding.FragmentCatalogObjectBinding
 import com.example.bloold.buildp.model.CatalogObjectsModel
 import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.model.SortObject
+import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.ui.CatalogObjectDetailsActivity
+import com.example.bloold.buildp.ui.MainActivity
 import io.reactivex.observers.DisposableSingleObserver
 import java.net.ConnectException
 import java.net.UnknownHostException
 
 class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<CatalogObject>, LazyScrollPageUploader.OnLazyScrollUploaderListener {
     private lateinit var mBinding: FragmentCatalogObjectBinding
-    private var catalogObjectAdapter = CatalogObjectAdapter(this)
+    private lateinit var catalogObjectAdapter: CatalogObjectAdapter
     private var lazyScrollPageUploader = LazyScrollPageUploader(this)
     private var objectsArray: ArrayList<CatalogObjectsModel> = ArrayList()
     private var isHaveCatalog: Boolean = false
     var category: Category? = null
+    private var queryString:String?=null
+    private var queryType:String?=null
 
     companion object {
         private val ITEMS_ON_PAGE = 5
@@ -58,17 +64,28 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                     putBoolean(KEY_RESPONSE_HAVE_CATALOG, isHave)} }
         }
 
-        fun newInstance(category: Category?): CatalogObjectListFragment {
+        fun newInstance(category: Category?, queryType:String?=null, queryString:String?=null): CatalogObjectListFragment {
             return CatalogObjectListFragment()
                     .apply { arguments = Bundle().apply {
                         putParcelable(KEY_RESPONSE_SORTED_OBJECTS, category)
+                        if(queryString!=null&&queryType!=null)
+                        {
+                            putString(IntentHelper.EXTRA_QUERY_STRING, queryString)
+                            putString(IntentHelper.EXTRA_QUERY_TYPE, queryType)
+                        }
                     } }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        catalogObjectAdapter = CatalogObjectAdapter(this,
+                OnItemClickListener {
+                    if(it.getLocation()!=null)
+                        (activity as? MainActivity)?.showMap(it)
+                })
+        queryString=arguments?.getString(IntentHelper.EXTRA_QUERY_STRING)
+        queryType=arguments?.getString(IntentHelper.EXTRA_QUERY_TYPE)
         if(arguments != null){
             if (arguments.containsKey(KEY_RESPONSE_ARRAY_OBJECTS)) {
                 objectsArray = arguments.getParcelableArrayList(KEY_RESPONSE_ARRAY_OBJECTS)
@@ -143,7 +160,8 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
             }
         }
         category?.id?.let { filters.put("filter[IBLOCK_SECTION_ID][${filters.size}]",it) }
-        getCompositeDisposable().add(ServiceGenerator.serverApi.getCatalogObjects(filters, ITEMS_ON_PAGE, page, category?.id)
+        getCompositeDisposable().add(ServiceGenerator.serverApi.getCatalogObjects(filters, ITEMS_ON_PAGE, page, category?.id,
+                searchQuery = ApiHelper.generateSearchParams(queryType, queryString))
                 .compose(RxHelper.applySchedulers())
                 .doOnSubscribe { lazyScrollPageUploader.setLoading(true) }
                 .doFinally {
@@ -173,6 +191,5 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                             Toast.makeText(activity, R.string.server_error, Toast.LENGTH_SHORT).show()
                     }
                 }))
-
     }
 }

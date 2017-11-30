@@ -16,7 +16,7 @@ class AddAccessTokenInterceptor : Interceptor {
         val originalRequest = chain.request()
 
         val builder = originalRequest.newBuilder()
-        builder.addHeader("Device-Id", "0000")
+        builder.addHeader("Device-Id", Settings.getUdid())
         if(!Settings.userToken.isNullOrEmpty())
             builder.addHeader("Auth-Token", Settings.userToken)
         builder.addHeader("Authorization", "Basic"+String(android.util.Base64.encode("defa:defa".toByteArray(), android.util.Base64.NO_WRAP)))

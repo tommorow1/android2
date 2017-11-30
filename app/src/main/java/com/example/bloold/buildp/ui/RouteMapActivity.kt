@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import java.util.*
 
 
 /**
@@ -153,6 +154,7 @@ class RouteMapActivity : AppCompatActivity() {
         GoogleDirection.withServerKey(Settings.DIRECTIONS_API_KEY)
             .from(LatLng(latFrom, lngFrom))
             .to(LatLng(latTo, lngTo))
+                .language("ru")
             .transportMode(routeMode)
             .execute(object: DirectionCallback {
                 override fun onDirectionFailure(t: Throwable?) {
@@ -180,7 +182,9 @@ class RouteMapActivity : AppCompatActivity() {
                             }
                             prevPoint=it
                         } } }
-                        mBinding.tvDistance.text= if(totalDistanceM<1000) getString(R.string.meters, totalDistanceM.toInt()) else getString(R.string.km, totalDistanceM.div(1000).toInt())
+                        val distanceStr = if(totalDistanceM<1000) getString(R.string.meters, totalDistanceM.toInt()) else getString(R.string.km, totalDistanceM.div(1000).toInt())
+                        val duration=direction.routeList[0].legList[0].duration.text
+                        mBinding.tvDistance.text=distanceStr+", "+duration
                         drawnRoute=googleMap?.addPolyline(lineOptions)
                     } else {
                         mBinding.tvDistance.text=getString(R.string.no_route)

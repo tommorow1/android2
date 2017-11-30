@@ -30,6 +30,7 @@ interface ServerApi {
     fun getCatalogObjects(@QueryMap filter:Map<String, String>?,
                           @Query("limit") limit: Int, @Query("page") page: Int,
                           @Query("filter[IBLOCK_SECTION_ID][0]") categoryId: String?=null,
+                          @QueryMap searchQuery:Map<String, String>?=HashMap(),
                           @Query("filter[INCLUDE_SUBSECTIONS]") includeSubsections: String="Y",
                           @Query("select[]") selectParams: Array<String> = ApiHelper.defaultParams): Single<BaseResponseWithDataObject<CatalogObject>>
     @GET("directory/type-map-structure/")
@@ -39,7 +40,7 @@ interface ServerApi {
     fun editObject(@Field("FORM[ID]") objectId:Int,
                    @Field("FORM[PROPS][CONDITION][DETAIL_TEXT]") conditionDescription:String?,
                    @Field("FORM[PROPS][CONDITION][PROPS][MARK]") conditionMarkId:Int?,
-                   @FieldMap extraFields:Map<String,String>): Single<Response<Void>>
+                   @FieldMap extraFields:Map<String,String>): Single<Response<BaseResponseWithoutData>>
     //------ Состояния объектов ---------
     @GET("directory/condition-mark/")
     fun getConditionMark(): Single<BaseResponse<ConditionMark>>

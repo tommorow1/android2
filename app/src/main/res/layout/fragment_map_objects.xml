@@ -75,52 +75,58 @@
                 android:id="@+id/map_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:layout_gravity="bottom"
                 android:background="@android:color/white"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_vertical_margin"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/marker_name"
-                        android:layout_width="0dp"
+                    android:background="?selectableItemBackground"
+                    android:onClick="@{listener::onInfoBlockClick}"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:lines="1"
-                        android:ellipsize="end"
-                        android:layout_marginEnd="@dimen/activity_vertical_margin"
-                        tools:text="TextVw"
-                        android:textColor="@color/vk_black"
-                        android:textSize="22sp" />
-                    <ImageView
-                        android:id="@+id/ivFavourite"
+                        android:layout_margin="@dimen/activity_vertical_margin"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/marker_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:layout_marginEnd="@dimen/activity_vertical_margin"
+                            tools:text="TextVw"
+                            android:textColor="@color/vk_black"
+                            android:textSize="22sp" />
+                        <ImageView
+                            android:id="@+id/ivFavourite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_favourite_off"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/marker_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_favourite_off"/>
+                        android:layout_weight="1"
+                        android:paddingBottom="5dp"
+                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        tools:text="TextView" />
+                    <TextView
+                        android:id="@+id/tvDist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="8dp"
+                        android:drawableStart="@drawable/pointer"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_marginStart="@dimen/activity_vertical_margin"
+                        android:text="250m" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/marker_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="17dp"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/tvDist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="8dp"
-                    android:drawableStart="@drawable/pointer"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin"
-                    android:text="250m" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_panel_height"

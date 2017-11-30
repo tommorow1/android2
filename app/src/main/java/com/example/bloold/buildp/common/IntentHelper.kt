@@ -9,6 +9,10 @@ class IntentHelper {
         val ACTION_TOGGLE_FAVOURITE="toggleFavourite"
 
         val EXTRA_SORT_OBJECT="sortObject"
+
+        val EXTRA_QUERY_TYPE="queryType"
+        val EXTRA_QUERY_STRING="queryString"
+
         val EXTRA_OBJECT_ID="ObjId"
         val EXTRA_CATEGORY_ID="categoryId"
         val EXTRA_PHOTO_DATA_ARRAY="photoDataArr"

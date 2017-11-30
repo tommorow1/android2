@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
+import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.model.BaseModel
 import com.example.bloold.buildp.utils.MediaFilePicker
 import com.example.bloold.buildp.utils.PermissionUtil
@@ -238,7 +239,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
         var params = RequestParams()
 
         client.setBasicAuth("defa","defa")
-        client.addHeader("Device-Id","0000")
+        client.addHeader("Device-Id", Settings.getUdid())
         client.addHeader("Auth-Token",AuthTokenSuccess)
 
         var context = this
@@ -330,7 +331,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
         var params = RequestParams()
 
         client.setBasicAuth("defa","defa")
-        client.addHeader("Device-Id","0000")
+        client.addHeader("Device-Id",Settings.getUdid())
         client.addHeader("Auth-Token",AuthTokenSuccess)
 
         var context = this
@@ -435,7 +436,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
                 connection.requestMethod = "POST"
                 connection.setRequestProperty("USER-AGENT", "Mozilla/5.0")
                 connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5")
-                connection.setRequestProperty("Device-Id", "0000")
+                connection.setRequestProperty("Device-Id", Settings.getUdid())
                 connection.setRequestProperty("Auth-Token", AuthTokenSuccess)
                 val header = "Basic " + String(android.util.Base64.encode("defa:defa".toByteArray(), android.util.Base64.NO_WRAP))
                 connection.addRequestProperty("Authorization", header)
@@ -527,7 +528,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
                 connection.requestMethod = "POST"
                 connection.setRequestProperty("USER-AGENT", "Mozilla/5.0")
                 connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5")
-                connection.setRequestProperty("Device-Id", "0000")
+                connection.setRequestProperty("Device-Id", Settings.getUdid())
                 connection.setRequestProperty("Auth-Token", AuthTokenSuccess)
                 val header = "Basic " + String(android.util.Base64.encode("defa:defa".toByteArray(), android.util.Base64.NO_WRAP))
                 connection.addRequestProperty("Authorization", header)

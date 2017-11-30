@@ -238,9 +238,9 @@ class AddObjectActivity : NetworkActivity() {
     private fun updateReBuildDate()
     {
         if (rebuildDate != null)
-            mBinding.tvBuildDate.text = DateFormat.getMediumDateFormat(this).format(rebuildDate)
+            mBinding.tvReBuildDate.text = DateFormat.getMediumDateFormat(this).format(rebuildDate)
         else
-            mBinding.tvBuildDate.text = ""
+            mBinding.tvReBuildDate.text = ""
     }
     fun onGoToFullFormClick(v:View)
     {
@@ -280,7 +280,7 @@ class AddObjectActivity : NetworkActivity() {
                     .doOnSubscribe { showProgress(true) }
                     .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
                         override fun onSuccess(result: Response<BaseResponseWithoutData>) {
-                            if (result.isSuccessful && result.body()?.code == 200) {
+                            if (result.isSuccessful && result.body()?.code == 200&&result.body()?.code==200) {
                                 Toast.makeText(this@AddObjectActivity, R.string.object_added, Toast.LENGTH_SHORT).show()
                                 finish()
                             } else {

@@ -120,11 +120,13 @@
                                     android:textSize="12sp"
                                     android:paddingLeft="16dp"/>
 
-                                <android.support.v7.widget.AppCompatTextView
+                                <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:text="Жилой дом"
                                     android:lines="1"
+                                    android:visibility="gone"
+                                    tools:visibility="visible"
                                     android:textColor="@android:color/white"
                                     android:id="@+id/tvDistance"
                                     android:textSize="15sp"

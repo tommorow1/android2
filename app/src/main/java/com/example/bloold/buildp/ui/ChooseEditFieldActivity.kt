@@ -38,7 +38,6 @@ class ChooseEditFieldActivity : AppCompatActivity() {
             when(it.second)
             {
                 "add_object_item" -> AddObjectActivity.launch(this)
-                "route_item" -> RouteActivity.launch(this, objectId)
                 "status_item" -> startActivityForResult(Intent(this, EditStateActivity::class.java)
                         .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
                 "photo_video_audio_item" -> startActivity(Intent(this, EditPhotoVideoAudioActivity::class.java)
@@ -52,7 +51,6 @@ class ChooseEditFieldActivity : AppCompatActivity() {
             //TODO открываем в зависимости от того что выбрали
         },
                 arrayListOf(Pair(getString(R.string.add_object_item), "add_object_item"),
-                        Pair(getString(R.string.route_item), "route_item"),
                         Pair(getString(R.string.state_item), "status_item"),
                         Pair(getString(R.string.photo_video_audio_item), "photo_video_audio_item"),
                         Pair(getString(R.string.main_info_item), "main_info_item"),

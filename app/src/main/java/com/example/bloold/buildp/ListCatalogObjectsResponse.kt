@@ -2,6 +2,7 @@ package com.example.bloold.buildp
 
 import android.os.AsyncTask
 import android.util.Log
+import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.model.*
 import com.google.gson.Gson
 import org.json.JSONArray
@@ -42,7 +43,7 @@ class ListCatalogObjectsResponse(private val view: callback) : AsyncTask<String,
             }
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
-            connection.setRequestProperty("Device-Id", "0000")
+            connection.setRequestProperty("Device-Id", Settings.getUdid())
 
             val header = "Basic " + String(android.util.Base64.encode("defa:defa".toByteArray(), android.util.Base64.NO_WRAP))
             connection.addRequestProperty("Authorization", header)
@@ -271,7 +272,7 @@ class HighObjectsFilterResponse(private val view: callback) : AsyncTask<String, 
             val url = URL(params[0])
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
-            connection.setRequestProperty("Device-Id", "0000")
+            connection.setRequestProperty("Device-Id", Settings.getUdid())
 
             val header = "Basic " + String(android.util.Base64.encode("defa:defa".toByteArray(), android.util.Base64.NO_WRAP))
             connection.addRequestProperty("Authorization", header)

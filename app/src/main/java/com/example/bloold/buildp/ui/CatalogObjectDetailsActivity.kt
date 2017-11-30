@@ -1,14 +1,21 @@
 package com.example.bloold.buildp.ui
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
+import android.location.Criteria
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
+import android.support.v4.app.ActivityCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.View
@@ -30,6 +37,10 @@ import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.EventActivity
 import com.example.bloold.buildp.databinding.ActivityCatalogObjectDetailsBinding
 import com.example.bloold.buildp.services.NetworkIntentService
+import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
+import com.example.bloold.buildp.utils.PermissionUtil
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
 import io.reactivex.observers.DisposableSingleObserver
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -43,6 +54,8 @@ class CatalogObjectDetailsActivity : EventActivity() {
     private lateinit var mBinding: ActivityCatalogObjectDetailsBinding
     private var catalogObject: CatalogObject? = null
     private var isFavourite = false
+
+    private var userLocation:LatLng?=null
     private lateinit var pagerAdapter: PagerAdapter
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -53,9 +66,10 @@ class CatalogObjectDetailsActivity : EventActivity() {
     private lateinit var ivBackToolbar: ImageView
     private lateinit var ivStarToolbar: ImageView
 
-    private lateinit var tvDistance: TextView
     private lateinit var tvAddress: TextView
     private lateinit var tvTitle: TextView
+
+    private var REQUEST_USER_LOCATION=888
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +96,6 @@ class CatalogObjectDetailsActivity : EventActivity() {
 
         tvTitle = findViewById(R.id.tvName)
         tvAddress = findViewById(R.id.tvAddress)
-        tvDistance = findViewById(R.id.tvDistance)
 
         ivAvatar = findViewById(R.id.ivAvatar)
 
@@ -91,6 +104,52 @@ class CatalogObjectDetailsActivity : EventActivity() {
         //loadObjectDetails(164080)
         loadObjectDetails(intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID, 0))
 
+    }
+
+    private fun fetchUserLocation()
+    {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
+        }
+        else
+        {
+            try {
+                val locationManager = (getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+                val userLoc=locationManager.getLastKnownLocation(locationManager.getBestProvider(Criteria(), true))
+                userLoc?.let {
+                    userLocation=LatLng(it.latitude, it.longitude)
+                    updateDistance()
+                }
+            }
+            catch(ex:Exception)
+            {
+                ex.printStackTrace()
+                updateDistance()
+            }
+        }
+    }
+    private fun updateDistance()
+    {
+        if(userLocation!=null&&catalogObject!=null&&catalogObject?.getLocation()!=null)
+        {
+            var distance=FloatArray(1)
+            val objLocation=catalogObject?.getLocation()
+            Location.distanceBetween(userLocation?.latitude?:0.0, userLocation?.longitude?:0.0,
+                    objLocation?.latitude?:0.0, objLocation?.longitude?:0.0, distance)
+            mBinding.tvDistance.text=if(distance[0]<1000) getString(R.string.meters, distance[0].toInt()) else getString(R.string.km, distance[0].div(1000).toInt())
+            mBinding.tvDistance.visibility=View.VISIBLE
+        }
+        else  mBinding.tvDistance.visibility=View.GONE
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_USER_LOCATION) {
+            if (PermissionUtil.verifyPermissions(grantResults)) {
+                fetchUserLocation()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -124,7 +183,6 @@ class CatalogObjectDetailsActivity : EventActivity() {
             ivBackToolbar.setOnClickListener { onBackPressed() }
 
             tvTitle.text = it.name
-            tvDistance.text = "250m"
             tvAddress.text = it.propertyAddress
 
             tvTitleToolbar.text = it.name
@@ -150,6 +208,7 @@ class CatalogObjectDetailsActivity : EventActivity() {
                     ivStarToolbar.visibility = View.INVISIBLE
                 }
             }
+            fetchUserLocation()
         }
     }
     private fun updateFavouriteBtn(isFavourite:Boolean)
@@ -236,6 +295,5 @@ class CatalogObjectDetailsActivity : EventActivity() {
             isFavourite=!isFavourite
             updateFavouriteBtn(isFavourite)
         }
-
     }
 }
