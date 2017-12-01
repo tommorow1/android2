@@ -42,29 +42,31 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="80dp"
                 android:layout_marginTop="30dp"
                 android:gravity="center">
 
                 <ImageView
                     android:id="@+id/ivVk"
                     android:layout_width="70dp"
-                    android:layout_height="60dp"
+                    android:layout_height="70dp"
                     android:layout_marginRight="23.5dp"
+                    android:padding="3dp"
                     app:srcCompat="@drawable/vk" />
-
 
                 <ImageView
                     android:id="@+id/ivFb"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_marginRight="23.5dp"
-                    android:layout_height="60dp"
+                    android:padding="3dp"
                     app:srcCompat="@drawable/fb" />
 
                 <ImageView
                     android:id="@+id/ivOk"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:padding="3dp"
                     app:srcCompat="@drawable/ok" />
 
 

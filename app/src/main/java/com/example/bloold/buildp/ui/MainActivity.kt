@@ -70,6 +70,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
     var navigationView: NavigationView? = null
     private lateinit var ivProfile : CircleImageView
     private lateinit var tvName : TextView
+    private lateinit var ball : TextView
     private lateinit var allCategories : ArrayList<Category>
     /*** Текущая категория */
     private var currentCategory : Category?=null
@@ -81,6 +82,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
 
         val llHeader = mBinding.navView.getHeaderView(0) as ConstraintLayout
         tvName = llHeader.findViewById<View>(R.id.tvName) as TextView
+        ball = llHeader.findViewById<View>(R.id.ball) as TextView
 
         Settings.catalogFilters=null//Очищаем предварительно установленые фильтры
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -218,6 +220,8 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
                 var code: String? = ""
                 var name: String? = ""
                 var last_name: String? = ""
+                var rating: String? = ""
+                var points: String? = ""
 
                 var data: JSONObject? = null
 
@@ -245,6 +249,27 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
                     }
                     tvName.setText(name+" "+last_name);
 
+                    try {
+                        points = data?.getString("POINTS")
+                        if (points == null ||  points == "null"){
+                            points = "0"
+                        }
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+
+                    try {
+
+                        rating = data?.getString("RATING")
+                        if (rating == null ||  rating == "null"){
+                            rating = "0"
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+
+                    ball.setText(rating+" ("+points+" бал.)");
 
                     try {
                         image = data?.getString("PHOTO")
@@ -445,9 +470,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
     }
 
     /*override fun onObjectsLoaded(items: ArrayList<SortObject>) {
-
     }
-
     override fun onSortedObjectsLoaded(items: ArrayList<SortObject>) {
         navigator.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, getItems(items))
     }*/
@@ -534,4 +557,5 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
             navigator.navigateTo(FilterMainNavigator.FilterScreens.CATALOG_OBJECTS, url, item)
         }
     }*/
+
 }
