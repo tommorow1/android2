@@ -8,9 +8,11 @@ import android.text.TextUtils
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
+import com.example.bloold.buildp.api.data.BaseResponseWithoutData
 import com.example.bloold.buildp.common.IntentHelper
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 import java.net.ConnectException
 import java.net.UnknownHostException
 
@@ -24,6 +26,8 @@ class NetworkIntentService : IntentService(TAG) {
             val action = intent.action
             when (action) {
                 IntentHelper.ACTION_TOGGLE_FAVOURITE -> toggleFavourite(intent.getIntExtra(IntentHelper.EXTRA_OBJECT_ID,-1))
+                IntentHelper.ACTION_SEND_PUSH_TOKEN -> sendPushToken(intent.getStringExtra(IntentHelper.EXTRA_PUSH_TOKEN))
+                IntentHelper.ACTION_SEND_NOTIFICATION_READ -> setNotificationRead()
             }
         }
     }
@@ -50,6 +54,39 @@ class NetworkIntentService : IntentService(TAG) {
                             sendEvent(IntentHelper.ACTION_TOGGLE_FAVOURITE, getString(R.string.error_check_internet), objectId)
                         else
                             sendEvent(IntentHelper.ACTION_TOGGLE_FAVOURITE, getString(R.string.server_error), objectId)
+                    }
+                })
+    }
+
+    private fun sendPushToken(pushToken:String)
+    {
+        ServiceGenerator.serverApi.setPushToken(pushToken)
+                .subscribeOn(Schedulers.newThread())
+                .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
+                    override fun onSuccess(result: Response<BaseResponseWithoutData>) {
+                    }
+                    override fun onError(error: Throwable) {
+                        error.printStackTrace()
+                        if (error is UnknownHostException || error is ConnectException)
+                            sendEvent(IntentHelper.ACTION_SEND_PUSH_TOKEN, getString(R.string.error_check_internet))
+                        else
+                            sendEvent(IntentHelper.ACTION_SEND_PUSH_TOKEN, getString(R.string.server_error))
+                    }
+                })
+    }
+    private fun setNotificationRead()
+    {
+        ServiceGenerator.serverApi.setNotificationsRead()
+                .subscribeOn(Schedulers.newThread())
+                .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithoutData>>() {
+                    override fun onSuccess(result: Response<BaseResponseWithoutData>) {
+                    }
+                    override fun onError(error: Throwable) {
+                        error.printStackTrace()
+                        if (error is UnknownHostException || error is ConnectException)
+                            sendEvent(IntentHelper.ACTION_SEND_NOTIFICATION_READ, getString(R.string.error_check_internet))
+                        else
+                            sendEvent(IntentHelper.ACTION_SEND_NOTIFICATION_READ, getString(R.string.server_error))
                     }
                 })
     }
@@ -87,6 +124,15 @@ class NetworkIntentService : IntentService(TAG) {
             context.startService(Intent(context, NetworkIntentService::class.java)
                     .setAction(IntentHelper.ACTION_TOGGLE_FAVOURITE)
                     .putExtra(IntentHelper.EXTRA_OBJECT_ID, objectId))
+        }
+        fun sendPushToken(context: Context, pushToken: String) {
+            context.startService(Intent(context, NetworkIntentService::class.java)
+                    .setAction(IntentHelper.ACTION_SEND_PUSH_TOKEN)
+                    .putExtra(IntentHelper.EXTRA_PUSH_TOKEN, pushToken))
+        }
+        fun setAllNotificationsRead(context: Context) {
+            context.startService(Intent(context, NetworkIntentService::class.java)
+                    .setAction(IntentHelper.ACTION_SEND_NOTIFICATION_READ))
         }
     }
 }

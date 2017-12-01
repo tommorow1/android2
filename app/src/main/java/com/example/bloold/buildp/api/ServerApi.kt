@@ -13,7 +13,7 @@ import retrofit2.http.*
 interface ServerApi {
     @POST("user/set-push-token/")
     @FormUrlEncoded
-    fun setPushToken(@Field("PUSH_TOKEN") pushToken:String): Single<Response<Void>>
+    fun setPushToken(@Field("PUSH_TOKEN") pushToken:String): Single<Response<BaseResponseWithoutData>>
 
     @GET("directory/type/")
     fun getObjectTypes(): Single<BaseResponseWithDataObject<ObjectType>>
@@ -129,5 +129,14 @@ interface ServerApi {
     @GET("object/suggestions/{type}")
     fun getSuggestions(@Path("type", encoded = true) suggestionType:String,
                        @Query("limit") limit: Int, @Query("page") page: Int,
+                       @Query("GET_DIFF") yOrN:String="Y",
                        @Query("select[]") selectParams: Array<String> = ApiHelper.suggestionParams): Single<Response<BaseResponseWithDataObject<Suggestion>>>
+    /*** Лента уведомлений */
+    @GET("notices/list/")
+    fun getNotifications(@Query("limit") limit: Int, @Query("page") page: Int,
+                         @Query("select[]") selectParams: Array<String> = ApiHelper.notificationParams): Single<Response<BaseResponseWithDataObject<NotificationInfo>>>
+
+    /*** Отметить уведомление прочитанным */
+    @POST("notices/set-read/")
+    fun setNotificationsRead(): Single<Response<BaseResponseWithoutData>>
 }

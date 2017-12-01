@@ -26,6 +26,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.crashlytics.android.Crashlytics
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponse
@@ -45,13 +46,16 @@ import com.example.bloold.buildp.sort.fragment.SortFragment
 import com.example.bloold.buildp.sort.fragment.onFilterListener
 import com.example.bloold.buildp.ui.fragments.CatalogObjectListFragment
 import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
+import com.example.bloold.buildp.ui.fragments.NotificationsFragment
 import com.example.bloold.buildp.ui.fragments.SuggestionTabsFragment
 import com.facebook.login.LoginManager
+import com.google.firebase.iid.FirebaseInstanceId
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import de.hdodenhof.circleimageview.CircleImageView
+import io.fabric.sdk.android.Fabric
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.json.JSONException
@@ -60,29 +64,10 @@ import java.net.ConnectException
 import java.net.UnknownHostException
 
 class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedListener
-        //,
-        //callback,
-        //onFilterListener
-        //OnFilterApplyListener
-        //SortFragment.OnListFragmentInteractionListener
 {
     private lateinit var mBinding:ActivityMainBinding
     private val AuthToken = "AuthToken"
     var navigationView: NavigationView? = null
-    //private lateinit var navigator: NavigatorCatalogObjects
-    /*private lateinit var pagerAdapter: PagerAdapter
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager
-
-*/
-    private val BASE_URL = "http://ruinnet.idefa.ru/api_app"
-    private val CATALOG_OBJECTS_URL = "/object/list/"
-    private val CATALOG_OBJECTS_SELECT = "?select[]=ID&select[]=NAME&select[]=DETAIL_PICTURE&select[]=IS_FAVORITE&filter[INCLUDE_SUBSECTIONS]=Y"
-    private val CATALOG_OBJECTS_FILTER = "&filter[IBLOCK_SECTION_ID][1]="
-    private val URL = "http://ruinnet.idefa.ru/api_app/directory/type-catalog-structure/"
-    private val CATALOG_ALL_OBJECT = "http://ruinnet.idefa.ru/api_app/object/list/?select[]=ID&select[]=NAME&select[]=DETAIL_PICTURE&select[]=IS_FAVORITE"
-    //private var presenter: SortPresenter = SortPresenter(this)
-    //private lateinit var navigator: FilterMainNavigator
     private lateinit var ivProfile : CircleImageView
     private lateinit var tvName : TextView
     private lateinit var allCategories : ArrayList<Category>
@@ -91,6 +76,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val llHeader = mBinding.navView.getHeaderView(0) as ConstraintLayout
@@ -99,12 +85,6 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         Settings.catalogFilters=null//Очищаем предварительно установленые фильтры
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-
-        /*val fabAdd = findViewById<View>(R.id.fabAdd) as FloatingActionButton
-        fabAdd.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }*/
 
         val fabFilter = findViewById<View>(R.id.fabFilter) as FloatingActionButton
         fabFilter.setOnClickListener {
@@ -120,14 +100,6 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
 
         val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
-/*
-        pagerAdapter = PagerClassAdapter(supportFragmentManager)
-        viewPager = findViewById<ViewPager>(R.id.container)
-        viewPager.adapter = pagerAdapter
-        tabLayout = findViewById<TabLayout>(R.id.tabs)
-        tabLayout.setupWithViewPager(viewPager)
-*/
-
 
         val sPref = getSharedPreferences("main", Context.MODE_PRIVATE) as SharedPreferences
         if (!sPref.contains(AuthToken)) {
@@ -137,7 +109,6 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
             showItem()
 
         }
-       // drawer.openDrawer(GravityCompat.START)
 
         supportFragmentManager.addOnBackStackChangedListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
@@ -459,6 +430,10 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
             showAppBarElevation(false)
             fabFilter.hide()
             fragmentClass=SuggestionTabsFragment::class.java
+        }else if (id == R.id.nav_notice) {
+            showAppBarElevation(true)
+            fabFilter.hide()
+            fragmentClass=NotificationsFragment::class.java
         }
 
         fragmentClass?.newInstance()?.let { supportFragmentManager.beginTransaction().replace(R.id.mainContainer, it)

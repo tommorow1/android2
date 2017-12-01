@@ -1,9 +1,11 @@
 package com.example.bloold.buildp.api
 
 import com.example.bloold.buildp.api.deserializers.AudioDataDeserializer
+import com.example.bloold.buildp.api.deserializers.DiffBodyDeserializer
 import com.example.bloold.buildp.api.deserializers.PhotoModelDeserializer
 import com.example.bloold.buildp.model.AudioModel
 import com.example.bloold.buildp.model.PhotoModel
+import com.example.bloold.buildp.model.Suggestion
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -35,7 +37,8 @@ object ServiceGenerator {
             .addConverterFactory(JacksonConverterFactory.create(
                     ObjectMapper().registerModule(SimpleModule()
                             .addDeserializer(AudioModel::class.java, AudioDataDeserializer())
-                            .addDeserializer(PhotoModel::class.java, PhotoModelDeserializer()))
+                            .addDeserializer(PhotoModel::class.java, PhotoModelDeserializer())
+                            .addDeserializer(Suggestion.SuggestionDiff.DiffBody::class.java, DiffBodyDeserializer()))
                             .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
                             .setTimeZone(TimeZone.getDefault())
             ))

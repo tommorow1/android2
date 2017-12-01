@@ -7,11 +7,15 @@ class IntentHelper {
     companion object
     {
         val ACTION_TOGGLE_FAVOURITE="toggleFavourite"
+        val ACTION_SEND_PUSH_TOKEN="sendPushToken"
+        val ACTION_SEND_NOTIFICATION_READ="notificationRead"
 
         val EXTRA_SORT_OBJECT="sortObject"
+        val EXTRA_PUSH_TOKEN="pushToken"
 
         val EXTRA_QUERY_TYPE="queryType"
         val EXTRA_QUERY_STRING="queryString"
+        val EXTRA_SUGGESTION="suggestion"
 
         val EXTRA_OBJECT_ID="ObjId"
         val EXTRA_CATEGORY_ID="categoryId"

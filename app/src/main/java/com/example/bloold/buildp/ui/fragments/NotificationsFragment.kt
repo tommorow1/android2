@@ -1,6 +1,5 @@
 package com.example.bloold.buildp.ui.fragments
 
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -11,85 +10,82 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.adapter.SuggestionAdapter
+import com.example.bloold.buildp.adapter.NotificationsAdapter
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
-import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.components.LazyScrollPageUploader
 import com.example.bloold.buildp.components.NetworkFragment
-import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.components.UIHelper
-import com.example.bloold.buildp.databinding.FragmentSuggestionsBinding
-import com.example.bloold.buildp.model.Category
-import com.example.bloold.buildp.model.Suggestion
-import com.example.bloold.buildp.ui.MainActivity
-import com.example.bloold.buildp.ui.SuggestionDetailsActivity
+import com.example.bloold.buildp.databinding.FragmentNotificationsBinding
+import com.example.bloold.buildp.model.NotificationInfo
+import com.example.bloold.buildp.services.NetworkIntentService
 import io.reactivex.observers.DisposableSingleObserver
+import kotlinx.android.synthetic.main.app_bar_main.*
 import retrofit2.Response
 import java.net.ConnectException
 import java.net.UnknownHostException
 
-class SuggestionsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScrollUploaderListener {
-    private lateinit var mBinding: FragmentSuggestionsBinding
-    private lateinit var suggestionsAdapter: SuggestionAdapter
+class NotificationsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScrollUploaderListener {
+    private lateinit var mBinding: FragmentNotificationsBinding
+    private lateinit var notificationsAdapter: NotificationsAdapter
     private var lazyScrollPageUploader = LazyScrollPageUploader(this)
-    var category: Category? = null
-    private lateinit var suggestionType:String
 
     companion object {
         private val ITEMS_ON_PAGE = 5
 
-        fun newInstance(suggestionType:String) = SuggestionsFragment()
-                    .apply { arguments = Bundle().apply { putString(IntentHelper.EXTRA_SUGGESTION_TYPE, suggestionType) } }
+        fun newInstance() = NotificationsFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        suggestionsAdapter = SuggestionAdapter( OnItemClickListener {
-                    startActivity(Intent(activity, SuggestionDetailsActivity::class.java)
-                            .putExtra(IntentHelper.EXTRA_SUGGESTION, it))
-                })
-        arguments?.let { suggestionType=it.getString(IntentHelper.EXTRA_SUGGESTION_TYPE) }
+        notificationsAdapter = NotificationsAdapter()
+
+        NetworkIntentService.setAllNotificationsRead(activity)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity.toolbar.setTitle(R.string.notifications)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         super.onCreateView(inflater, container, savedInstanceState)
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_suggestions, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications, container, false)
         return mBinding.root
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.rvCatalogObjects.addOnScrollListener(lazyScrollPageUploader)
-        mBinding.rvCatalogObjects.layoutManager=LinearLayoutManager(activity)
-        mBinding.rvCatalogObjects.addItemDecoration(DividerItemDecoration(activity, OrientationHelper.VERTICAL))
-        mBinding.rvCatalogObjects.adapter=suggestionsAdapter
+        mBinding.recyclerView.addOnScrollListener(lazyScrollPageUploader)
+        mBinding.recyclerView.layoutManager=LinearLayoutManager(activity)
+        mBinding.recyclerView.addItemDecoration(DividerItemDecoration(activity, OrientationHelper.VERTICAL))
+        mBinding.recyclerView.adapter=notificationsAdapter
 
         showProgress(true)
-        loadSuggestions(1)
+        loadNotifications(1)
     }
     private fun showProgress(showProgress: Boolean) {
         mBinding.pbLoading.visibility = if (showProgress) View.VISIBLE else View.GONE
     }
     private fun updateNoItemsView() {
-        if (mBinding.rvCatalogObjects.adapter.itemCount == 0) {
-            mBinding.rvCatalogObjects.visibility = View.GONE
+        if (mBinding.recyclerView.adapter.itemCount == 0) {
+            mBinding.recyclerView.visibility = View.GONE
             mBinding.tvNothingToShow.visibility = View.VISIBLE
         } else {
-            mBinding.rvCatalogObjects.visibility = View.VISIBLE
+            mBinding.recyclerView.visibility = View.VISIBLE
             mBinding.tvNothingToShow.visibility = View.GONE
         }
     }
 
     override fun onLoadData(totalItems: Int) {
-        loadSuggestions(totalItems/ITEMS_ON_PAGE+1)
+        loadNotifications(totalItems/ITEMS_ON_PAGE+1)
     }
 
-    private fun loadSuggestions(page: Int)
+    private fun loadNotifications(page: Int)
     {
-        getCompositeDisposable().add(ServiceGenerator.serverApi.getSuggestions(suggestionType, ITEMS_ON_PAGE, page)
+        getCompositeDisposable().add(ServiceGenerator.serverApi.getNotifications(ITEMS_ON_PAGE, page)
                 .compose(RxHelper.applySchedulers())
                 .doOnSubscribe { lazyScrollPageUploader.setLoading(true) }
                 .doFinally {
@@ -97,25 +93,25 @@ class SuggestionsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScro
                     lazyScrollPageUploader.setLoading(false)
                     updateNoItemsView()
                 }
-                .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithDataObject<Suggestion>>>() {
-                    override fun onSuccess(result: Response<BaseResponseWithDataObject<Suggestion>>) {
+                .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithDataObject<NotificationInfo>>>() {
+                    override fun onSuccess(result: Response<BaseResponseWithDataObject<NotificationInfo>>) {
                         if(result.isSuccessful&&result.body()?.code==200)
                         {
                             result.body()?.data?.items?.let {
                                 val allItemsLoaded = it.size < ITEMS_ON_PAGE
-                                suggestionsAdapter.isShowLoadingFooter = !allItemsLoaded
+                                notificationsAdapter.isShowLoadingFooter = !allItemsLoaded
                                 lazyScrollPageUploader.noMoreElements=allItemsLoaded
 
                                 if(page==1)
-                                    suggestionsAdapter.setData(it)
+                                    notificationsAdapter.setData(it)
                                 else
-                                    suggestionsAdapter.addData(it)
+                                    notificationsAdapter.addData(it)
                             }
                         }
                         else
                         {
                             UIHelper.showServerError(result, activity)
-                            suggestionsAdapter.isShowLoadingFooter = false
+                            notificationsAdapter.isShowLoadingFooter = false
                             lazyScrollPageUploader.noMoreElements=true
                         }
                     }

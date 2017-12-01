@@ -18,14 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bloold.buildp.R;
 import com.example.bloold.buildp.common.Settings;
 import com.example.bloold.buildp.ui.MainActivity;
-import com.example.bloold.buildp.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -37,8 +38,6 @@ import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.facebook.login.widget.*;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginButton.performClick();
             }
         });
-
         ImageView ivOk = (ImageView) findViewById(R.id.ivOk);
         ivOk.setOnClickListener(new LoginClickListener(OkAuthType.ANY));
         odnoklassniki = Odnoklassniki.createInstance(this, APP_ID, APP_KEY);

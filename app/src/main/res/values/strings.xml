@@ -141,6 +141,16 @@
     <string name="suggestion_status_declined">Отклонено как нежелательное</string>
     <string name="suggestion_status_approved">Одобрено</string>
 
+    <!-- Карточка предложения  -->
+    <string name="suggestions">Предложения</string>
+    <string name="object_changed">Внесены изменения в объект</string>
+    <string name="was">Было</string>
+    <string name="become">Стало</string>
+
+    <!-- Лента уведомлений -->
+    <string name="notifications">Уведомления</string>
+    <string name="no_notifications">Нет уведомлений</string>
+
     <string-array name="spinner_choice_object_address">
         <item>По обьекту</item>
         <item>По адресу</item>

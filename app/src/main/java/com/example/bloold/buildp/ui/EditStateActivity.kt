@@ -403,7 +403,7 @@ class EditStateActivity : ChooseImageActivity() {
         //TODO Сообщение не должно быть пустое
         compositeDisposable.add(ServiceGenerator.serverApi.sendCondition(objectId, mBinding.etStateDescription.text.toString(),
                 (mBinding.spConditionMark.selectedItem as ConditionMark).id,
-                SimpleDateFormat("dd.MM.YYYY", Locale.getDefault()).format(Date()))
+                SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()))
                 .compose(RxHelper.applySchedulers())
                 .doFinally { showProgress(false) }
                 .doOnSubscribe { showProgress(true) }
