@@ -62,7 +62,7 @@ class SuggestionTabsFragment : NetworkFragment() {
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
-                0 -> getString(R.string.suggestion_all)
+                0 -> getString(R.string.all)
                 1 -> getString(R.string.suggestion_on_expert_checking)
                 2 -> getString(R.string.suggestion_approved)
                 3 -> getString(R.string.suggestion_declined)

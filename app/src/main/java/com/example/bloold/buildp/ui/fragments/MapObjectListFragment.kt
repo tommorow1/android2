@@ -89,11 +89,13 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         private val REQUEST_RESOLVE_SERVICES_ERROR = 125
         private val REQUEST_USER_LOCATION = 128
         fun newInstance(obj:CatalogObject?=null): MapObjectListFragment
+                = newInstance(obj?.getLocation()?.latitude, obj?.getLocation()?.longitude)
+        fun newInstance(lat: Double?, long: Double?): MapObjectListFragment
                 = MapObjectListFragment().apply { arguments=Bundle() }
-                .apply { obj?.getLocation().let {
-                    arguments.putDouble(IntentHelper.EXTRA_LATITUDE, it?.latitude?:-1.0)
-                    arguments.putDouble(IntentHelper.EXTRA_LONGITUDE, it?.longitude?:-1.0)
-                }}
+                .apply {
+                    arguments.putDouble(IntentHelper.EXTRA_LATITUDE, lat?:-1.0)
+                    arguments.putDouble(IntentHelper.EXTRA_LONGITUDE, long?:-1.0)
+                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,7 +153,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.setTitle(R.string.navigation_drawer_object_in_map)
+        activity.toolbar?.setTitle(R.string.navigation_drawer_object_in_map)
         val resCode= GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
         when(resCode)
         {

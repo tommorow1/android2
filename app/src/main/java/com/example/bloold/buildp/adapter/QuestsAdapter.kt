@@ -7,20 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.components.BindingViewHolder
 import com.example.bloold.buildp.components.OnItemClickListener
-import com.example.bloold.buildp.databinding.ItemCatalogObjectBinding
 import com.example.bloold.buildp.databinding.ItemLoadingBinding
+import com.example.bloold.buildp.databinding.ItemQuestBinding
+import com.example.bloold.buildp.model.Quest
 import java.util.*
 
 /**
  * Created by sagus on 18.11.2017.
  */
-class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<CatalogObject>?,
-                           private val onMapMarkerClickListener: OnItemClickListener<CatalogObject>?): RecyclerView.Adapter<BindingViewHolder<out ViewDataBinding>>()
+class QuestsAdapter(private val onItemClickListener: OnItemClickListener<Quest>?) : RecyclerView.Adapter<BindingViewHolder<out ViewDataBinding>>()
 {
+    var onParticipateClickListener: OnItemClickListener<Quest>?=null
     var isShowLoadingFooter = false
         set(showLoadingFooter) {
             val wasShowed = this.isShowLoadingFooter
@@ -32,14 +33,14 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
                     notifyItemInserted(mData.size)
             }
         }
-    val mData = ArrayList<CatalogObject>()
+    private val mData = ArrayList<Quest>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder<out ViewDataBinding> {
         return if (viewType == TYPE_FOOTER) {
             val listIemBinding = DataBindingUtil.inflate<ItemLoadingBinding>(LayoutInflater.from(parent.context), R.layout.item_loading, parent, false)
             BindingViewHolder(listIemBinding)
         } else {
-            val listIemBinding = DataBindingUtil.inflate<ItemCatalogObjectBinding>(LayoutInflater.from(parent.context), R.layout.item_catalog_object, parent, false)
+            val listIemBinding = DataBindingUtil.inflate<ItemQuestBinding>(LayoutInflater.from(parent.context), R.layout.item_quest, parent, false)
             BindingViewHolder(listIemBinding)
         }
     }
@@ -47,15 +48,29 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
     override fun onBindViewHolder(holderRaw: BindingViewHolder<out ViewDataBinding>, position: Int) {
         val viewType = getItemViewType(position)
         if (viewType == TYPE_DATA) {
-            val holder = holderRaw as BindingViewHolder<ItemCatalogObjectBinding>
-            val catalogObject = mData[position]
+            val holder = holderRaw as BindingViewHolder<ItemQuestBinding>
+            val item = mData[position]
 
-            holder.mLayoutBinding.name.text=catalogObject.name
+            holder.mLayoutBinding.tvBonuses.text=item.points.toInt().toString()
+            holder.mLayoutBinding.tvParticipants.text=item.participants.toInt().toString()
+            holder.mLayoutBinding.tvName.text=item.name
+            holder.mLayoutBinding.tvDescription.text=item.previewText
+
+            if(onParticipateClickListener!=null)
+            {
+                holder.mLayoutBinding.bAction.text=holderRaw.itemView.context.getString(if(item.isParticipate) R.string.cancel_participate else R.string.participate)
+                holder.mLayoutBinding.bAction.visibility= View.VISIBLE
+                holder.mLayoutBinding.bAction.setOnClickListener { onParticipateClickListener?.onItemClick(mData[holder.adapterPosition]) }
+            }
+            else
+                holder.mLayoutBinding.bAction.visibility= View.GONE
+
+            //TODO менять название на кнопке и обрабатывать нажатие на кнопку
+
             Glide.with(holderRaw.itemView.context)
-                    .load(catalogObject.detailPicture?.fullPath())
-                    .into(holder.mLayoutBinding.ivBuild)
-
-            holder.mLayoutBinding.ivLocation.setOnClickListener({onMapMarkerClickListener?.onItemClick(mData[holder.adapterPosition])})
+                    .load(item.pictureDetail.fullPath())
+                    .apply(RequestOptions().centerCrop())
+                    .into(holder.mLayoutBinding.imageView)
             holder.itemView.setOnClickListener({onItemClickListener?.onItemClick(mData[holder.adapterPosition])})
         }
     }
@@ -68,18 +83,28 @@ class CatalogObjectAdapter(private val onItemClickListener: OnItemClickListener<
         if (isShowLoadingFooter) size += 1
         return size
     }
+    fun participateToQuest(quest: Quest, participate:Boolean)
+    {
+        val pos=mData.indexOf(quest)
+        if(pos!=-1) {
+            if(participate)
+                quest.participants += 1
+            else quest.participants -= 1
+            quest.isParticipate = participate
+            notifyItemChanged(pos)
+        }
+    }
 
-    fun setData(newData: Array<CatalogObject>?) {
+    fun setData(newData: Array<Quest>?) {
         mData.clear()
         if (newData != null) mData.addAll(newData)
         notifyDataSetChanged()
     }
 
-    fun addData(newData: Array<CatalogObject>?) {
+    fun addData(newData: Array<Quest>?) {
         if (newData == null) return
 
         val positionOfNewItem = mData.size
-        //if(showLoadingFooter) positionOfNewItem-=1;
         mData.addAll(newData)
         notifyItemRangeInserted(positionOfNewItem, newData.size)
     }

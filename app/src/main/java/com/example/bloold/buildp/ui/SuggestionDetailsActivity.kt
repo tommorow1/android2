@@ -43,11 +43,13 @@ class SuggestionDetailsActivity : AppCompatActivity() {
     {
         mBinding.tvObjectName.text=suggestion.objectName
         mBinding.tvSuggestionType.setText(R.string.object_changed)
-        mBinding.tvDate.text= SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(suggestion.dateCreate)
+        suggestion.dateCreate?.let {
+            mBinding.tvDate.text= SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(it)
+        }
         BindingHelper.configureSuggestionStatusBadge(suggestion, mBinding.llStatus,
                 mBinding.ivStatus, mBinding.tvStatus)
         Glide.with(this)
-                .load(suggestion.objectPicture)
+                .load(suggestion.objectPicture?.fullPath())
                 .apply(RequestOptions().circleCrop())
                 .into(mBinding.ivObject)
         suggestion.diffList?.forEach {

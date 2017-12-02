@@ -35,6 +35,7 @@ class SortFragment : Fragment(), OnItemClickListener<Category> {
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
         }
+        activity.invalidateOptionsMenu()
     }
 
 

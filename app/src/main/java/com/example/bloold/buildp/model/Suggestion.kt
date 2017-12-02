@@ -20,12 +20,12 @@ class Suggestion() : Parcelable
     @get: JsonProperty("OBJECT_NAME")
     lateinit var objectName: String
     @get: JsonProperty("OBJECT_PICTURE")
-    lateinit var objectPicture: String
+    var objectPicture: PictureDetail?=null
     @get: JsonProperty("STATE_NAME")
     lateinit var stateName: String
     @get: JsonProperty("DATE_CREATE")
     @get: JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
-    lateinit var dateCreate: Date
+    var dateCreate: Date?=null
     @JsonIgnoreProperties(ignoreUnknown = true)
     @get: JsonProperty("DIFF")
     var diffList: Array<SuggestionDiff>?=null
@@ -34,36 +34,11 @@ class Suggestion() : Parcelable
         id = parcel.readInt()
         objId = parcel.readInt()
         objectName = parcel.readString()
-        objectPicture = parcel.readString()
+        objectPicture = parcel.readParcelable(PictureDetail::class.java.classLoader)
         stateName = parcel.readString()
-        dateCreate = Date(parcel.readLong())
         diffList = parcel.createTypedArray(SuggestionDiff)
     }
 
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeInt(objId)
-        parcel.writeString(objectName)
-        parcel.writeString(objectPicture)
-        parcel.writeString(stateName)
-        parcel.writeLong(dateCreate.time)
-        parcel.writeTypedArray(diffList, flags)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Suggestion> {
-        override fun createFromParcel(parcel: Parcel): Suggestion {
-            return Suggestion(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Suggestion?> {
-            return arrayOfNulls(size)
-        }
-    }
     class SuggestionDiff() : Parcelable {
         @get: JsonProperty("CODE")
         lateinit var code: String
@@ -131,6 +106,29 @@ class Suggestion() : Parcelable
             override fun newArray(size: Int): Array<SuggestionDiff?> {
                 return arrayOfNulls(size)
             }
+        }
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeInt(objId)
+        parcel.writeString(objectName)
+        parcel.writeParcelable(objectPicture, flags)
+        parcel.writeString(stateName)
+        parcel.writeTypedArray(diffList, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Suggestion> {
+        override fun createFromParcel(parcel: Parcel): Suggestion {
+            return Suggestion(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Suggestion?> {
+            return arrayOfNulls(size)
         }
     }
 

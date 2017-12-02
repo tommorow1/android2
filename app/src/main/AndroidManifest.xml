@@ -157,7 +157,10 @@
             android:label="@string/photo"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple"/>
-
+        <activity
+            android:name=".ui.QuestDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
@@ -189,7 +192,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         <activity android:name=".ui.MapActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/navigation_drawer_object_in_map"
+            android:theme="@style/AppTheme.NoActionBar.WithStatus" />
         <activity android:name=".ui.RouteActivity"
             android:windowSoftInputMode="stateHidden"
             android:label="@string/route_item"

@@ -34,22 +34,16 @@ import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
+import com.example.bloold.buildp.components.EventActivity
 import com.example.bloold.buildp.components.NetworkActivity
-import com.example.bloold.buildp.components.OnFilterApplyListener
 import com.example.bloold.buildp.databinding.ActivityMainBinding
 import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.profile.LoginActivity
 import com.example.bloold.buildp.profile.ProfileSettingsActivity
 import com.example.bloold.buildp.search.SearchActivity
-import com.example.bloold.buildp.sort.fragment.FilterMainNavigator
 import com.example.bloold.buildp.sort.fragment.SortFragment
-import com.example.bloold.buildp.sort.fragment.onFilterListener
-import com.example.bloold.buildp.ui.fragments.CatalogObjectListFragment
-import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
-import com.example.bloold.buildp.ui.fragments.NotificationsFragment
-import com.example.bloold.buildp.ui.fragments.SuggestionTabsFragment
+import com.example.bloold.buildp.ui.fragments.*
 import com.facebook.login.LoginManager
-import com.google.firebase.iid.FirebaseInstanceId
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
@@ -63,7 +57,7 @@ import org.json.JSONObject
 import java.net.ConnectException
 import java.net.UnknownHostException
 
-class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedListener
+class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedListener
 {
     private lateinit var mBinding:ActivityMainBinding
     private val AuthToken = "AuthToken"
@@ -72,6 +66,7 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
     private lateinit var tvName : TextView
     private lateinit var ball : TextView
     private lateinit var allCategories : ArrayList<Category>
+    lateinit var llHeader:View
     /*** Текущая категория */
     private var currentCategory : Category?=null
 
@@ -80,9 +75,9 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         Fabric.with(this, Crashlytics())
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val llHeader = mBinding.navView.getHeaderView(0) as ConstraintLayout
-        tvName = llHeader.findViewById<View>(R.id.tvName) as TextView
-        ball = llHeader.findViewById<View>(R.id.ball) as TextView
+        llHeader = mBinding.navView.getHeaderView(0) as ConstraintLayout
+        tvName = llHeader.findViewById(R.id.tvName)
+        ball = llHeader.findViewById(R.id.ball)
 
         Settings.catalogFilters=null//Очищаем предварительно установленые фильтры
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -129,7 +124,8 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
                 mBinding.appBarIncludeLayout?.fabFilter?.hide()
 
             if (currentFragment is MapObjectListFragment||
-                    currentFragment is SuggestionTabsFragment) {
+                    currentFragment is SuggestionTabsFragment||
+                    currentFragment is MyQuestsTabsFragment) {
                 showAppBarElevation(false)
             } else
                 showAppBarElevation(true)
@@ -313,23 +309,23 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
 
     fun  LogBtnHide()
     {
-        val btnAuth =  findViewById<View>(R.id.btnAuth) as AppCompatButton;
-        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView;
-        val ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView;
-        val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView;
-        val tvName = findViewById<View>(R.id.tvName) as TextView;
-        val ball = findViewById<View>(R.id.ball) as TextView
+        val btnAuth =  llHeader.findViewById<View>(R.id.btnAuth) as AppCompatButton;
+        val ivLogout = llHeader.findViewById<View>(R.id.ivLogout) as ImageView;
+        val ivProfile = llHeader.findViewById<View>(R.id.ivProfile) as CircleImageView;
+        val ivSettings = llHeader.findViewById<View>(R.id.ivSettings) as ImageView;
+        val tvName = llHeader.findViewById<View>(R.id.tvName) as TextView;
+        val ball = llHeader.findViewById<View>(R.id.ball) as TextView
         //btnLogout.setWidth(160);
-        btnAuth.setWidth(0);
+        btnAuth.width = 0;
 
 
 
-        btnAuth.setVisibility(View.INVISIBLE);
-        tvName.setVisibility(View.VISIBLE);
-        ivLogout.setVisibility(View.VISIBLE);
-        ivProfile.setVisibility(View.VISIBLE);
-        ivSettings.setVisibility(View.VISIBLE);
-        ball.setVisibility(View.VISIBLE);
+        btnAuth.visibility = View.INVISIBLE;
+        tvName.visibility = View.VISIBLE;
+        ivLogout.visibility = View.VISIBLE;
+        ivProfile.visibility = View.VISIBLE;
+        ivSettings.visibility = View.VISIBLE;
+        ball.visibility = View.VISIBLE;
 
     }
 
@@ -342,14 +338,14 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         val tvName = findViewById<View>(R.id.tvName) as TextView;
         val ball = findViewById<View>(R.id.ball) as TextView;
 
-        tvName.setText("");
+        tvName.text = "";
 
-        btnAuth.setVisibility(View.VISIBLE);
-        ball.setVisibility(View.INVISIBLE);
-        tvName.setVisibility(View.INVISIBLE);
-        ivLogout.setVisibility(View.INVISIBLE);
-        ivProfile.setVisibility(View.INVISIBLE);
-        ivSettings.setVisibility(View.INVISIBLE);
+        btnAuth.visibility = View.VISIBLE;
+        ball.visibility = View.INVISIBLE;
+        tvName.visibility = View.INVISIBLE;
+        ivLogout.visibility = View.INVISIBLE;
+        ivProfile.visibility = View.INVISIBLE;
+        ivSettings.visibility = View.INVISIBLE;
     }
 
 
@@ -388,7 +384,9 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-        if(currentFragment !is SuggestionTabsFragment)
+        if(currentFragment is CatalogObjectListFragment||
+                currentFragment is MapObjectListFragment||
+                currentFragment == null)
             menuInflater.inflate(R.menu.main, menu)
 
 
@@ -396,24 +394,22 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         if (sPref.contains(AuthToken)) {
             LogBtnHide()
         }
-        ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView
+        ivProfile = llHeader.findViewById<View>(R.id.ivProfile) as CircleImageView
         //tvName = findViewById<View>(R.id.tvName) as TextView
-        val btnAuth = findViewById<View>(R.id.btnAuth) as Button
+        val btnAuth = llHeader.findViewById<View>(R.id.btnAuth) as Button
 
-        btnAuth.setOnClickListener { view ->
+        btnAuth.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
 
         }
 
-        val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView
+        val ivLogout = llHeader.findViewById<View>(R.id.ivLogout) as ImageView
 
         ivLogout.setOnClickListener { view ->
-            hideItem();
-            DeleteToken();
-            startActivity(Intent(this, MainActivity::class.java))
+            logout()
         }
 
-        val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView
+        val ivSettings = llHeader.findViewById<View>(R.id.ivSettings) as ImageView
 
         ivSettings.setOnClickListener {
             val intent = Intent(this@MainActivity, ProfileSettingsActivity::class.java)
@@ -422,6 +418,13 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         return true
     }
 
+    private fun logout()
+    {
+        hideItem()
+        DeleteToken()
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -460,6 +463,30 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
             fabFilter.hide()
             fragmentClass=NotificationsFragment::class.java
         }
+        else if (id == R.id.nav_my_quests) {
+            showAppBarElevation(true)
+            fabFilter.hide()
+            fragmentClass= MyQuestsTabsFragment::class.java
+        }
+        else if (id == R.id.nav_quests) {
+            showAppBarElevation(true)
+            fabFilter.hide()
+            fragmentClass= QuestsFragment::class.java
+        }
+        else if (id == R.id.nav_news) {
+            showWebView(getString(R.string.news), Settings.URL_NEWS)
+        }
+        else if (id == R.id.nav_about) {
+            showWebView(getString(R.string.about), Settings.URL_ABOUT)
+        }
+        else if (id == R.id.nav_voting) {
+            showWebView(getString(R.string.voting), Settings.URL_VOTING)
+        }
+        else if (id == R.id.nav_feedback) {
+            showAppBarElevation(true)
+            fabFilter.hide()
+            fragmentClass= FeedbackFragment::class.java
+        }
 
         fragmentClass?.newInstance()?.let { supportFragmentManager.beginTransaction().replace(R.id.mainContainer, it)
                 .addToBackStack(null).commit() }
@@ -467,6 +494,13 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+    private fun showWebView(title:String, url: String)
+    {
+        showAppBarElevation(true)
+        fabFilter.hide()
+        supportFragmentManager.beginTransaction().replace(R.id.mainContainer, WebViewFragment.newInstance(title, url))
+                .addToBackStack(null).commit()
     }
 
     /*override fun onObjectsLoaded(items: ArrayList<SortObject>) {
@@ -541,21 +575,14 @@ class MainActivity : NetworkActivity(), NavigationView.OnNavigationItemSelectedL
                 .addToBackStack(null).commit() }
     }
 
-    /*override fun onListFragmentInteraction(item: Category) {
-        currentCategory=item
-        showCategoryListFragment(item)
-        //Log.d("mainListener", item.children.toString())
-        if(item.children != null && item.children!![0].children != null && !TextUtils.equals(item.name, "Все")) {
-            //navigator.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, getItems(ArrayList(item.children?.toMutableList()), item.id))
-        } else {
-            var url = if(TextUtils.equals(item.id, "-1")){
-                CATALOG_ALL_OBJECT
-            } else {
-                BASE_URL + CATALOG_OBJECTS_URL + CATALOG_OBJECTS_SELECT + CATALOG_OBJECTS_FILTER + item.id
-            }
-            //Log.d("mainListener", url)
-            navigator.navigateTo(FilterMainNavigator.FilterScreens.CATALOG_OBJECTS, url, item)
-        }
-    }*/
+
+    /// ЛОвим события, если надо перелогиниться
+    override val actions: Array<String>
+        get() = arrayOf(IntentHelper.ACTION_NEED_REAUTH)
+
+    override fun onEventReceived(action: String, errorMsg: String?, data: Intent?) {
+        if(action==IntentHelper.ACTION_NEED_REAUTH)
+            logout()
+    }
 
 }

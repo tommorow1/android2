@@ -14,6 +14,20 @@ class ApiHelper {
         val SUGGESTION_DECLINED="declined/"
         val suggestionParams: Array<String> by lazy { arrayOf("OBJECT_ID", "OBJECT_NAME", "OBJECT_PICTURE", "STATE_NAME", "DATE_CREATE") }
         val notificationParams: Array<String> by lazy { arrayOf("ID", "NOTICE_DATA","NOTIFY_READ","DATE_CREATE") }
+        val questsParams: Array<String> by lazy { arrayOf("ID",
+                "NAME",
+                "DETAIL_PICTURE",
+                "PREVIEW_TEXT",
+                "PROPERTY_STATUS",
+                "PARTICIPATE",
+                "PROPERTY_POINTS",
+                "PROPERTY_PARTICIPANTS",
+                "PROPERTY_TYPE")}
+
+        val questsFullParams: Array<String> by lazy { questsParams+ arrayOf(
+                "DETAIL_TEXT",
+                "PARTICIPANTS_DATA",
+                "OBJECTS_DATA")}
 
         val defaultParams: Array<String> by lazy { arrayOf("ID", "NAME", "DETAIL_PICTURE", "IS_FAVORITE","PROPERTY_MAP") }
         val mapParams: Array<String> by lazy { arrayOf("OBJECT_ID", "NAME", "ADDRESS", "MAP_TYPE","PROPERTY_MAP", "LAT", "LNG") }

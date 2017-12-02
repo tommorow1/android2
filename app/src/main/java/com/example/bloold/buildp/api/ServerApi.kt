@@ -135,8 +135,38 @@ interface ServerApi {
     @GET("notices/list/")
     fun getNotifications(@Query("limit") limit: Int, @Query("page") page: Int,
                          @Query("select[]") selectParams: Array<String> = ApiHelper.notificationParams): Single<Response<BaseResponseWithDataObject<NotificationInfo>>>
+    /*** Список квестов */
+    @GET("object/quest/list/")
+    fun getQuests(@Query("limit") limit: Int, @Query("page") page: Int,
+                         @Query("select[]") selectParams: Array<String> = ApiHelper.questsParams): Single<Response<BaseResponseWithDataObject<Quest>>>
 
-    /*** Отметить уведомление прочитанным */
+    /*** Список типов для моих квестов */
+    @GET("directory/quest-filter/")
+    fun getQuestTypes(): Single<Response<QuestTypes>>
+    /*** Список моих квестов */
+    @GET("user/quest/list/")
+    fun getMyQuests(@Query("filter[TYPE]") questType:String,
+                    @Query("limit") limit: Int, @Query("page") page: Int,
+                  @Query("select[]") selectParams: Array<String> = ApiHelper.questsParams): Single<Response<BaseResponseWithDataObject<Quest>>>
+
+    @GET("object/quest/list/")
+    fun getQuestDetails(@Query("filter[ID][0]") questId: Int,
+                        @Query("select[]") selectParams: Array<String> = ApiHelper.questsFullParams): Single<BaseResponseWithDataObject<Quest>>
+    @POST("object/quest/toggle/")
+    @FormUrlEncoded
+    fun toggleQuestParticipate(@Field("QUEST_ID") questId:Int): Single<Response<BaseResponseWithoutData>>
+
+    /*** Отметить все уведомления прочитанными */
     @POST("notices/set-read/")
     fun setNotificationsRead(): Single<Response<BaseResponseWithoutData>>
+
+    /*** Отправить обратную связь */
+    @POST("feedback/")
+    @FormUrlEncoded
+    fun sendFeedback(@Field("NAME") name:String,
+                     @Field("EMAIL") email:String?,
+                     @Field("PHONE") phone:String?,
+                     @Field("MSG") message:String,
+                     @Field("ATTACH") fileId:Long?=null): Single<Response<FeedbackResponse>>
+
 }

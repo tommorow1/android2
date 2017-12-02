@@ -34,12 +34,12 @@ class AudioModel(): Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<PhotoModel> {
-        override fun createFromParcel(parcel: Parcel): PhotoModel {
-            return PhotoModel(parcel)
+    companion object CREATOR : Parcelable.Creator<AudioModel> {
+        override fun createFromParcel(parcel: Parcel): AudioModel {
+            return AudioModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<PhotoModel?> {
+        override fun newArray(size: Int): Array<AudioModel?> {
             return arrayOfNulls(size)
         }
     }

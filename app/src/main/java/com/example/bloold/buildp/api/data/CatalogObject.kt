@@ -1,5 +1,7 @@
 package com.example.bloold.buildp.api.data
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.model.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
@@ -10,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng
  * Created by sagus on 18.11.2017.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-class CatalogObject {
+class CatalogObject() : Parcelable {
     @get: JsonProperty("ID")
     var id = 0
     @get: JsonProperty("NAME")
@@ -54,6 +56,30 @@ class CatalogObject {
     @get: JsonProperty("PROPERTY_LNG")
     var longitude: Double? = null
 
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readInt()
+        name = parcel.readString()
+        code = parcel.readString()
+        propertyAddress = parcel.readString()
+        previewText = parcel.readString()
+        detailPageUrl = parcel.readString()
+        detailPicture = parcel.readParcelable(DetailPictureModel::class.java.classLoader)
+        photosData = parcel.createTypedArray(PhotoModel)
+        docsData = parcel.createTypedArray(DocModel)
+        videoData = parcel.createTypedArray(VideoModel)
+        audioData = parcel.createTypedArray(AudioModel)
+        publicationsData = parcel.createTypedArray(PublicationsModel)
+        propertyMap = parcel.readString()
+        isFavourite = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        condition = parcel.readString()
+        isUnesco = parcel.readString()
+        isValuable = parcel.readString()
+        propertyType = parcel.readString()
+        propertyCategory = parcel.readString()
+        latitude = parcel.readValue(Double::class.java.classLoader) as? Double
+        longitude = parcel.readValue(Double::class.java.classLoader) as? Double
+    }
+
     fun getLocation():LatLng?
     {
         propertyMap?.let {
@@ -84,4 +110,42 @@ class CatalogObject {
     var isFavourite: Object =""*/
     fun getFullLink(): String?
             = if(detailPageUrl!=null) ServiceGenerator.SITE_URL+detailPageUrl else null
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(name)
+        parcel.writeString(code)
+        parcel.writeString(propertyAddress)
+        parcel.writeString(previewText)
+        parcel.writeString(detailPageUrl)
+        parcel.writeParcelable(detailPicture, flags)
+        parcel.writeTypedArray(photosData, flags)
+        parcel.writeTypedArray(docsData, flags)
+        parcel.writeTypedArray(videoData, flags)
+        parcel.writeTypedArray(audioData, flags)
+        parcel.writeTypedArray(publicationsData, flags)
+        parcel.writeString(propertyMap)
+        parcel.writeValue(isFavourite)
+        parcel.writeString(condition)
+        parcel.writeString(isUnesco)
+        parcel.writeString(isValuable)
+        parcel.writeString(propertyType)
+        parcel.writeString(propertyCategory)
+        parcel.writeValue(latitude)
+        parcel.writeValue(longitude)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<CatalogObject> {
+        override fun createFromParcel(parcel: Parcel): CatalogObject {
+            return CatalogObject(parcel)
+        }
+
+        override fun newArray(size: Int): Array<CatalogObject?> {
+            return arrayOfNulls(size)
+        }
+    }
 }

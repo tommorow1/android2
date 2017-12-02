@@ -9,6 +9,7 @@ class IntentHelper {
         val ACTION_TOGGLE_FAVOURITE="toggleFavourite"
         val ACTION_SEND_PUSH_TOKEN="sendPushToken"
         val ACTION_SEND_NOTIFICATION_READ="notificationRead"
+        val ACTION_NEED_REAUTH="needReauth"
 
         val EXTRA_SORT_OBJECT="sortObject"
         val EXTRA_PUSH_TOKEN="pushToken"
@@ -18,6 +19,9 @@ class IntentHelper {
         val EXTRA_SUGGESTION="suggestion"
 
         val EXTRA_OBJECT_ID="ObjId"
+        val EXTRA_OBJECT_LIST="objectList"
+        val EXTRA_PARTICIPANT_LIST="participantList"
+        val EXTRA_QUEST_ID="questId"
         val EXTRA_CATEGORY_ID="categoryId"
         val EXTRA_PHOTO_DATA_ARRAY="photoDataArr"
         val EXTRA_IMAGE_URL="imageUrl"
@@ -30,6 +34,7 @@ class IntentHelper {
         val EXTRA_VIDEO_MODEL_LIST="videoModelList"
 
         val EXTRA_SUGGESTION_TYPE="suggestionType"
+        val EXTRA_QUEST_STATUS="questStatus"
 
         val EXTRA_LATITUDE="latitude"
         val EXTRA_LONGITUDE="longitude"
@@ -38,5 +43,8 @@ class IntentHelper {
 
         val EXTRA_ERROR_MSG="errorMsg"
         val EXTRA_VALUE="value"
+
+        val EXTRA_TITLE="title"
+        val EXTRA_URL="urlToOpen"
     }
 }
