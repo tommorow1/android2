@@ -128,7 +128,7 @@ class FeedbackFragment : NetworkFragment() {
                             mBinding.etEmail.setText("")
                             mBinding.etPhone.setText("")
                             mBinding.etMessage.setText("")
-                            mBinding.etFile.text = ""
+                            mBinding.etFile.setText(R.string.choose_file)
                             file=null
                             sentFileId=null
                             Toast.makeText(activity, R.string.feedback_sent, Toast.LENGTH_SHORT).show()

@@ -33,6 +33,10 @@ interface ServerApi {
                           @QueryMap searchQuery:Map<String, String>?=HashMap(),
                           @Query("filter[INCLUDE_SUBSECTIONS]") includeSubsections: String="Y",
                           @Query("select[]") selectParams: Array<String> = ApiHelper.defaultParams): Single<BaseResponseWithDataObject<CatalogObject>>
+    /*** Избранное */
+    @GET("object/favorite/list/")
+    fun getFavourite(@Query("limit") limit: Int, @Query("page") page: Int): Single<BaseResponseWithDataObject<FavouriteObject>>
+
     @GET("directory/type-map-structure/")
     fun getMapStructure(): Single<BaseResponse<CatalogObject>>
     @POST("object/edit/")

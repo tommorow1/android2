@@ -181,6 +181,10 @@
     <string name="need_input_message">Введите сообщение</string>
     <string name="feedback_sent">Ваш отзыв отправлен. Спасибо за обратную связь!</string>
 
+    <!-- Избранное -->
+    <string name="favourite">Избранное</string>
+    <string name="no_favourite">Вы ещё ничего не добавили в избранное</string>
+
     <string-array name="spinner_choice_object_address">
         <item>По обьекту</item>
         <item>По адресу</item>

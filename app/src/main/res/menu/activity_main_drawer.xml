@@ -24,10 +24,10 @@
         android:id="@+id/logging_menu">
         <menu>
             <item
-                android:id="@+id/nav_election"
+                android:id="@+id/nav_favourite"
                 android:checkable="true"
                 android:icon="@drawable/ic_menu_election"
-                android:title="Избраное" />
+                android:title="@string/favourite" />
             <item
                 android:id="@+id/nav_my_suggestions"
                 android:checkable="true"
@@ -41,11 +41,13 @@
             <item
                 android:id="@+id/nav_message"
                 android:checkable="true"
+                android:visible="false"
                 android:icon="@drawable/ic_menu_message"
                 android:title="Сообщения" />
             <item
                 android:id="@+id/nav_contacts"
                 android:checkable="true"
+                android:visible="false"
                 android:icon="@drawable/ic_menu_contacts"
                 android:title="Контакты" />
             <item
