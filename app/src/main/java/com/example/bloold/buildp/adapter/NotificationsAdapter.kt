@@ -4,20 +4,14 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bloold.buildp.R
-import com.example.bloold.buildp.common.BindingHelper
 import com.example.bloold.buildp.components.BindingViewHolder
-import com.example.bloold.buildp.components.OnItemClickListener
 import com.example.bloold.buildp.databinding.ItemLoadingBinding
 import com.example.bloold.buildp.databinding.ItemNotificationBinding
-import com.example.bloold.buildp.databinding.ItemSuggestionBinding
 import com.example.bloold.buildp.model.NotificationInfo
-import com.example.bloold.buildp.model.Suggestion
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -57,7 +51,6 @@ class NotificationsAdapter: RecyclerView.Adapter<BindingViewHolder<out ViewDataB
             holder.mLayoutBinding.tvMessage.text=item.noticeData.message
             holder.mLayoutBinding.tvDate.text=item.dateCreate
 
-            //TODO доделать разные картинки в зависимости от типа
             if(item.noticeData.getFullUserFromAvatarUrl()!=null) {
                 Glide.with(holderRaw.itemView.context)
                         .load(item.noticeData.getFullUserFromAvatarUrl())
@@ -66,7 +59,12 @@ class NotificationsAdapter: RecyclerView.Adapter<BindingViewHolder<out ViewDataB
             }
             else
             {
-                //TODO
+                var imageToShow = when(item.noticeData.type) {
+                    2-> R.drawable.ic_notification_accepted
+                    3-> R.drawable.ic_notification_declined
+                    else -> R.drawable.ic_notification_accepted
+                }
+                holder.mLayoutBinding.imageView.setImageResource(imageToShow)
             }
         }
     }
