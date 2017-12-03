@@ -453,6 +453,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if(code.equals("200")){
                     SaveToken(AuthTokenresp);
+
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
                 }else{

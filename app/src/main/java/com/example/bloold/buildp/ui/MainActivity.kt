@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
@@ -41,9 +42,11 @@ import com.example.bloold.buildp.model.Category
 import com.example.bloold.buildp.profile.LoginActivity
 import com.example.bloold.buildp.profile.ProfileSettingsActivity
 import com.example.bloold.buildp.search.SearchActivity
+import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.sort.fragment.SortFragment
 import com.example.bloold.buildp.ui.fragments.*
 import com.facebook.login.LoginManager
+import com.google.firebase.iid.FirebaseInstanceId
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
@@ -138,6 +141,17 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
                 mBinding.appBarIncludeLayout?.fabFilter?.show()*/
         }
         loadCategories()
+
+        try {
+            val refreshedToken = FirebaseInstanceId.getInstance().token
+            refreshedToken?.let {
+                NetworkIntentService.sendPushToken(this, it)
+            }
+
+            Log.d("Firbase id login", "Refreshed token: " + refreshedToken)
+        } catch (ex:Exception) {
+            ex.printStackTrace()
+        }
     }
 
     private fun showProgress(showProgress: Boolean) {

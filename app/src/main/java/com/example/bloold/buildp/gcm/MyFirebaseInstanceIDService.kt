@@ -1,6 +1,7 @@
 package com.example.bloold.buildp.gcm
 
 import android.util.Log
+import com.example.bloold.buildp.common.Settings
 
 import com.example.bloold.buildp.services.NetworkIntentService
 import com.google.firebase.iid.FirebaseInstanceId
@@ -34,7 +35,10 @@ class MyFirebaseInstanceIDService : FirebaseInstanceIdService() {
      */
     private fun sendRegistrationToServer(token: String?) {
         Log.d(TAG, "sendRegistrationToServer() called with: token = [$token]")
-        token?.let { NetworkIntentService.sendPushToken(this, it) }
+        token?.let {
+            Settings.pushToken = it
+            NetworkIntentService.sendPushToken(this, it)
+        }
     }
 
     companion object {

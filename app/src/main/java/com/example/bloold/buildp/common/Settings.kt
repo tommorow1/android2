@@ -20,6 +20,7 @@ object Settings {
     private val KEY_CATALOG_FILTERS = "catalogFilters"
     private val KEY_USER_TOKEN = "AuthToken"
     private val KEY_UDID = "udid"
+    private val KEY_PUSH_TOKEN = "pushTOken"
 
     fun getUdid(): String? {
         var udid:String? = prefs.getString(KEY_UDID, "")
@@ -39,6 +40,10 @@ object Settings {
         get() = prefs.getStringSet(KEY_CATALOG_FILTERS, HashSet<String>())
         set(value) = prefs.edit().putStringSet(KEY_CATALOG_FILTERS, value).apply()
 
+    /*** Пуш токен  */
+    var pushToken: String?
+        get() = prefs.getString(KEY_PUSH_TOKEN, null)
+        set(value) = prefs.edit().putString(KEY_PUSH_TOKEN, value).apply()
 
     /*** Токен авторизации  */
     var userToken: String?

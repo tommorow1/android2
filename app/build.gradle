@@ -74,7 +74,7 @@ dependencies {
     implementation 'com.vk:androidsdk:1.6.5'
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
-    implementation 'com.google.android.gms:play-services-maps:11.4.2'
+    implementation 'com.google.android.gms:play-services-maps:11.6.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'ru.ok:odnoklassniki-android-sdk:2.1.2'
@@ -93,3 +93,4 @@ dependencies {
 repositories {
     mavenCentral()
 }
+apply plugin: 'com.google.gms.google-services'
