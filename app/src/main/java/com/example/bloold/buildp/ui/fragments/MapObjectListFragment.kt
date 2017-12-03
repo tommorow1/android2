@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.location.Criteria
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -81,6 +82,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     private var searchType: String?=null
     private var searchQuery: String?=null
 
+    private var userMarker:Marker?=null
+
     // Координаты куда надо переметстить карту, если кликнули по объекту
     private var latMoveTo:Double?=null
     private var lngMoveTo:Double?=null
@@ -103,9 +106,16 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         arguments?.let {
             latMoveTo=arguments.getDouble(IntentHelper.EXTRA_LATITUDE)
             lngMoveTo=arguments.getDouble(IntentHelper.EXTRA_LONGITUDE)
-            if(latMoveTo==-1.0) latMoveTo=null
-            if(lngMoveTo==-1.0) lngMoveTo=null
+            if(latMoveTo==-1.0||lngMoveTo==-1.0)
+            {
+                latMoveTo=null
+                lngMoveTo=null
+            }
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -175,7 +185,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         (childFragmentManager.findFragmentById(R.id.fMap) as SupportMapFragment).getMapAsync({
             googleMap=it
             googleMap?.let {
-                it.uiSettings.isMyLocationButtonEnabled=true
+                //it.uiSettings.isMyLocationButtonEnabled=true
                 mClusterManager = ClusterManager(activity, it)
                 //mClusterManager.setOnClusterItemClickListener(this)
                 //it.setOnInfoWindowClickListener(mClusterManager)
@@ -196,19 +206,24 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                     //Перемещаем на место объекта
                     googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latMoveTo?:0.0, lngMoveTo?:0.0), 16f))
                 }
-                else {
-                    //Перемещаем на местоположения пользователя
-                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
-                    } else moveToUserLocation()
-                }
+
+                //Получаем местоположение пользователя для отображения маркера
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
+                } else startGettingUserLocation()
             }
         })
     }
-    private fun moveToUserLocation()
+    private fun showUserLocationMarker(moveToUserLocation:Boolean)
     {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+        userLocation?.let {
+            userMarker?.remove()
+            userMarker=googleMap?.addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude))
+                    .apply { icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_marker)) })
+            if(moveToUserLocation) googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 16f))
+        }
+        /*if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             try {
                 val locationManager = (activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager)
@@ -220,14 +235,14 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             {
                 ex.printStackTrace()
             }
-        }
+        }*/
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_USER_LOCATION) {
             if (PermissionUtil.verifyPermissions(grantResults)) {
-                moveToUserLocation()
+                startGettingUserLocation()
             }
         }
     }
@@ -469,6 +484,71 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     fun onAddObjectClick(v:View)
     {
         AddObjectActivity.launch(activity)
+    }
+
+    //-- Получение местоположения пользователя --
+
+    private var userLocation: Location? = null
+    private var locationListener: LocationListener? = null
+    //Получили актуальные координаты пользователя(не последние)
+    private var gotActualLocation = false
+
+    private fun fetchActualUserLocation() {
+        // Define a listener that responds to location updates
+        if (locationListener == null) {
+            locationListener = object : LocationListener {
+                override fun onLocationChanged(location: Location) {
+                    // Called when a new location is found by the network location provider.
+                    userLocation = location
+                    showUserLocationMarker(latMoveTo==null&& lngMoveTo==null)
+                    stopLocationUpdates()
+                    gotActualLocation = true
+                    locationListener = null
+                }
+
+                override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+
+                override fun onProviderEnabled(provider: String) {}
+
+                override fun onProviderDisabled(provider: String) {}
+            }
+        }
+
+        try {
+            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
+        } catch (ex: SecurityException) {
+            ex.printStackTrace()
+            Toast.makeText(activity, R.string.gps_not_enabled, Toast.LENGTH_LONG).show()
+        }
+    }
+    private fun stopLocationUpdates() {
+        if (locationListener != null) {
+            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager.removeUpdates(locationListener)
+        }
+    }
+
+    private fun startGettingUserLocation() {
+        //Пока определяются текущие координаты, мы получаем посление
+        if (userLocation == null) {
+            userLocation = fetchLastLocation()
+            showUserLocationMarker(latMoveTo==null&& lngMoveTo==null)
+        }
+        if (!gotActualLocation) fetchActualUserLocation()//Запускаем получение актуальных координат
+    }
+
+    // -------- Получение местоположения пользователя ----------
+    private fun fetchLastLocation(): Location? {
+        try {
+            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        } catch (ex: SecurityException) {
+            ex.printStackTrace()
+            Toast.makeText(activity, R.string.gps_not_enabled, Toast.LENGTH_LONG).show()
+        }
+
+        return null
     }
 
     //---- Ловим события от сервиса ----
