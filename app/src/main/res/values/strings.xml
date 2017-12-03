@@ -184,6 +184,15 @@
     <!-- Избранное -->
     <string name="favourite">Избранное</string>
     <string name="no_favourite">Вы ещё ничего не добавили в избранное</string>
+    
+    <!-- Мои настройки -->
+    <string name="object_quest_near">Объект по квесту рядом</string>
+    <string name="fav_object_near">Объект из избранного рядом</string>
+    <string name="new_message">Новое сообщение</string>
+    <string name="new_notification">Новое уведомление</string>
+    <string name="clear_image_cache">Очистить кеш изображений</string>
+    <string name="cache">Кеш</string>
+    <string name="cache_cleared">Кеш изображений очищен</string>
 
     <string-array name="spinner_choice_object_address">
         <item>По обьекту</item>

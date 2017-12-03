@@ -473,6 +473,11 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
             fabFilter.hide()
             fragmentClass= FavouriteObjectListFragment::class.java
         }
+        else if (id == R.id.nav_my_settings) {
+            showAppBarElevation(true)
+            fabFilter.hide()
+            fragmentClass= MySettingsFragment::class.java
+        }
         else if (id == R.id.nav_quests) {
             showAppBarElevation(true)
             fabFilter.hide()

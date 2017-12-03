@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.bloold.buildp.R
@@ -38,6 +39,7 @@ class FavouriteAdapter(private val onItemClickListener: OnItemClickListener<Favo
             BindingViewHolder(listIemBinding)
         } else {
             val listIemBinding = DataBindingUtil.inflate<ItemCatalogObjectBinding>(LayoutInflater.from(parent.context), R.layout.item_catalog_object, parent, false)
+            listIemBinding.ivLocation.visibility= View.GONE
             BindingViewHolder(listIemBinding)
         }
     }
@@ -52,7 +54,6 @@ class FavouriteAdapter(private val onItemClickListener: OnItemClickListener<Favo
             Glide.with(holderRaw.itemView.context)
                     .load(catalogObject.getImageLink())
                     .into(holder.mLayoutBinding.ivBuild)
-
             holder.itemView.setOnClickListener({onItemClickListener?.onItemClick(mData[holder.adapterPosition])})
         }
     }

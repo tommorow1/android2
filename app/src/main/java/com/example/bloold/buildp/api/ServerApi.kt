@@ -173,4 +173,11 @@ interface ServerApi {
                      @Field("MSG") message:String,
                      @Field("ATTACH") fileId:Long?=null): Single<Response<FeedbackResponse>>
 
+    /*** Настройки уведомлений */
+    @GET("user/notice/types/")
+    fun getNotificationSettings(): Single<Response<NotificationSettings>>
+
+    @POST("user/notice/types/")
+    @FormUrlEncoded
+    fun setNotificationSettings(@Field("NOTICES[]") notices:ArrayList<String>): Single<Response<BaseResponseWithoutData>>
 }
