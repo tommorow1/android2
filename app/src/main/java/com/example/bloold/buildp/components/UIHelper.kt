@@ -2,6 +2,7 @@ package com.example.bloold.buildp.components
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.support.design.widget.TextInputLayout
 import android.text.TextUtils
 import android.view.MotionEvent
@@ -13,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ErrorUtils
+import com.example.bloold.buildp.common.Settings
+import com.example.bloold.buildp.profile.LoginActivity
 import retrofit2.Response
 import java.net.MalformedURLException
 import java.net.URL
@@ -60,6 +63,14 @@ object UIHelper
             parent = parent.parent
         return parent as TextInputLayout?
     }
+
+    /*** Возвращает true если авторизован, иначе открывает экран логина */
+    fun userAuthorizedOtherwiseOpenLogin(cntx:Context)
+            = if(Settings.userToken.isNullOrEmpty())
+                {
+                    cntx.startActivity(Intent(cntx, LoginActivity::class.java))
+                    false
+                } else true
 
     fun makeEditTextScrollable(editText:EditText)
     {

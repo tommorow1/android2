@@ -63,7 +63,7 @@ class QuestsAdapter(private val onItemClickListener: OnItemClickListener<Quest>?
                 holder.mLayoutBinding.bAction.setOnClickListener { onParticipateClickListener?.onItemClick(mData[holder.adapterPosition]) }
             }
             else
-                holder.mLayoutBinding.bAction.visibility= View.GONE
+                holder.mLayoutBinding.bAction.visibility= View.INVISIBLE
 
             //TODO менять название на кнопке и обрабатывать нажатие на кнопку
 

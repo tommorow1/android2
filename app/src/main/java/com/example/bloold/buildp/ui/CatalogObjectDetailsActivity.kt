@@ -35,6 +35,7 @@ import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.EventActivity
+import com.example.bloold.buildp.components.UIHelper
 import com.example.bloold.buildp.databinding.ActivityCatalogObjectDetailsBinding
 import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.ui.fragments.MapObjectListFragment
@@ -42,6 +43,7 @@ import com.example.bloold.buildp.utils.PermissionUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.observers.DisposableSingleObserver
+import kotlinx.android.synthetic.main.activity_catalog_object_details.*
 import java.net.ConnectException
 import java.net.UnknownHostException
 
@@ -64,7 +66,6 @@ class CatalogObjectDetailsActivity : EventActivity() {
 
     private lateinit var tvTitleToolbar: TextView
     private lateinit var ivBackToolbar: ImageView
-    private lateinit var ivStarToolbar: ImageView
 
     private lateinit var tvAddress: TextView
     private lateinit var tvTitle: TextView
@@ -92,7 +93,6 @@ class CatalogObjectDetailsActivity : EventActivity() {
 
         tvTitleToolbar = findViewById(R.id.tvTitle)
         ivBackToolbar = findViewById(R.id.ivBack)
-        ivStarToolbar = findViewById(R.id.ivStarFill)
 
         tvTitle = findViewById(R.id.tvName)
         tvAddress = findViewById(R.id.tvAddress)
@@ -202,10 +202,10 @@ class CatalogObjectDetailsActivity : EventActivity() {
             findViewById<AppBarLayout>(R.id.appbar).addOnOffsetChangedListener { appBarLayout, verticalOffset ->
                 if(appBarLayout!!.totalScrollRange + verticalOffset < 100){
                     tvTitleToolbar.visibility = View.VISIBLE
-                    ivStarToolbar.visibility = View.VISIBLE
+                    ivStarFill.visibility = if(Settings.userToken.isNullOrEmpty()) View.INVISIBLE else View.VISIBLE
                 } else {
                     tvTitleToolbar.visibility = View.INVISIBLE
-                    ivStarToolbar.visibility = View.INVISIBLE
+                    ivStarFill.visibility = View.INVISIBLE
                 }
             }
             fetchUserLocation()
@@ -262,26 +262,29 @@ class CatalogObjectDetailsActivity : EventActivity() {
     }
     fun onEditClick(v:View)
     {
-        catalogObject?.let {
-            startActivityForResult(Intent(this, ChooseEditFieldActivity::class.java)
-                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
-        }
+        if(UIHelper.userAuthorizedOtherwiseOpenLogin(this))
+            catalogObject?.let {
+                startActivityForResult(Intent(this, ChooseEditFieldActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+            }
     }
     fun onAlertClick(v:View)
     {
-        catalogObject?.let {
-            startActivityForResult(Intent(this, EditStateActivity::class.java)
-                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
-        }
+        if(UIHelper.userAuthorizedOtherwiseOpenLogin(this))
+            catalogObject?.let {
+                startActivityForResult(Intent(this, EditStateActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+            }
+    }
+    fun onPhotoClick(v:View)
+    {
+        if(UIHelper.userAuthorizedOtherwiseOpenLogin(this))
+            catalogObject?.let { startActivity(Intent(this, EditPhotoVideoAudioActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
     }
     fun onRouteClick(v:View)
     {
         catalogObject?.let { RouteActivity.launch(this, it.id) }
-    }
-    fun onPhotoClick(v:View)
-    {
-        catalogObject?.let { startActivity(Intent(this, EditPhotoVideoAudioActivity::class.java)
-                .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
     }
 
     //----- Следим за событиями с сервиса --------

@@ -29,6 +29,7 @@ import com.example.bloold.buildp.services.NetworkIntentService
 import com.example.bloold.buildp.ui.CatalogObjectDetailsActivity
 import com.example.bloold.buildp.ui.MainActivity
 import io.reactivex.observers.DisposableSingleObserver
+import kotlinx.android.synthetic.main.activity_catalog_object_details.*
 import java.net.ConnectException
 import java.net.UnknownHostException
 
@@ -95,6 +96,11 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                 category = arguments.getParcelable(KEY_RESPONSE_SORTED_OBJECTS)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity.toolbar.title=getString(R.string.navigation_drawer_catalog_object)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?

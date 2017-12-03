@@ -134,7 +134,8 @@ class EditPhotoVideoAudioActivity : ChooseImageActivity() {
         mBinding.rvAudios.layoutManager=LinearLayoutManager(this)
         mBinding.rvAudios.adapter=audioEditAdapter
 
-        loadObjectDetails(objectId)
+        //Пока решили не отображать текущие данные объекта
+        //loadObjectDetails(objectId)
     }
 
     override fun onPause() {

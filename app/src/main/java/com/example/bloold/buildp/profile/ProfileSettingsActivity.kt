@@ -28,6 +28,7 @@ import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
 import cz.msebera.android.httpclient.Header
+import kotlinx.android.synthetic.main.activity_profile_settings.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -108,7 +109,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
         tvSaveChanges.setOnClickListener{
             FirstName = etFirstName.text.toString()
             LastName = etLastName.text.toString()
-            Region  = spinnerEdit.id.toString()
+            Region  = regions[spinnerEdit.selectedItemPosition].id?:""
 
             JSONEdit(this).execute("http://ruinnet.idefa.ru/api_app" + "/user/profile/edit/")
 
@@ -119,7 +120,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
             dialogFilePicker()
         }
 
-        adapterS = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item)
+        adapterS = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
                 /*.createFromResource(this,
                 R.array.spinner_choice_region, android.R.layout.simple_spinner_item)
 */
@@ -128,7 +129,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
         spinnerEdit.adapter = adapterS
         spinnerEdit.id
         getUser()
-        getRegion()
+        //getRegion()
 
         filePicker = MediaFilePicker(this, this, savedInstanceState)
     }
@@ -304,6 +305,8 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
                             e.printStackTrace()
                         }
 
+                        Region=data?.getString("REGION_ID")?:""
+
                         if(image != null && !TextUtils.isEmpty(image) && image != "null")
                             Glide.with(context).load("http://ruinnet.idefa.ru" + image).into(ivAvatar)
                     }
@@ -317,6 +320,7 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
 
                 override fun onFinish() {
                     // Completed the request (either success or failure)
+                    getRegion()
                 }
             })
     }
@@ -402,7 +406,15 @@ class ProfileSettingsActivity: AppCompatActivity(), MediaFilePicker.OnFilePicker
 
 
             override fun onFinish() {
-
+                //Выделяем регион, который указан в профиле пользователя
+                for (i in 0 until regions.size)
+                {
+                    if(regions[i].id==Region)
+                    {
+                        spEdit.setSelection(i)
+                        break
+                    }
+                }
             }
         })
     }

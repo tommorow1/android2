@@ -358,6 +358,7 @@ public class LoginActivity extends AppCompatActivity {
                         SaveToken(AuthTokenresp);
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
+                        finishAffinity();
                     }else{
                         Toast.makeText(LoginActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
                     }
@@ -456,6 +457,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
+                    finishAffinity();
                 }else{
                     Toast.makeText(LoginActivity.this, "Ошибка авторизации", Toast.LENGTH_LONG).show();
                 }

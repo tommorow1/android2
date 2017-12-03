@@ -253,6 +253,10 @@ class EditStateActivity : ChooseImageActivity() {
     {
         compositeDisposable.add(ServiceGenerator.serverApi.getObjectConditionMark(objectId)
                 .compose(RxHelper.applySchedulers())
+                .doFinally {
+                    showProgress(false)
+                    updateUI()
+                }
                 .subscribeWith(object : DisposableSingleObserver<CurrentUserCondition>() {
                     override fun onSuccess(result: CurrentUserCondition) {
                         result.data?.items?.firstOrNull()?.let {
@@ -263,7 +267,8 @@ class EditStateActivity : ChooseImageActivity() {
                                     break
                                 }
                         }
-                        loadObjectDetails(objectId)
+                        //Пока решили не отображать текущие данные объекта
+                        //loadObjectDetails(objectId)
                     }
                     override fun onError(e: Throwable) {
                         e.printStackTrace()

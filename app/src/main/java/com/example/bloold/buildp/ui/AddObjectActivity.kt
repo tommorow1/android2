@@ -120,8 +120,8 @@ class AddObjectActivity : NetworkActivity() {
             {
                 data?.let {
                     mBinding.tvAddress.text=data.getStringExtra(IntentHelper.EXTRA_ADDRESS)
-                    latitude=data.getSerializableExtra(IntentHelper.EXTRA_LATITUDE) as Double
-                    longitude=data.getSerializableExtra(IntentHelper.EXTRA_LONGITUDE) as Double
+                    latitude=data.getSerializableExtra(IntentHelper.EXTRA_LATITUDE) as Double?
+                    longitude=data.getSerializableExtra(IntentHelper.EXTRA_LONGITUDE) as Double?
                 }
             }
         }

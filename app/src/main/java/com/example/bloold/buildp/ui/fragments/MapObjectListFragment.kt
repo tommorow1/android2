@@ -29,6 +29,7 @@ import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
 import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.EventFragment
+import com.example.bloold.buildp.components.UIHelper
 import com.example.bloold.buildp.databinding.FragmentMapObjectsBinding
 import com.example.bloold.buildp.model.MyItem
 import com.example.bloold.buildp.services.NetworkIntentService
@@ -36,7 +37,6 @@ import com.example.bloold.buildp.ui.*
 import com.example.bloold.buildp.utils.PermissionUtil
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -135,6 +135,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             }
 
         })
+
+        if(Settings.userToken.isNullOrEmpty()) mBinding.fabAdd.hide() else mBinding.fabAdd.show()
         loadTabs()
     }
 
@@ -146,6 +148,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                     requestCode==EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
             {
                 mBinding.mapInfo.visibility=View.GONE
+                if(Settings.userToken.isNullOrEmpty()) mBinding.fabAdd.hide() else mBinding.fabAdd.show()
                 loadObjectsOnMap()
             }
         }
@@ -185,6 +188,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                     currentMarker = null
 
                     mBinding.mapInfo.visibility=View.GONE
+                    if(Settings.userToken.isNullOrEmpty()) mBinding.fabAdd.hide() else mBinding.fabAdd.show()
                     loadObjectsOnMap()
                 }
                 if(latMoveTo!=null&&lngMoveTo!=null)
@@ -338,6 +342,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             mBinding.markerAddress.text=address
             mBinding.markerName.text=name
             mBinding.mapInfo.visibility=View.VISIBLE
+            mBinding.fabAdd.hide()
+
 
             val item = mEventMapItem[it.id]
             it.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("red_marker",67,96)))
@@ -435,26 +441,34 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     fun onEditClick(v:View)
     {
-        mEventMapItem[currentMarker?.id]?.let {
-            startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
-                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
-        }
+        if(UIHelper.userAuthorizedOtherwiseOpenLogin(activity))
+            mEventMapItem[currentMarker?.id]?.let {
+                startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+            }
     }
     fun onAlertClick(v:View)
     {
-        mEventMapItem[currentMarker?.id]?.let {
-            startActivityForResult(Intent(activity, EditStateActivity::class.java)
-                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
-        }
+        if(UIHelper.userAuthorizedOtherwiseOpenLogin(activity))
+            mEventMapItem[currentMarker?.id]?.let {
+                startActivityForResult(Intent(activity, EditStateActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+            }
     }
     fun onPhotoClick(v:View)
     {
-        mEventMapItem[currentMarker?.id]?.let { startActivity(Intent(activity, EditPhotoVideoAudioActivity::class.java)
-                .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
+        if(UIHelper.userAuthorizedOtherwiseOpenLogin(activity))
+            mEventMapItem[currentMarker?.id]?.let { startActivity(Intent(activity, EditPhotoVideoAudioActivity::class.java)
+                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
     }
     fun onRouteClick(v:View)
     {
         mEventMapItem[currentMarker?.id]?.let { RouteActivity.launch(activity, it.id) }
+    }
+
+    fun onAddObjectClick(v:View)
+    {
+        AddObjectActivity.launch(activity)
     }
 
     //---- Ловим события от сервиса ----

@@ -27,13 +27,6 @@ class ChooseFiltersActivity : AppCompatActivity() {
         val REQUEST_CODE_EDIT_FILTERS=127
         fun launch(act:Activity, category: Category?, code:Int)
         {
-            /*val filterNames=SortObject()
-            category?.let {
-                filterNames.name=category.name
-                val objects=ArrayList<SortObject>()
-                it.children?.forEach { objects.add(SortObject(it.name?:"",it.id)) }
-                filterNames.child=objects.toTypedArray()
-            }*/
             act.startActivityForResult(Intent(act, ChooseFiltersActivity::class.java)
                     .putExtra(IntentHelper.EXTRA_SORT_OBJECT, category), code)
         }

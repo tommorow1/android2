@@ -22,9 +22,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    android:background="@color/black_overlay"/>
+                    android:background="@drawable/image_foreground_gradient"/>
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"

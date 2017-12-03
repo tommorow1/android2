@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
@@ -152,6 +153,10 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
         } catch (ex:Exception) {
             ex.printStackTrace()
         }
+
+        if (savedInstanceState == null) {
+            showMap()
+        }
     }
 
     private fun showProgress(showProgress: Boolean) {
@@ -167,7 +172,7 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
                     override fun onSuccess(result: BaseResponse<Category>) {
                         allCategories=getItems(ArrayList(result.data?.toMutableList()), "-1")
                         //allCategories=ArrayList(result.data?.toList())
-                        showCategoryListFragment()
+                        //showCategoryListFragment()
                         //navigator.navigateTo(FilterMainNavigator.FilterScreens.MAIN_FILTER, getItems(ArrayList(result.data?.toList())))
                     }
                     override fun onError(e: Throwable) {
@@ -381,14 +386,14 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
         } else {
 
             val currentFragment = supportFragmentManager.findFragmentById(R.id.mainContainer)
-            if (currentFragment != null && (currentFragment as? SortFragment)?.isMain==true) {
+            if (currentFragment != null && (currentFragment is MapObjectListFragment)) {
                 finish()
                 //super.onBackPressed();
             } else if (supportFragmentManager.backStackEntryCount > 0) {
                 super.onBackPressed()
             }
             else
-                showCategoryListFragment()
+                showMap()
 
             //navigator.back()
             //super.onBackPressed()
@@ -588,15 +593,16 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
                 .apply { children=categoryList?.toTypedArray() }*/
         supportFragmentManager.beginTransaction().replace(R.id.mainContainer,
                 SortFragment.newInstance(getItems(categoryList?:allCategories), categoryList==null))
+                .addToBackStack(null)
                 .commit()
     }
 
     fun showMap(obj:CatalogObject?=null)
     {
-        showAppBarElevation(false)
+        Handler().post({showAppBarElevation(false)})
         fabFilter.hide()
         MapObjectListFragment.newInstance(obj).let { supportFragmentManager.beginTransaction().replace(R.id.mainContainer, it)
-                .addToBackStack(null).commit() }
+                .commit() }
     }
 
 
