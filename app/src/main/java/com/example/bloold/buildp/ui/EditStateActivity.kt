@@ -82,6 +82,7 @@ class EditStateActivity : ChooseImageActivity() {
         player.setOnPreparedListener { it.start() }
 
         UIHelper.makeEditTextScrollable(mBinding.etStateDescription)
+        mBinding.tvConditionCriteria.movementMethod = LinkMovementMethod.getInstance()
         mBinding.tvPhotoRules.movementMethod = LinkMovementMethod.getInstance()
 
         photoEditAdapter= PhotoEditAdapter(OnItemClickListener {

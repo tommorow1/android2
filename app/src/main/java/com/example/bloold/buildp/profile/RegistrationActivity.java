@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bloold.buildp.common.Settings;
+import com.example.bloold.buildp.ui.AgreementActivity;
 import com.example.bloold.buildp.ui.MainActivity;
 import com.example.bloold.buildp.R;
 import com.facebook.CallbackManager;

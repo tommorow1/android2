@@ -19,6 +19,7 @@ class NotificationInfo
     @get: JsonProperty("DATE_CREATE")
     lateinit var dateCreate: String
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     class NoticeData {
         @get: JsonProperty("TYPE")
         var type: Int=0

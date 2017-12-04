@@ -82,6 +82,7 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
         llHeader = mBinding.navView.getHeaderView(0) as ConstraintLayout
         tvName = llHeader.findViewById(R.id.tvName)
         ball = llHeader.findViewById(R.id.ball)
+        ivProfile = llHeader.findViewById<View>(R.id.ivProfile) as CircleImageView;
 
         Settings.catalogFilters=null//Очищаем предварительно установленые фильтры
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -330,7 +331,6 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
     {
         val btnAuth =  llHeader.findViewById<View>(R.id.btnAuth) as AppCompatButton;
         val ivLogout = llHeader.findViewById<View>(R.id.ivLogout) as ImageView;
-        val ivProfile = llHeader.findViewById<View>(R.id.ivProfile) as CircleImageView;
         val ivSettings = llHeader.findViewById<View>(R.id.ivSettings) as ImageView;
         val tvName = llHeader.findViewById<View>(R.id.tvName) as TextView;
         val ball = llHeader.findViewById<View>(R.id.ball) as TextView
@@ -352,7 +352,6 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
     {
         val btnAuth =  findViewById<View>(R.id.btnAuth) as AppCompatButton;
         val ivLogout = findViewById<View>(R.id.ivLogout) as ImageView;
-        val ivProfile = findViewById<View>(R.id.ivProfile) as CircleImageView;
         val ivSettings = findViewById<View>(R.id.ivSettings) as ImageView;
         val tvName = findViewById<View>(R.id.tvName) as TextView;
         val ball = findViewById<View>(R.id.ball) as TextView;
@@ -413,7 +412,6 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
         if (sPref.contains(AuthToken)) {
             LogBtnHide()
         }
-        ivProfile = llHeader.findViewById<View>(R.id.ivProfile) as CircleImageView
         //tvName = findViewById<View>(R.id.tvName) as TextView
         val btnAuth = llHeader.findViewById<View>(R.id.btnAuth) as Button
 

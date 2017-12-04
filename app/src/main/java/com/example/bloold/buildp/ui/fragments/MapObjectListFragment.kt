@@ -257,6 +257,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                         mBinding.tabs.visibility=if(mBinding.tabs.tabCount==0) View.GONE else View.VISIBLE
                         if(mBinding.tabs.visibility==View.VISIBLE)
                             mBinding.tabs.addTab(mBinding.tabs.newTab().setText(getString(R.string.all)),0)
+                        mBinding.tabs.getTabAt(0)?.select()
                     }
                     override fun onError(e: Throwable) {
                         e.printStackTrace()

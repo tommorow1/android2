@@ -93,9 +93,9 @@
             android:label="@string/title_activity_profile_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".profile.AgreementActivity"
+            android:name=".ui.AgreementActivity"
             android:label="@string/title_activity_agreement"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.WithStatus" />
         <activity
             android:name=".ListActivityObjects.ListObjectsActivity"
             android:label="@string/title_activity_list_objects"
@@ -203,7 +203,7 @@
             android:exported="false" />
         <provider
             android:name=".components.GenericFileProvider"
-            android:authorities="com.example.bloold.buildp"
+            android:authorities="ru.net.ruin.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

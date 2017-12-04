@@ -53,7 +53,8 @@
     <string name="add_photo_title">Добавить фотографии</string>
     <string name="add_video_title">Добавить видео</string>
     <string name="add_audio_title">Добавить аудио</string>
-    <string name="add_photo_rules"><a href="https://ruin.net.ru/recommendations/">Правила добавления фотографий</a></string>
+    <string name="condition_criteria"><a href="https://ruin.net.ru/object-condition-terms/?clear_for_app=y">Критерии оценки состояния</a></string>
+    <string name="add_photo_rules"><a href="https://ruin.net.ru/recommendations/?clear_for_app=y">Правила добавления фотографий</a></string>
     <string name="add">Добавить</string>
     <string name="audio_record">Аудиозапись</string>
     <string name="youtube_link">Сссылка на youtube видео</string>
@@ -64,7 +65,7 @@
     <string name="object_name">Название объекта</string>
     <string name="folk_object_name">Народное название объекта</string>
     <string name="address">Адрес</string>
-    <string name="edit_object_rules"><a href="http://ruinnet.idefa.ru/rules/">Правила добавления объектов</a></string>
+    <string name="edit_object_rules"><a href="https://ruin.net.ru/rules-add/?clear_for_app=y">Правила добавления объектов</a></string>
     <string name="go_to_full_form"><u>Перейти к полной форме</u></string>
     <string name="need_fill_this_field">Для добавления объекта необходимо заполнить это поле</string>
     <string name="need_address_for_adding_object">Для добавления объекта введите адрес и выберите место на карте</string>

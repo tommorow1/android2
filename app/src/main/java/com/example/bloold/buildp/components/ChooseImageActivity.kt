@@ -125,7 +125,7 @@ abstract class ChooseImageActivity : NetworkActivity() {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        FileProvider.getUriForFile(this, "com.example.bloold.buildp", photoFile))
+                        FileProvider.getUriForFile(this, "ru.net.ruin.provider", photoFile))
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
             }
         } else

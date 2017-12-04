@@ -15,6 +15,7 @@ object Settings {
     val URL_NEWS = "https://ruin.net.ru/news/?clear_for_app=y"
     val URL_VOTING = "https://ruin.net.ru/voting/?clear_for_app=y"
     val URL_ABOUT = "https://ruin.net.ru/landing/?clear_for_app=y"
+    val URL_AGREEMENT = "https://ruin.net.ru/terms/?clear_for_app=y"
 
     val DIRECTIONS_API_KEY = "AIzaSyA0SGbiZ28WwwukGWgPwmqIKTd7GJMUDfY"
     private val KEY_CATALOG_FILTERS = "catalogFilters"
