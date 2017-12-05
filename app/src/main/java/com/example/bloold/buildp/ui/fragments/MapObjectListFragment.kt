@@ -41,10 +41,9 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.clustering.Cluster
+import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import io.reactivex.observers.DisposableSingleObserver
@@ -341,6 +340,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             val address = it.title
             var name = it.snippet
             if (address == null && name == null) {
+                scaleCluster(marker)
                 return true
             }
             if(currentMarker?.id!=it.id) {
@@ -366,8 +366,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             currentMarker = it
             //val ObjId = item?.objId
 
-            val mrLatitude = it.position.latitude.toString()
-            val mrLongitude = it.position.longitude.toString()
+            //val mrLatitude = it.position.latitude.toString()
+            //val mrLongitude = it.position.longitude.toString()
             var geoLatitude = 0.0
             var geoLongitude = 0.0
 
@@ -407,16 +407,23 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                     }
                 })
             }
-
-/*String mrPosition = String.valueOf(mrLatitude+","+mrLongitude);
-            intentRoute.putExtra("mrPosition", mrPosition);
-            intentSingleObject.putExtra("ObjId", ObjId);
-            String geoPosition = String.valueOf(geoLatitude+","+geoLongitude);
-            intentRoute.putExtra("geoPosition", geoPosition);
-            intentRoute.putExtra("mrTitle",marker.getSnippet());*/
-
         }
         return true
+    }
+
+    /*** Увеличить мастаб до попадания всех элементов на экран  */
+    private fun scaleCluster(clusterMarker: Marker) {
+        val cluster: Cluster<MyItem> = (mClusterManager.renderer as OwnIconRendered).getCluster(clusterMarker) ?: return
+
+        val builder = LatLngBounds.Builder()
+        for(i in 0 until cluster.items.size)
+            cluster.items.elementAt(i)?.let { builder.include(it.position) }
+        val bounds = builder.build()
+
+        val padding = 100 // offset from edges of the map in pixels
+        //CameraPosition cameraPosition = new CameraPosition.Builder().target(latlng).zoom(14.0f).build();
+        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        googleMap?.animateCamera(cu)
     }
 
     fun onInfoBlockClick(v:View)

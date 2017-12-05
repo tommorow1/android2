@@ -20,7 +20,7 @@ android {
         applicationId "ru.net.ruin"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 3
+        versionCode 5
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         versionName "1.0"

@@ -35,7 +35,7 @@ interface ServerApi {
                           @Query("select[]") selectParams: Array<String> = ApiHelper.defaultParams): Single<BaseResponseWithDataObject<CatalogObject>>
     /*** Избранное */
     @GET("object/favorite/list/")
-    fun getFavourite(@Query("limit") limit: Int, @Query("page") page: Int): Single<BaseResponseWithDataObject<FavouriteObject>>
+    fun getFavourite(): Single<BaseResponseWithDataObject<FavouriteObject>>
 
     @GET("directory/type-map-structure/")
     fun getMapStructure(): Single<BaseResponse<CatalogObject>>

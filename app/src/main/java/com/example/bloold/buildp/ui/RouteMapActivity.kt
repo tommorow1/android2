@@ -106,14 +106,16 @@ class RouteMapActivity : AppCompatActivity() {
                         ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
                 }*/
-                val from=LatLng(latFrom, lngFrom)
-                val to=LatLng(latTo, lngTo)
-                it.addMarker(MarkerOptions().icon(getMarkerIconFromDrawable(resources.getDrawable(R.drawable.red_marker))).position(from))
-                it.addMarker(MarkerOptions().icon(getMarkerIconFromDrawable(resources.getDrawable(R.drawable.red_marker))).position(to))
+                it.setOnMapLoadedCallback({
+                    val from=LatLng(latFrom, lngFrom)
+                    val to=LatLng(latTo, lngTo)
+                    it.addMarker(MarkerOptions().icon(getMarkerIconFromDrawable(resources.getDrawable(R.drawable.red_marker))).position(from))
+                    it.addMarker(MarkerOptions().icon(getMarkerIconFromDrawable(resources.getDrawable(R.drawable.red_marker))).position(to))
 
-                it.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.Builder().include(from).include(to).build(), 100))
+                    it.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.Builder().include(from).include(to).build(), 100))
 
-                getDirections()
+                    getDirections()
+                })
             }
         })
     }

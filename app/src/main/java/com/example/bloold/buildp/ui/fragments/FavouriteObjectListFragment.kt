@@ -26,13 +26,12 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import java.net.ConnectException
 import java.net.UnknownHostException
 
-class FavouriteObjectListFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScrollUploaderListener {
+class FavouriteObjectListFragment : NetworkFragment()
+{
     private lateinit var mBinding: FragmentCatalogObjectBinding
     private lateinit var catalogObjectAdapter: FavouriteAdapter
-    private var lazyScrollPageUploader = LazyScrollPageUploader(this)
 
     companion object {
-        private val ITEMS_ON_PAGE = 5
         private val KEY_RESPONSE_ARRAY_OBJECTS = "catalog_response"
 
         fun newInstance(): FavouriteObjectListFragment
@@ -57,12 +56,10 @@ class FavouriteObjectListFragment : NetworkFragment(), LazyScrollPageUploader.On
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.rvCatalogObjects.addOnScrollListener(lazyScrollPageUploader)
         mBinding.rvCatalogObjects.layoutManager=LinearLayoutManager(activity)
         mBinding.rvCatalogObjects.adapter=catalogObjectAdapter
 
-        showProgress(true)
-        loadCatalogObjects(1)
+        loadCatalogObjects()
     }
 
     override fun onResume() {
@@ -83,31 +80,19 @@ class FavouriteObjectListFragment : NetworkFragment(), LazyScrollPageUploader.On
         }
     }
 
-    override fun onLoadData(totalItems: Int) {
-        loadCatalogObjects(totalItems/ITEMS_ON_PAGE+1)
-    }
-
-    private fun loadCatalogObjects(page: Int)
+    private fun loadCatalogObjects()
     {
-        getCompositeDisposable().add(ServiceGenerator.serverApi.getFavourite(ITEMS_ON_PAGE, page)
+        getCompositeDisposable().add(ServiceGenerator.serverApi.getFavourite()
                 .compose(RxHelper.applySchedulers())
-                .doOnSubscribe { lazyScrollPageUploader.setLoading(true) }
+                .doOnSubscribe { showProgress(true) }
                 .doFinally {
                     showProgress(false)
-                    lazyScrollPageUploader.setLoading(false)
                     updateNoItemsView()
                 }
                 .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<FavouriteObject>>() {
                     override fun onSuccess(result: BaseResponseWithDataObject<FavouriteObject>) {
                         result.data?.items?.let {
-                            val allItemsLoaded = it.size < ITEMS_ON_PAGE
-                            catalogObjectAdapter.isShowLoadingFooter = !allItemsLoaded
-                            lazyScrollPageUploader.noMoreElements=allItemsLoaded
-
-                            if(page==1)
-                                catalogObjectAdapter.setData(it)
-                            else
-                                catalogObjectAdapter.addData(it)
+                            catalogObjectAdapter.setData(it)
                         }
                     }
 
