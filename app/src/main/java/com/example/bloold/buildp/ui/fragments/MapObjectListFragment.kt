@@ -16,6 +16,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -180,7 +181,11 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     private fun setupMap()
     {
-        if(googleMap!=null) return
+        if(googleMap!=null)
+        {
+            if(!gotActualLocation) startGettingUserLocation()
+            return
+        }
         (childFragmentManager.findFragmentById(R.id.fMap) as SupportMapFragment).getMapAsync({
             googleMap=it
             googleMap?.let {
@@ -531,19 +536,35 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         }
     }
     private fun stopLocationUpdates() {
-        if (locationListener != null) {
+        locationListener?.let {
             val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            locationManager.removeUpdates(locationListener)
+            locationManager.removeUpdates(it)
         }
     }
 
     private fun startGettingUserLocation() {
         //Пока определяются текущие координаты, мы получаем посление
+        if(!isGPSEnabledOrShowError()) return
         if (userLocation == null) {
             userLocation = fetchLastLocation()
             showUserLocationMarker(latMoveTo==null&& lngMoveTo==null)
         }
         if (!gotActualLocation) fetchActualUserLocation()//Запускаем получение актуальных координат
+    }
+
+    private fun isGPSEnabledOrShowError(): Boolean
+    {
+        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder(activity)
+                    .setMessage(R.string.gps_not_enabled)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.enable, { _,_ -> startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)) })
+                    .setNegativeButton(android.R.string.cancel, null).show()
+            return false
+        }
+        return true
     }
 
     // -------- Получение местоположения пользователя ----------

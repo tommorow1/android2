@@ -36,6 +36,7 @@
     <string name="meters">%d м</string>
     <string name="km">%d км</string>
     <string name="no_route">Нет маршрута</string>
+    <string name="enable">Включить</string>
 
     <!-- Редактирование -->
     <string name="edit_object_title">Редактирование объекта</string>
