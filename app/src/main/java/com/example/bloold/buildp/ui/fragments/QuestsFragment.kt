@@ -28,6 +28,7 @@ import com.example.bloold.buildp.model.Quest
 import com.example.bloold.buildp.ui.MainActivity
 import com.example.bloold.buildp.ui.QuestDetailsActivity
 import io.reactivex.observers.DisposableSingleObserver
+import kotlinx.android.synthetic.main.activity_catalog_object_details.*
 import retrofit2.Response
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -107,7 +108,7 @@ class QuestsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScrollUpl
     override fun onResume() {
         super.onResume()
         if(parentFragment==null)
-            activity?.title=getString(R.string.quests)
+            activity?.toolbar?.setTitle(R.string.quests)
     }
     private fun showProgress(showProgress: Boolean) {
         mBinding.pbLoading.visibility = if (showProgress) View.VISIBLE else View.GONE
