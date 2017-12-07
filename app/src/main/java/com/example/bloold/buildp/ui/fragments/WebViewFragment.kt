@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import com.example.bloold.buildp.R
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.databinding.FragmentWebviewBinding
@@ -77,6 +78,7 @@ class WebViewFragment : Fragment()
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 if (errorCode == WebViewClient.ERROR_HOST_LOOKUP) {
                     lastFailUrl = failingUrl
+                    activity?.let { Toast.makeText(it, R.string.error_check_internet, Toast.LENGTH_LONG).show() }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.example.bloold.buildp.single.`object`.photos
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -43,8 +42,10 @@ class PhotoFragment : Fragment()
 
             adapter = PhotoRecyclerViewAdapter(OnItemClickListener
             {
-                startActivity(Intent(activity, ImageViewActivity::class.java)
-                        .putExtra(IntentHelper.EXTRA_IMAGE_URL, it.fullPath()))
+                currentPhoto->
+                photoList?.let{ ImageViewActivity.launch(activity!!, it, currentPhoto) }
+                /*startActivity(Intent(activity, ImageViewActivity::class.java)
+                        .putExtra(IntentHelper.EXTRA_IMAGE_URL, it.fullPath()))*/
             }, view.context)
             adapter.addAll(photoList?.toList())
 
@@ -53,8 +54,6 @@ class PhotoFragment : Fragment()
     }
 
     companion object {
-
-        private val ARG_COLUMN_COUNT = "column-count"
         fun newInstance(photos: Array<PhotoModel>?): PhotoFragment
                 = PhotoFragment().apply {  arguments = Bundle().apply { putParcelableArray(IntentHelper.EXTRA_PHOTO_DATA_ARRAY, photos) } }
     }

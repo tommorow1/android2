@@ -27,7 +27,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import java.util.*
 
 
 /**
@@ -170,7 +169,7 @@ class RouteMapActivity : AppCompatActivity() {
                     mBinding.flLoading.visibility=View.GONE
                     drawnRoute?.remove()
                     if(direction?.isOK==true) {
-                        var totalDistanceM:Float=0f
+                        var totalDistanceM=0f
                         var distance=FloatArray(1)
                         var prevPoint:LatLng?=null
                         val lineOptions = PolylineOptions()

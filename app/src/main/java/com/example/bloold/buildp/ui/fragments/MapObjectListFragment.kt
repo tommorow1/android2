@@ -372,9 +372,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             currentMarker = it
             //val ObjId = item?.objId
 
-            var dist=getDistanceToUser(it.position.latitude, it.position.longitude)?:0.0
-            dist = dist.toInt().toDouble()
-            mBinding.tvDist.text=dist.toString()+"м"
+            var totalDistanceM=getDistanceToUser(it.position.latitude, it.position.longitude)?:0.0
+            mBinding.tvDist.text=if(totalDistanceM<1000) getString(R.string.meters, totalDistanceM.toInt()) else getString(R.string.km, totalDistanceM.div(1000).toInt())
 
             if(Settings.userToken.isNullOrEmpty())
             {
