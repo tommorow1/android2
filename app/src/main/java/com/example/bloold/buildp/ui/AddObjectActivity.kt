@@ -70,6 +70,12 @@ class AddObjectActivity : NetworkActivity() {
         return true
     }
 
+    override fun onBackPressed() {
+        if(mBinding.llFullBlock.visibility==View.VISIBLE)
+            hideFullForm()
+        else super.onBackPressed()
+    }
+
     private fun loadObjectDetails(objectId:Int)
     {
         compositeDisposable.add(ServiceGenerator.serverApi.getCatalogObjects(HashMap<String,String>().apply { put("filter[ID][0]", objectId.toString()) },
@@ -127,11 +133,19 @@ class AddObjectActivity : NetworkActivity() {
     }
     private fun showFullForm()
     {
-        loadObjectTypes()
-        loadObjectValueCategoriesTypes()
-        loadProtectiveStatuses()
+        if(mBinding.spObjectType.adapter==null) {
+            //Загружаем данные для спиннеров
+            loadObjectTypes()
+            loadObjectValueCategoriesTypes()
+            loadProtectiveStatuses()
+        }
         mBinding.tvFullForm.visibility=View.GONE
         mBinding.llFullBlock.visibility=View.VISIBLE
+    }
+    private fun hideFullForm()
+    {
+        mBinding.tvFullForm.visibility=View.VISIBLE
+        mBinding.llFullBlock.visibility=View.GONE
     }
     private fun loadObjectTypes()
     {
