@@ -16,12 +16,12 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 class SortFragment : Fragment(), OnItemClickListener<Category> {
     private var adapter: SortAdapter? = null
     var isMain:Boolean=false
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_filter_start_list, container, false)
+        return inflater.inflate(R.layout.fragment_filter_start_list, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         isMain=arguments?.getBoolean(KEY_IS_MAIN, false)==true
@@ -30,18 +30,18 @@ class SortFragment : Fragment(), OnItemClickListener<Category> {
         if (view is RecyclerView) {
             val context = view.getContext()
 
-            adapter = SortAdapter(arguments.getParcelableArrayList(ITEMS_KEY)!!, R.layout.item_hight_level_filter, this)
+            adapter = SortAdapter(arguments?.getParcelableArrayList(ITEMS_KEY)!!, R.layout.item_hight_level_filter, this)
 
             view.layoutManager = LinearLayoutManager(context)
             view.adapter = adapter
         }
-        activity.invalidateOptionsMenu()
+        activity?.invalidateOptionsMenu()
     }
 
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.setTitle(R.string.navigation_drawer_catalog_object)
+        activity?.toolbar?.setTitle(R.string.navigation_drawer_catalog_object)
     }
 
     override fun onItemClick(item: Category) {

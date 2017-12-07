@@ -40,7 +40,7 @@ class SuggestionTabsFragment : NetworkFragment() {
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.setTitle(R.string.my_suggestions)
+        activity?.toolbar?.setTitle(R.string.my_suggestions)
     }
 
     private inner class SuggestionPagerAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {

@@ -87,20 +87,20 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
                 })
         queryString=arguments?.getString(IntentHelper.EXTRA_QUERY_STRING)
         queryType=arguments?.getString(IntentHelper.EXTRA_QUERY_TYPE)
-        if(arguments != null){
-            if (arguments.containsKey(KEY_RESPONSE_ARRAY_OBJECTS)) {
-                objectsArray = arguments.getParcelableArrayList(KEY_RESPONSE_ARRAY_OBJECTS)
-                isHaveCatalog = arguments.getBoolean(KEY_RESPONSE_HAVE_CATALOG)
+        arguments?.let {
+            if (it.containsKey(KEY_RESPONSE_ARRAY_OBJECTS)) {
+                objectsArray = it.getParcelableArrayList(KEY_RESPONSE_ARRAY_OBJECTS)
+                isHaveCatalog = it.getBoolean(KEY_RESPONSE_HAVE_CATALOG)
             }
-            if(arguments.containsKey(KEY_RESPONSE_SORTED_OBJECTS)){
-                category = arguments.getParcelable(KEY_RESPONSE_SORTED_OBJECTS)
+            if(it.containsKey(KEY_RESPONSE_SORTED_OBJECTS)){
+                category = it.getParcelable(KEY_RESPONSE_SORTED_OBJECTS)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.title=getString(R.string.navigation_drawer_catalog_object)
+        activity?.toolbar?.title=getString(R.string.navigation_drawer_catalog_object)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -109,7 +109,7 @@ class CatalogObjectListFragment : NetworkFragment(), OnItemClickListener<Catalog
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_catalog_object, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.rvCatalogObjects.addOnScrollListener(lazyScrollPageUploader)

@@ -36,10 +36,10 @@ class ParticipantsInQuestFragment : Fragment()
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_participants_in_quest, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        participantAdapter.addData(arguments.getParcelableArrayList(IntentHelper.EXTRA_PARTICIPANT_LIST))
+        participantAdapter.addData(arguments?.getParcelableArrayList(IntentHelper.EXTRA_PARTICIPANT_LIST))
         mBinding.recyclerView.layoutManager=LinearLayoutManager(activity)
         mBinding.recyclerView.adapter=participantAdapter
         updateNoItemsView()

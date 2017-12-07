@@ -53,7 +53,7 @@ class FavouriteObjectListFragment : NetworkFragment()
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_catalog_object, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.rvCatalogObjects.layoutManager=LinearLayoutManager(activity)
@@ -64,7 +64,7 @@ class FavouriteObjectListFragment : NetworkFragment()
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.title=getString(R.string.favourite)
+        activity?.toolbar?.title=getString(R.string.favourite)
     }
 
     private fun showProgress(showProgress: Boolean) {

@@ -44,14 +44,14 @@ class MySettingsFragment : NetworkFragment(), CompoundButton.OnCheckedChangeList
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadNotificationSettings(true)
     }
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.title=getString(R.string.my_settings)
+        activity?.toolbar?.setTitle(R.string.my_settings)
     }
     private fun showProgress(showProgress: Boolean) {
         mBinding.flLoading.visibility = if (showProgress) View.VISIBLE else View.GONE

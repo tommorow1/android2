@@ -33,7 +33,7 @@ class PhotoFragment : Fragment()
                               savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_photo_list, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (view is RecyclerView) {

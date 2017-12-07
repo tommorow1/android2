@@ -93,7 +93,7 @@ class QuestsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScrollUpl
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_quests, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.rvCatalogObjects.addOnScrollListener(lazyScrollPageUploader)
@@ -107,7 +107,7 @@ class QuestsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScrollUpl
     override fun onResume() {
         super.onResume()
         if(parentFragment==null)
-            activity.title=getString(R.string.quests)
+            activity?.title=getString(R.string.quests)
     }
     private fun showProgress(showProgress: Boolean) {
         mBinding.pbLoading.visibility = if (showProgress) View.VISIBLE else View.GONE

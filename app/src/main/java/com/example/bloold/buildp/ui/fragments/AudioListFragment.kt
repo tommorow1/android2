@@ -24,13 +24,13 @@ class AudioListFragment : Fragment() {
     private lateinit var adapter:AudioEditAdapter
     private var player:MediaPlayer=MediaPlayer().apply { setAudioStreamType(AudioManager.STREAM_MUSIC) }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_view, container, false)
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.recyclerView.addItemDecoration(DividerItemDecoration(activity, OrientationHelper.VERTICAL))
         mBinding.recyclerView.layoutManager=LinearLayoutManager(activity)

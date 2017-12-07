@@ -17,7 +17,6 @@ import com.example.bloold.buildp.R
 import com.example.bloold.buildp.api.ApiHelper
 import com.example.bloold.buildp.api.ServiceGenerator
 import com.example.bloold.buildp.api.data.BaseResponseWithDataObject
-import com.example.bloold.buildp.api.data.BaseResponseWithoutData
 import com.example.bloold.buildp.api.data.FeedbackResponse
 import com.example.bloold.buildp.common.PhotoHelper
 import com.example.bloold.buildp.common.RxHelper
@@ -43,21 +42,21 @@ class FeedbackFragment : NetworkFragment() {
     private var file:String?=null
     private var sentFileId:Long?=null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_feedback, container, false)
         mBinding.listener=this
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.etPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
     }
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.title=getString(R.string.feedback)
+        activity?.toolbar?.title=getString(R.string.feedback)
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -149,11 +148,13 @@ class FeedbackFragment : NetworkFragment() {
     }
     fun onChooseFileClick(v:View?)
     {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ChooseImageActivity.REQUEST_READ_EXTERNAL)
+        activity?.baseContext?.let {
+            if (ActivityCompat.checkSelfPermission(it, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ChooseImageActivity.REQUEST_READ_EXTERNAL)
+            }
+            else startActivityForResult(Intent(Intent.ACTION_GET_CONTENT)
+                    .setType("*/*"), REQUEST_CODE_CHOOSE_FILE)
         }
-        else startActivityForResult(Intent(Intent.ACTION_GET_CONTENT)
-                .setType("*/*"), REQUEST_CODE_CHOOSE_FILE)
     }
 
     private fun uploadFile(filePath: String, key:Long, onFileUploadListener: EditPublicationsActivity.OnFileUploadListener)

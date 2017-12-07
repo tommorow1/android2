@@ -94,18 +94,17 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         fun newInstance(obj:CatalogObject?=null): MapObjectListFragment
                 = newInstance(obj?.getLocation()?.latitude, obj?.getLocation()?.longitude)
         fun newInstance(lat: Double?, long: Double?): MapObjectListFragment
-                = MapObjectListFragment().apply { arguments=Bundle() }
-                .apply {
-                    arguments.putDouble(IntentHelper.EXTRA_LATITUDE, lat?:-1.0)
-                    arguments.putDouble(IntentHelper.EXTRA_LONGITUDE, long?:-1.0)
-                }
+                = MapObjectListFragment().apply { arguments=Bundle().apply {
+                    putDouble(IntentHelper.EXTRA_LATITUDE, lat?:-1.0)
+                    putDouble(IntentHelper.EXTRA_LONGITUDE, long?:-1.0)
+                } }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            latMoveTo=arguments.getDouble(IntentHelper.EXTRA_LATITUDE)
-            lngMoveTo=arguments.getDouble(IntentHelper.EXTRA_LONGITUDE)
+            latMoveTo=it.getDouble(IntentHelper.EXTRA_LATITUDE)
+            lngMoveTo=it.getDouble(IntentHelper.EXTRA_LONGITUDE)
             if(latMoveTo==-1.0||lngMoveTo==-1.0)
             {
                 latMoveTo=null
@@ -126,7 +125,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener
         {
@@ -166,7 +165,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar?.setTitle(R.string.navigation_drawer_object_in_map)
+        activity?.toolbar?.setTitle(R.string.navigation_drawer_object_in_map)
         val resCode= GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
         when(resCode)
         {
@@ -195,7 +194,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                 //it.setOnInfoWindowClickListener(mClusterManager)
                 //mClusterManager.setOnClusterClickListener(this)
                 //mClusterManager.setOnClusterInfoWindowClickListener(this)
-                mClusterManager.renderer = OwnIconRendered(activity, it, mClusterManager)
+                activity?.baseContext?.let { context ->  mClusterManager.renderer = OwnIconRendered(context, it, mClusterManager) }
                 it.setOnMarkerClickListener(this)
                 it.setOnCameraIdleListener {
                     mClusterManager.onCameraIdle()
@@ -212,10 +211,12 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                 }
 
                 //Получаем местоположение пользователя для отображения маркера
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
-                } else startGettingUserLocation()
+                activity?.baseContext?.let {
+                    if (ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_USER_LOCATION)
+                    } else startGettingUserLocation()
+                }
             }
         })
     }
@@ -377,7 +378,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             var geoLongitude = 0.0
 
             var dist=0f
-            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             var location: Location?
             try {
                 location = locationManager.getLastKnownLocation(locationManager.getBestProvider(Criteria(), true))
@@ -408,7 +409,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                     item?.isFavourite=(mBinding.ivFavourite.tag as Int)==0
                     updateFavouriteBtn((mBinding.ivFavourite.tag as Int)==0)
                     mEventMapItem[marker.id]?.let {
-                        NetworkIntentService.toogleFavourite(activity, it.id)
+                        activity?.baseContext?.let { cntx ->NetworkIntentService.toogleFavourite(cntx, it.id) }
                     }
                 })
             }
@@ -469,34 +470,45 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     fun onEditClick(v:View)
     {
-        if(UIHelper.userAuthorizedOtherwiseOpenLogin(activity))
-            mEventMapItem[currentMarker?.id]?.let {
-                startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
-                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
-            }
+        activity?.baseContext?.let { context ->
+            if(UIHelper.userAuthorizedOtherwiseOpenLogin(context))
+                mEventMapItem[currentMarker?.id]?.let {
+                    startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
+                            .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), ChooseEditFieldActivity.REQUEST_CODE_EDIT_OBJECT)
+                }
+        }
+
     }
     fun onAlertClick(v:View)
     {
-        if(UIHelper.userAuthorizedOtherwiseOpenLogin(activity))
-            mEventMapItem[currentMarker?.id]?.let {
-                startActivityForResult(Intent(activity, EditStateActivity::class.java)
-                        .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
-            }
+        activity?.baseContext?.let { context ->
+            if (UIHelper.userAuthorizedOtherwiseOpenLogin(context))
+                mEventMapItem[currentMarker?.id]?.let {
+                    startActivityForResult(Intent(activity, EditStateActivity::class.java)
+                            .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id), EditStateActivity.REQUEST_CODE_EDIT_STATE_OBJECT)
+                }
+        }
     }
     fun onPhotoClick(v:View)
     {
-        if(UIHelper.userAuthorizedOtherwiseOpenLogin(activity))
-            mEventMapItem[currentMarker?.id]?.let { startActivity(Intent(activity, EditPhotoVideoAudioActivity::class.java)
-                    .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id)) }
+        activity?.baseContext?.let { context ->
+            if (UIHelper.userAuthorizedOtherwiseOpenLogin(context))
+                mEventMapItem[currentMarker?.id]?.let {
+                    startActivity(Intent(activity, EditPhotoVideoAudioActivity::class.java)
+                            .putExtra(IntentHelper.EXTRA_OBJECT_ID, it.id))
+                }
+        }
     }
     fun onRouteClick(v:View)
     {
-        mEventMapItem[currentMarker?.id]?.let { RouteActivity.launch(activity, it.id) }
+        mEventMapItem[currentMarker?.id]?.let {
+            activity?.let { act-> RouteActivity.launch(act, it.id) }
+        }
     }
 
     fun onAddObjectClick(v:View)
     {
-        AddObjectActivity.launch(activity)
+        activity?.let { AddObjectActivity.launch(it) }
     }
 
     //-- Получение местоположения пользователя --
@@ -528,7 +540,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         }
 
         try {
-            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
         } catch (ex: SecurityException) {
             ex.printStackTrace()
@@ -537,7 +549,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     private fun stopLocationUpdates() {
         locationListener?.let {
-            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationManager.removeUpdates(it)
         }
     }
@@ -554,14 +566,16 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     private fun isGPSEnabledOrShowError(): Boolean
     {
-        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AlertDialog.Builder(activity)
-                    .setMessage(R.string.gps_not_enabled)
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.enable, { _,_ -> startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)) })
-                    .setNegativeButton(android.R.string.cancel, null).show()
+            activity?.baseContext?.let {
+                AlertDialog.Builder(it)
+                        .setMessage(R.string.gps_not_enabled)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.enable, { _,_ -> startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)) })
+                        .setNegativeButton(android.R.string.cancel, null).show()
+            }
             return false
         }
         return true
@@ -570,7 +584,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     // -------- Получение местоположения пользователя ----------
     private fun fetchLastLocation(): Location? {
         try {
-            val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         } catch (ex: SecurityException) {
             ex.printStackTrace()

@@ -26,7 +26,7 @@ abstract class EventFragment : NetworkFragment() {
     }
 
     override fun onPause() {
-        activity.unregisterReceiver(broadcastReceiver)
+        activity?.unregisterReceiver(broadcastReceiver)
         super.onPause()
     }
 
@@ -41,7 +41,7 @@ abstract class EventFragment : NetworkFragment() {
 
         val intentFilter = IntentFilter()
         for (action in actions) intentFilter.addAction(action)
-        activity.registerReceiver(broadcastReceiver, intentFilter)
+        activity?.registerReceiver(broadcastReceiver, intentFilter)
     }
 }
 

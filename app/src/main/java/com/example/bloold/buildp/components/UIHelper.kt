@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.design.widget.TextInputLayout
+import android.support.v4.app.FragmentActivity
+import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
@@ -28,12 +30,14 @@ import java.util.*
 object UIHelper
 {
     /*** Есть ли ошибка в ответе сервера  */
-    fun showServerError(response: Response<*>, cntx: Context) {
-        val error = ErrorUtils.parseError(response)
-        if (error != null && !TextUtils.isEmpty(error.message))
-            Toast.makeText(cntx.applicationContext, error.message, Toast.LENGTH_LONG).show()
-        else
-            Toast.makeText(cntx.applicationContext, R.string.server_error, Toast.LENGTH_LONG).show()
+    fun showServerError(response: Response<*>, activity: Context?) {
+        activity?.let {
+            val error = ErrorUtils.parseError(response)
+            if (error != null && !TextUtils.isEmpty(error.message))
+                Toast.makeText(it.applicationContext, error.message, Toast.LENGTH_LONG).show()
+            else
+                Toast.makeText(it.applicationContext, R.string.server_error, Toast.LENGTH_LONG).show()
+        }
     }
     /*** Показываем ошибку для TextView если пустой
      * @return true если ошибка

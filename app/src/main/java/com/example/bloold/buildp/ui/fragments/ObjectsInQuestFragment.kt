@@ -37,7 +37,7 @@ class ObjectsInQuestFragment : Fragment()
                 },
                 OnItemClickListener {
                     if(it.getLocation()!=null)
-                        MapActivity.launch(activity, it)
+                        activity?.let { act-> MapActivity.launch(act, it) }
                 })
     }
 
@@ -47,10 +47,10 @@ class ObjectsInQuestFragment : Fragment()
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_objects_in_quest, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        catalogObjectAdapter.setData(arguments.getParcelableArrayList<CatalogObject>(IntentHelper.EXTRA_OBJECT_LIST).toTypedArray())
+        catalogObjectAdapter.setData(arguments?.getParcelableArrayList<CatalogObject>(IntentHelper.EXTRA_OBJECT_LIST)?.toTypedArray())
         mBinding.rvCatalogObjects.layoutManager=LinearLayoutManager(activity)
         mBinding.rvCatalogObjects.adapter=catalogObjectAdapter
         updateNoItemsView()

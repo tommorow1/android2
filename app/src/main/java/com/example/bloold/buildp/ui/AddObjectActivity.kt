@@ -18,7 +18,6 @@ import com.example.bloold.buildp.api.data.BaseResponseWithoutData
 import com.example.bloold.buildp.api.data.CatalogObject
 import com.example.bloold.buildp.common.IntentHelper
 import com.example.bloold.buildp.common.RxHelper
-import com.example.bloold.buildp.common.Settings
 import com.example.bloold.buildp.components.NetworkActivity
 import com.example.bloold.buildp.components.SpinnerWithoutLPaddingAdapter
 import com.example.bloold.buildp.components.UIHelper

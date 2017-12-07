@@ -59,7 +59,7 @@ class SuggestionsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazyScro
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_suggestions, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.rvCatalogObjects.addOnScrollListener(lazyScrollPageUploader)

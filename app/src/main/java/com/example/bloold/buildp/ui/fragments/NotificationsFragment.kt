@@ -41,12 +41,12 @@ class NotificationsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazySc
         super.onCreate(savedInstanceState)
         notificationsAdapter = NotificationsAdapter()
 
-        NetworkIntentService.setAllNotificationsRead(activity)
+        activity?.baseContext?.let { NetworkIntentService.setAllNotificationsRead(it) }
     }
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar.setTitle(R.string.notifications)
+        activity?.toolbar?.setTitle(R.string.notifications)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -55,7 +55,7 @@ class NotificationsFragment : NetworkFragment(), LazyScrollPageUploader.OnLazySc
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifications, container, false)
         return mBinding.root
     }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.recyclerView.addOnScrollListener(lazyScrollPageUploader)

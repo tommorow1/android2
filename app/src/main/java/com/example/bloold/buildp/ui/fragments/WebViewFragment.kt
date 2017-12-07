@@ -24,7 +24,7 @@ class WebViewFragment : Fragment()
 
     private var mCurrentUrl: String? = null//Для того чтобы правильно отслеживать редиректы
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_webview, container, false)
         return mBinding.root
@@ -32,15 +32,15 @@ class WebViewFragment : Fragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title=arguments.getString(IntentHelper.EXTRA_TITLE)
+        title=arguments?.getString(IntentHelper.EXTRA_TITLE)?:""
     }
 
     override fun onResume() {
         super.onResume()
-        activity.toolbar?.title = title
+        activity?.toolbar?.title = title
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, progress: Int) {
@@ -89,10 +89,10 @@ class WebViewFragment : Fragment()
         val TAG = "FinesFragment"
 
         fun newInstance(title: String, url: String): WebViewFragment
-                = WebViewFragment().apply { arguments=Bundle() }
-                .apply {
-                    arguments.putString(IntentHelper.EXTRA_TITLE, title)
-                    arguments.putString(IntentHelper.EXTRA_URL, url)
-                }
+                = WebViewFragment().apply { arguments=Bundle().apply {
+                putString(IntentHelper.EXTRA_TITLE, title)
+                putString(IntentHelper.EXTRA_URL, url)
+            }}
+
     }
 }
