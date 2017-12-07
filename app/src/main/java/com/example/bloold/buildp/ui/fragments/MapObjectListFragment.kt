@@ -372,28 +372,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             currentMarker = it
             //val ObjId = item?.objId
 
-            //val mrLatitude = it.position.latitude.toString()
-            //val mrLongitude = it.position.longitude.toString()
-            var geoLatitude = 0.0
-            var geoLongitude = 0.0
-
-            var dist=0f
-            val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            var location: Location?
-            try {
-                location = locationManager.getLastKnownLocation(locationManager.getBestProvider(Criteria(), true))
-                if(location!=null) {
-                    geoLatitude = location.latitude
-                    geoLongitude = location.longitude
-                    dist = calculationDistance(geoLatitude,geoLongitude,it.position.latitude,it.position.longitude);
-                }
-            }
-            catch (ex:Exception)
-            {
-                ex.printStackTrace()
-            }
-
-            dist = dist.toInt().toFloat()
+            var dist=getDistanceToUser(it.position.latitude, it.position.longitude)?:0.0
+            dist = dist.toInt().toDouble()
             mBinding.tvDist.text=dist.toString()+"м"
 
             if(Settings.userToken.isNullOrEmpty())
@@ -417,6 +397,31 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         return true
     }
 
+    private fun getDistanceToUser(latitude: Double, longitude: Double):Double?
+    {
+        var userLatitude:Double?=null
+        var userLongitude:Double?=null
+        try {
+            (activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager).let {
+                it.getLastKnownLocation(it.getBestProvider(Criteria(), true))?.let{
+                    userLatitude=it.latitude
+                    userLongitude=it.longitude
+                }
+            }
+        }
+        catch (ex:Exception)
+        {
+            ex.printStackTrace()
+        }
+        if(userLatitude==null||userLongitude==null)
+            userLocation?.let {
+                userLatitude=it.latitude
+                userLongitude=it.longitude
+            }
+        if(userLatitude!=null&&userLongitude!=null)
+            return calculationDistance(userLatitude!!,userLongitude!!,latitude,longitude).toDouble()
+        return null
+    }
     /*** Увеличить мастаб до попадания всех элементов на экран  */
     private fun scaleCluster(clusterMarker: Marker) {
         val cluster: Cluster<MyItem> = (mClusterManager.renderer as OwnIconRendered).getCluster(clusterMarker) ?: return
