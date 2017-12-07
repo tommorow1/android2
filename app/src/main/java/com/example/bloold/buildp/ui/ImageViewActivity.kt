@@ -26,7 +26,7 @@ class ImageViewActivity : AppCompatActivity() {
 
     companion object {
         private val START_IMAGE_POS="startImagePos"
-        fun launch(activity: FragmentActivity, photos: Array<PhotoModel>, currentPhoto:PhotoModel?=null)
+        fun launch(activity: FragmentActivity, photos: ArrayList<PhotoModel>, currentPhoto:PhotoModel?=null)
         {
             var currentImgPos=0
             currentPhoto?.let {
@@ -53,7 +53,7 @@ class ImageViewActivity : AppCompatActivity() {
         var imageList:List<String>?=null
         intent.getStringExtra(IntentHelper.EXTRA_IMAGE_URL)?.let { imageList= listOf(it) }
         if(imageList==null)
-            intent.getParcelableArrayExtra(IntentHelper.EXTRA_PHOTO_DATA_ARRAY)?.let { imageList= it.map { (it as PhotoModel).fullPath() } }
+            intent.getParcelableArrayListExtra<PhotoModel>(IntentHelper.EXTRA_PHOTO_DATA_ARRAY)?.let { imageList= it.map { (it as PhotoModel).fullPath() } }
         imageList?.let {
             viewPager.adapter=ImagePagerAdapter(it)
             viewPager.currentItem=intent.getIntExtra(START_IMAGE_POS, 0)

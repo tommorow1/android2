@@ -28,7 +28,7 @@ class CatalogObject() : Parcelable {
     @get: JsonProperty("DETAIL_PICTURE")
     var detailPicture: DetailPictureModel?=null
     @get: JsonProperty("PHOTOS_DATA")
-    var photosData: Array<PhotoModel>?=null
+    var photosData: ArrayList<PhotoModel>?=null
     @get: JsonProperty("DOCS_DATA")
     var docsData: Array<DocModel>?=null
     @get: JsonProperty("VIDEO_DATA")
@@ -64,7 +64,7 @@ class CatalogObject() : Parcelable {
         previewText = parcel.readString()
         detailPageUrl = parcel.readString()
         detailPicture = parcel.readParcelable(DetailPictureModel::class.java.classLoader)
-        photosData = parcel.createTypedArray(PhotoModel)
+        photosData = parcel.createTypedArrayList(PhotoModel)
         docsData = parcel.createTypedArray(DocModel)
         videoData = parcel.createTypedArray(VideoModel)
         audioData = parcel.createTypedArray(AudioModel)
@@ -119,7 +119,7 @@ class CatalogObject() : Parcelable {
         parcel.writeString(previewText)
         parcel.writeString(detailPageUrl)
         parcel.writeParcelable(detailPicture, flags)
-        parcel.writeTypedArray(photosData, flags)
+        parcel.writeTypedList(photosData)
         parcel.writeTypedArray(docsData, flags)
         parcel.writeTypedArray(videoData, flags)
         parcel.writeTypedArray(audioData, flags)

@@ -16,7 +16,7 @@ import com.example.bloold.buildp.ui.ImageViewActivity
 class PhotoFragment : Fragment()
 {
     private var mColumnCount = 3
-    private var photoList: Array<PhotoModel>? = null
+    private var photoList: ArrayList<PhotoModel>? = null
     private lateinit var adapter: PhotoRecyclerViewAdapter
     private lateinit var rvPhotos: RecyclerView
 
@@ -25,7 +25,7 @@ class PhotoFragment : Fragment()
 
         mColumnCount = 3
 
-        arguments?.let { photoList= it.getParcelableArray(IntentHelper.EXTRA_PHOTO_DATA_ARRAY) as Array<PhotoModel>? }
+        arguments?.let { photoList= it.getParcelableArrayList<PhotoModel>(IntentHelper.EXTRA_PHOTO_DATA_ARRAY) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +54,7 @@ class PhotoFragment : Fragment()
     }
 
     companion object {
-        fun newInstance(photos: Array<PhotoModel>?): PhotoFragment
-                = PhotoFragment().apply {  arguments = Bundle().apply { putParcelableArray(IntentHelper.EXTRA_PHOTO_DATA_ARRAY, photos) } }
+        fun newInstance(photos: ArrayList<PhotoModel>?): PhotoFragment
+                = PhotoFragment().apply {  arguments = Bundle().apply { putParcelableArrayList(IntentHelper.EXTRA_PHOTO_DATA_ARRAY, photos) } }
     }
 }
