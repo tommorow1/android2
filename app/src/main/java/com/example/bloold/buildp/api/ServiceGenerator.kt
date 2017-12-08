@@ -31,7 +31,7 @@ object ServiceGenerator {
             .writeTimeout(60, TimeUnit.SECONDS)
             //.authenticator(new TokenAuthenticator())
             .addNetworkInterceptor(AddAccessTokenInterceptor())
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            //.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
 
     private val builder = Retrofit.Builder()
             .addConverterFactory(JacksonConverterFactory.create(

@@ -16,7 +16,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
+import android.support.v4.math.MathUtils
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +48,9 @@ import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.io.UnsupportedEncodingException
@@ -87,6 +91,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     // Координаты куда надо переметстить карту, если кликнули по объекту
     private var latMoveTo:Double?=null
     private var lngMoveTo:Double?=null
+
+    private var loadObjectDisposable: Disposable?=null
 
     companion object {
         private val REQUEST_RESOLVE_SERVICES_ERROR = 125
@@ -188,12 +194,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         (childFragmentManager.findFragmentById(R.id.fMap) as SupportMapFragment).getMapAsync({
             googleMap=it
             googleMap?.let {
-                //it.uiSettings.isMyLocationButtonEnabled=true
                 mClusterManager = ClusterManager(activity, it)
-                //mClusterManager.setOnClusterItemClickListener(this)
-                //it.setOnInfoWindowClickListener(mClusterManager)
-                //mClusterManager.setOnClusterClickListener(this)
-                //mClusterManager.setOnClusterInfoWindowClickListener(this)
+                mClusterManager.algorithm=GridBasedAlgorithm<MyItem>()
                 activity?.baseContext?.let { context ->  mClusterManager.renderer = OwnIconRendered(context, it, mClusterManager) }
                 it.setOnMarkerClickListener(this)
                 it.setOnCameraIdleListener {
@@ -276,6 +278,12 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     private fun loadObjectsOnMap()
     {
+        Log.d("loadObjectsOnMap", "start")
+        loadObjectDisposable?.let {
+            getCompositeDisposable().remove(it)
+            loadObjectDisposable=null
+            Log.d("loadObjectsOnMap", "cancel prev")
+        }
         googleMap?.let {
             val bounds = it.projection.visibleRegion.latLngBounds
             var lat1 = bounds.southwest.latitude
@@ -322,13 +330,15 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             categoryId?.let {
                 filters.put("filter[SECTION_ID]", categoryId.toString())
             }
-            getCompositeDisposable().add(ServiceGenerator.serverApi.searchMapObjects(filters, 3500, 1)
+            loadObjectDisposable=ServiceGenerator.serverApi.searchMapObjects(filters, 3500, 1)
                     .compose(RxHelper.applySchedulers())
                     .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<MyItem>>() {
                         override fun onSuccess(result: BaseResponseWithDataObject<MyItem>) {
+                            Log.d("loadObjectsOnMap", "finish 0")
                             mClusterManager.clearItems()
                             mClusterManager.addItems(result.data?.items?.toMutableList())
                             mClusterManager.cluster()
+                            Log.d("loadObjectsOnMap", "finish 1")
                         }
                         override fun onError(e: Throwable) {
                             e.printStackTrace()
@@ -337,7 +347,8 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
                             else
                                 Toast.makeText(activity, R.string.server_error, Toast.LENGTH_SHORT).show()
                         }
-                    }))
+                    })
+            loadObjectDisposable?.let { getCompositeDisposable().add(it) }
         }
     }
 
@@ -621,7 +632,6 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             super.onClusterItemRendered(item, marker)
             marker?.let {
                 mEventMapItem.put(it.id!!, item!!)
-
             }
         }
 
@@ -635,9 +645,14 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
         override fun getColor(clusterSize: Int): Int = Color.parseColor("#65bacc")
     }
-    fun resizeMapIcons(iconName: String, width: Int, height: Int): Bitmap {
+    fun resizeMapIcons(iconName: String, width: Int, height: Int): Bitmap
+    {
+        val options = BitmapFactory.Options()
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
         val imageBitmap = BitmapFactory.decodeResource(MyApplication.instance.resources,
-                MyApplication.instance.resources.getIdentifier(iconName, "drawable", MyApplication.instance.packageName))
-        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
+                MyApplication.instance.resources.getIdentifier(iconName, "drawable", MyApplication.instance.packageName), options)
+        val newBitmap=Bitmap.createScaledBitmap(imageBitmap, width, height, false)
+        if(newBitmap!=imageBitmap) imageBitmap.recycle()
+        return newBitmap
     }
 }
