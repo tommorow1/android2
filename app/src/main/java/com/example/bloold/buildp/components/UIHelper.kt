@@ -69,7 +69,7 @@ object UIHelper
     }
 
     /*** Возвращает true если авторизован, иначе открывает экран логина */
-    fun userAuthorizedOtherwiseOpenLogin(cntx:Context)
+    fun userAuthorizedOtherwiseOpenLogin(cntx:Activity)
             = if(Settings.userToken.isNullOrEmpty())
                 {
                     cntx.startActivity(Intent(cntx, LoginActivity::class.java))

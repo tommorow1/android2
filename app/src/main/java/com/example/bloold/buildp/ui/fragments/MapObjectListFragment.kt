@@ -474,7 +474,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     fun onEditClick(v:View)
     {
-        activity?.baseContext?.let { context ->
+        activity?.let { context ->
             if(UIHelper.userAuthorizedOtherwiseOpenLogin(context))
                 mEventMapItem[currentMarker?.id]?.let {
                     startActivityForResult(Intent(activity, ChooseEditFieldActivity::class.java)
@@ -485,7 +485,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     fun onAlertClick(v:View)
     {
-        activity?.baseContext?.let { context ->
+        activity?.let { context ->
             if (UIHelper.userAuthorizedOtherwiseOpenLogin(context))
                 mEventMapItem[currentMarker?.id]?.let {
                     startActivityForResult(Intent(activity, EditStateActivity::class.java)
@@ -495,7 +495,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     }
     fun onPhotoClick(v:View)
     {
-        activity?.baseContext?.let { context ->
+        activity?.let { context ->
             if (UIHelper.userAuthorizedOtherwiseOpenLogin(context))
                 mEventMapItem[currentMarker?.id]?.let {
                     startActivity(Intent(activity, EditPhotoVideoAudioActivity::class.java)
