@@ -408,7 +408,7 @@ class EditPhotoVideoAudioActivity : ChooseImageActivity() {
                         .compose(RxHelper.applySchedulers())
                         .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithDataObject<Long>>>() {
                             override fun onSuccess(result: Response<BaseResponseWithDataObject<Long>>) {
-                                if(result.isSuccessful)
+                                if(result.isSuccessful&& result.body()?.code==200)
                                 {
                                     //Получаем ключ загруженного файла
                                     onFileUploadListener.onFileUploaded(filePath, result.body()?.data?.items?.first(),true)

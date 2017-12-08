@@ -573,7 +573,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            activity?.baseContext?.let {
+            activity?.let {
                 AlertDialog.Builder(it)
                         .setMessage(R.string.gps_not_enabled)
                         .setCancelable(true)
