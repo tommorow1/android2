@@ -23,9 +23,9 @@ import com.google.maps.android.clustering.ClusterItem
 @JsonIgnoreProperties(ignoreUnknown = true)
 class MyItem : ClusterItem {
     @get: JsonProperty("ADDRESS")
-    var title: String? = null
+    var titleInner: String? = null
     @get: JsonProperty("NAME")
-    var snippet: String? = null
+    var snippetInner: String? = null
     @get: JsonProperty("OBJECT_ID")
     var id: Int=0
     /*@get: JsonProperty("ID")
@@ -37,9 +37,12 @@ class MyItem : ClusterItem {
     @get: JsonProperty("IS_FAVORITE")
     var isFavourite:Boolean?=null
 
+    override fun getSnippet(): String = snippetInner?:""
+    override fun getTitle(): String = titleInner?:""
+
     override fun getPosition(): LatLng = LatLng(lat,lng)
 
     override fun toString(): String {
-        return snippet?:""
+        return snippet
     }
 }

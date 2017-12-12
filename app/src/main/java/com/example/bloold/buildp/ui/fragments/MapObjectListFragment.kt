@@ -195,8 +195,9 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             googleMap=it
             googleMap?.let {
                 mClusterManager = ClusterManager(activity, it)
-                mClusterManager.algorithm=GridBasedAlgorithm<MyItem>()
+                mClusterManager.setAnimation(false)
                 activity?.baseContext?.let { context ->  mClusterManager.renderer = OwnIconRendered(context, it, mClusterManager) }
+                //mClusterManager.algorithm=GridBasedAlgorithm<MyItem>()
                 it.setOnMarkerClickListener(this)
                 it.setOnCameraIdleListener {
                     mClusterManager.onCameraIdle()
@@ -278,11 +279,9 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
 
     private fun loadObjectsOnMap()
     {
-        Log.d("loadObjectsOnMap", "start")
         loadObjectDisposable?.let {
             getCompositeDisposable().remove(it)
             loadObjectDisposable=null
-            Log.d("loadObjectsOnMap", "cancel prev")
         }
         googleMap?.let {
             val bounds = it.projection.visibleRegion.latLngBounds
@@ -330,15 +329,13 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
             categoryId?.let {
                 filters.put("filter[SECTION_ID]", categoryId.toString())
             }
-            loadObjectDisposable=ServiceGenerator.serverApi.searchMapObjects(filters, 3500, 1)
+            loadObjectDisposable=ServiceGenerator.serverApi.searchMapObjects(filters, 1000, 1)
                     .compose(RxHelper.applySchedulers())
                     .subscribeWith(object : DisposableSingleObserver<BaseResponseWithDataObject<MyItem>>() {
                         override fun onSuccess(result: BaseResponseWithDataObject<MyItem>) {
-                            Log.d("loadObjectsOnMap", "finish 0")
                             mClusterManager.clearItems()
                             mClusterManager.addItems(result.data?.items?.toMutableList())
                             mClusterManager.cluster()
-                            Log.d("loadObjectsOnMap", "finish 1")
                         }
                         override fun onError(e: Throwable) {
                             e.printStackTrace()
@@ -627,7 +624,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     inner class OwnIconRendered(context: Context, map: GoogleMap,
                                    clusterManager: ClusterManager<MyItem>) : DefaultClusterRenderer<MyItem>(context, map, clusterManager) {
 
-
+        private var bitmapDescriptor:BitmapDescriptor?=null
         override fun onClusterItemRendered(item: MyItem?, marker: Marker?) {
             super.onClusterItemRendered(item, marker)
             marker?.let {
@@ -636,7 +633,9 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
         }
 
         override fun onBeforeClusterItemRendered(item: MyItem?, markerOptions: MarkerOptions?) {
-            markerOptions!!.icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker", 67, 96)))
+            if(bitmapDescriptor==null)
+                bitmapDescriptor=BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker", 67, 96))
+            markerOptions!!.icon(bitmapDescriptor)
             markerOptions.snippet(item!!.snippet)
             markerOptions.title(item.title)
             super.onBeforeClusterItemRendered(item, markerOptions)
