@@ -149,7 +149,7 @@ interface ServerApi {
     fun getQuestTypes(): Single<Response<QuestTypes>>
     /*** Список моих квестов */
     @GET("user/quest/list/")
-    fun getMyQuests(@Query("filter[TYPE]") questType:String,
+    fun getMyQuests(@Query("TYPE") questType:String,
                     @Query("limit") limit: Int, @Query("page") page: Int,
                   @Query("select[]") selectParams: Array<String> = ApiHelper.questsParams): Single<Response<BaseResponseWithDataObject<Quest>>>
 
