@@ -122,8 +122,7 @@ class MainActivity : EventActivity(), NavigationView.OnNavigationItemSelectedLis
                 showAppBarElevation(true)*/
             if(currentFragment is SortFragment)
                 navigationView.setCheckedItem(R.id.nav_catalog)
-
-            if(currentFragment is CatalogObjectListFragment)
+            else if(currentFragment is CatalogObjectListFragment)
                 mBinding.appBarIncludeLayout?.fabFilter?.show()
             else
                 mBinding.appBarIncludeLayout?.fabFilter?.hide()

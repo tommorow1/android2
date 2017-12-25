@@ -172,6 +172,7 @@ class MapObjectListFragment : EventFragment(), GoogleMap.OnMarkerClickListener {
     override fun onResume() {
         super.onResume()
         activity?.toolbar?.setTitle(R.string.navigation_drawer_object_in_map)
+        activity?.invalidateOptionsMenu()
         val resCode= GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
         when(resCode)
         {
