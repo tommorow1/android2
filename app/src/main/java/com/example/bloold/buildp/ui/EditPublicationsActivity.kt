@@ -250,7 +250,7 @@ class EditPublicationsActivity : ChooseImageActivity() {
                     !it.isEmpty()
                 }
                 .map { ServiceGenerator.serverApi.uploadFile(
-                        ApiHelper.generateUploadFileParams(it.substring(it.lastIndexOf("/")+1), it, key))
+                        ApiHelper.generateUploadFileParams(filePath.substring(filePath.lastIndexOf("/")+1), it, key))
                         .compose(RxHelper.applySchedulers())
                         .subscribeWith(object : DisposableSingleObserver<Response<BaseResponseWithDataObject<Long>>>() {
                             override fun onSuccess(result: Response<BaseResponseWithDataObject<Long>>) {
