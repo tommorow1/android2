@@ -48,10 +48,11 @@ abstract class ChooseImageActivity : NetworkActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 //decodeImageAndSaveToTmp(mCurrentPhotoPath);
+                mCurrentPhotoPath?.let { onImageChosen(it) }
             } else if (requestCode == REQUEST_GALLERY_PHOTO) {
                 data?.let { mCurrentPhotoPath = PhotoHelper.getPath(it.data) }
+                mCurrentPhotoPath?.let { onImageChosen(it) }
             }
-            mCurrentPhotoPath?.let { onImageChosen(it) }
         }
     }
 
